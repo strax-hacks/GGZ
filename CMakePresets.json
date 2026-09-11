@@ -1,0 +1,53 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "desktop-dev",
+      "displayName": "Desktop Development (SDL2 Simulator)",
+      "description": "Build for local macOS / Linux host with SDL2 windowed simulator",
+      "binaryDir": "${sourceDir}/build/desktop",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "BUILD_DESKTOP_SIMULATOR": "ON",
+        "TARGET_DEVICE": "DESKTOP"
+      }
+    },
+    {
+      "name": "desktop-release",
+      "displayName": "Desktop Release",
+      "description": "Optimized release build for desktop testing",
+      "binaryDir": "${sourceDir}/build/desktop-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "BUILD_DESKTOP_SIMULATOR": "ON",
+        "TARGET_DEVICE": "DESKTOP"
+      }
+    },
+    {
+      "name": "cp0-arm64-cross",
+      "displayName": "Cardputer Zero ARM64 Target",
+      "description": "Cross-compile for Raspberry Pi CM0 / Debian Bookworm ARM64",
+      "binaryDir": "${sourceDir}/build/cp0-arm64",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "TARGET_DEVICE": "CARDPUTER_ZERO",
+        "CMAKE_SYSTEM_NAME": "Linux",
+        "CMAKE_SYSTEM_PROCESSOR": "aarch64"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "desktop-dev",
+      "configurePreset": "desktop-dev"
+    },
+    {
+      "name": "desktop-release",
+      "configurePreset": "desktop-release"
+    },
+    {
+      "name": "cp0-arm64-cross",
+      "configurePreset": "cp0-arm64-cross"
+    }
+  ]
+}

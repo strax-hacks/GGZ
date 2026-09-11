@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=OpenGGS C64
+Comment=The Great Giana Sisters C64 Remake for Cardputer ZERO
+Exec=/usr/share/openggs/bin/openggs-cz
+Icon=/usr/share/APPLaunch/share/images/openggs.png
+Terminal=false
+Categories=Game;Arcade;
+Keywords=giana;c64;arcade;platformer;
+StartupNotify=false

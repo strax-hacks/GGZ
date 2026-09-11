@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "name": "cardputerzero-openggs",
+  "display_name": "OpenGGS C64",
+  "version": "1.0.0",
+  "runtime": "legacy-deb-only",
+  "bin_name": "openggs-cz",
+  "install_prefix": "/usr/share/openggs",
+  "description": "The Great Giana Sisters C64 remake ported for M5Stack Cardputer ZERO",
+  "author": "OpenGGS Team / CardputerZero Community",
+  "category": "Game",
+  "icon": "packaging/openggs.png",
+  "desktop_entry": "packaging/openggs.desktop",
+  "caps": [
+    "display",
+    "keyboard",
+    "audio"
+  ],
+  "build": {
+    "type": "cmake",
+    "args": [
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DTARGET_DEVICE=CARDPUTER_ZERO"
+    ]
+  }
+}
