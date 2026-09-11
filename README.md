@@ -65,6 +65,8 @@ Task management and execution are tracked using **Beads** (`bd`):
 | `cz-ggz-bf4.6` | Optimize audio pipeline for BCM2837 / ES8389 on Cardputer ZERO | `task` | 25m | Open |
 | `cz-ggz-bf4.7` | Create APPLaunch .desktop integration, app icon, and Debian packaging (.deb) | `task` | 35m | Open |
 | `cz-ggz-bf4.8` | Build validation suite: headless smoke tests and CI build matrix | `task` | 30m | Open |
+| `cz-ggz-bf4.9` | Setup CardputerZero official czdev emulator runtime integration | `task` | 25m | Open |
+| `cz-ggz-bf4.10` | Setup QEMU ARM64 cardputer-zero-os system image runner | `task` | 40m | Open |
 
 To view ready work in Beads:
 ```bash
