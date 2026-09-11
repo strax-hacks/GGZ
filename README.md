@@ -2,6 +2,8 @@
 
 A native port and working fork of **OpenGGS** (the open-source C64 *The Great Giana Sisters* remake) tailored specifically for the **M5Stack Cardputer ZERO** (Raspberry Pi Compute Module 0 / BCM2837 ARM64, 320×170 IPS LCD, 46-key mechanical keyboard matrix).
 
+Full technical details and architecture specifications are documented in [docs/SPECIFICATION.md](docs/SPECIFICATION.md).
+
 ---
 
 ## Architecture Overview
@@ -15,15 +17,18 @@ Raspberry Pi OS / Debian Bookworm ARM64
 ```
 
 - **Resolution:** 320×170 native framebuffer / logical scaled viewport (`nearest` texture filtering for authentic retro pixel art)
-- **Controls:** 46-key matrix mapped to directional movement (`Arrows` / `WASD`), Jump (`SPACE` / `UP` / `K`), Fire (`ENTER` / `J`), Pause (`P`), and Menu (`ESC`)
+- **Controls:** 46-key matrix mapped to directional movement (`Arrows` / `WASD`), Jump (`SPACE` / `UP` / `K`), Fire (`ENTER` / `J`), Pause (`P`), and Menu (`ESC`), plus USB/Bluetooth GameController hot-plugging
 - **Audio:** `SDL2_mixer` tuned for Broadcom BCM2837 / ES8389 DAC (22,050 Hz, 16-bit, buffer size 1024)
-- **Packaging:** Debian `.deb` package with `APPLaunch` desktop integration (`/usr/share/APPLaunch/applications/openggs.desktop`)
+- **Power & Lifecycle:** Battery monitoring, auto-pause on window focus loss, low-power 60 FPS pacing
+- **Storage:** XDG Base Directory isolation (`~/.config/openggs`, `~/.local/share/openggs`) with 5-slot save states
+- **Maker Mode:** Keyboard-driven Level Editor adapted for 320×170 handheld operation
+- **Packaging:** Debian `.deb` package with `APPLaunch` desktop integration (`/usr/share/APPLaunch/applications/openggs.desktop`) and CardputerZero Store metadata
 
 ---
 
-## Cardputer ZERO App Template Runner
+## Cardputer ZERO App Template Runner & Development
 
-The development harness provides both a local desktop simulator (macOS / Linux SDL2) and ARM64 cross-compilation:
+The development harness provides multi-tier simulation and ARM64 cross-compilation:
 
 ### 1. Run Desktop Simulator (Local Development)
 ```bash
@@ -50,26 +55,31 @@ cmake --build --preset cp0-arm64-cross
 
 ---
 
-## Beads Task Breakdown & Issue Tracker
+## Complete Beads Task Matrix
 
-Task management and execution are tracked using **Beads** (`bd`):
+Task management, lifecycle states, and dependency chains are managed using **Beads** (`bd`):
 
-| Bead ID | Task Title | Type | Estimate | Status |
-| :--- | :--- | :--- | :--- | :--- |
-| **`cz-ggz-bf4`** | **Port and package OpenGGS (C64 clone) for M5Stack Cardputer ZERO** | `epic` | — | Open |
-| `cz-ggz-bf4.1` | Setup Cardputer Zero App Template Runner and build harness | `task` | 30m | Open (Scaffolded) |
-| `cz-ggz-bf4.2` | Ingest upstream bugix/OpenGGS C64 game codebase and assets | `task` | 30m | Open |
-| `cz-ggz-bf4.3` | Implement native 320x170 display resolution and viewport scaling in engine | `task` | 45m | Open |
-| `cz-ggz-bf4.4` | Redesign HUD layout and menus for 320x170 screen geometry | `task` | 30m | Open |
-| `cz-ggz-bf4.5` | Adapt input system for Cardputer ZERO 46-key matrix keyboard | `task` | 30m | Open |
-| `cz-ggz-bf4.6` | Optimize audio pipeline for BCM2837 / ES8389 on Cardputer ZERO | `task` | 25m | Open |
-| `cz-ggz-bf4.7` | Create APPLaunch .desktop integration, app icon, and Debian packaging (.deb) | `task` | 35m | Open |
-| `cz-ggz-bf4.8` | Build validation suite: headless smoke tests and CI build matrix | `task` | 30m | Open |
-| `cz-ggz-bf4.9` | Setup CardputerZero official czdev emulator runtime integration | `task` | 25m | Open |
-| `cz-ggz-bf4.10` | Setup QEMU ARM64 cardputer-zero-os system image runner | `task` | 40m | Open |
+| Bead Task ID | Milestone | Title | Priority | Est. | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **`cz-ggz-bf4`** | **Epic** | **Port and package OpenGGS for M5Stack Cardputer ZERO** | `P1` | — | Open |
+| `cz-ggz-bf4.1` | Harness | Setup Cardputer Zero App Template Runner and build harness | `P1` | 30m | **Ready** |
+| `cz-ggz-bf4.2` | Engine | Ingest upstream bugix/OpenGGS C64 game codebase and assets | `P1` | 30m | Open |
+| `cz-ggz-bf4.3` | Graphics | Implement native 320x170 display resolution and viewport scaling | `P1` | 45m | Open |
+| `cz-ggz-bf4.4` | UI/HUD | Redesign HUD layout and menus for 320x170 screen geometry | `P2` | 30m | Open |
+| `cz-ggz-bf4.5` | Controls | Adapt input system for Cardputer ZERO 46-key matrix keyboard | `P1` | 30m | Open |
+| `cz-ggz-bf4.6` | Audio | Optimize audio pipeline for BCM2837 / ES8389 on Cardputer ZERO | `P2` | 25m | Open |
+| `cz-ggz-bf4.7` | Packaging | Create APPLaunch .desktop integration, icon, and Debian packaging (.deb) | `P1` | 35m | Open |
+| `cz-ggz-bf4.8` | CI / QA | Build validation suite: headless smoke tests and CI build matrix | `P2` | 30m | Open |
+| `cz-ggz-bf4.9` | Tooling | Setup CardputerZero official czdev emulator runtime integration | `P2` | 25m | Open |
+| `cz-ggz-bf4.10` | Tooling | Setup QEMU ARM64 cardputer-zero-os system image runner | `P3` | 40m | Open |
+| `cz-ggz-bf4.11` | Storage | Implement XDG-compliant persistent storage and portable save-states | `P1` | 35m | Open |
+| `cz-ggz-bf4.12` | Power/OS | Implement battery monitoring, power management, and suspend/resume | `P2` | 30m | Open |
+| `cz-ggz-bf4.13` | Input | Implement SDL2 GameController hot-plugging & external gamepads | `P2` | 25m | Open |
+| `cz-ggz-bf4.14` | UI/Settings | Implement on-device settings menu, visual filters, and help overlay | `P2` | 30m | Open |
+| `cz-ggz-bf4.15` | Level Editor| Adapt OpenGGS Maker / Level Editor for 320x170 keyboard navigation | `P3` | 35m | Open |
+| `cz-ggz-bf4.16` | Store/Pub | Generate CardputerZero Store registry entry and distribution assets | `P2` | 20m | Open |
 
-To view ready work in Beads:
+To query ready tasks in Beads:
 ```bash
 bd ready
-bd show <issue-id>
 ```
