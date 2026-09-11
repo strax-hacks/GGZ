@@ -178,23 +178,21 @@ Binary serialization containing:
 
 ---
 
-## 7. Audio Subsystem & Optimization
+## 7. Audio Subsystem & Optimization (Core P1 Requirement)
 
-- **Driver:** `SDL2_mixer` configured for low-latency ALSA / PulseAudio.
-- **Audio Spec:** `22,050 Hz`, `AUDIO_S16SYS` (16-bit signed), Stereo (2 channels), Chunk size: `1024 bytes` (~46ms latency).
-- **Soundtracks:** Chiptune OGG streams for Title, Outdoor, Underground, and Boss themes.
-- **Sound Effects:** 16 pre-cached WAV sound chunks for jump, coin, brick break, shoot, enemy hit, power-up, and game over.
-- **Hardware Integration:** Compatible with ES8389 codec, AW8737A speaker amp, and 3.5mm TRRS auto-switch.
+- **Driver:** `SDL2_mixer` configured for low-latency ALSA / PulseAudio pipeline.
+- **Audio Spec:** `22,050 Hz` (or `44,100 Hz`), `AUDIO_S16SYS` (16-bit signed), Stereo (2 channels), Chunk size: `1024 bytes` (~23–46ms latency).
+- **Soundtracks:** Chiptune OGG streams for Title, Outdoor, Underground, and Boss themes (Original C64 / OpenGGS soundtrack by puch666 / Chris Hülsbeck compositions) with zero stutter and seamless loop points.
+- **Sound Effects:** Complete collection of 16 pre-cached WAV sound chunks (jump, diamond pickup, brick break, fire shoot, enemy hit, power-up transformation, extra life, game over, stage clear).
+- **Hardware Integration:** Calibrated output for the onboard ES8389 codec, AW8737A speaker amp (1W @ 8Ω), and 3.5mm TRRS headphone jack with auto-detection.
+- **Volume & Control:** Dedicated software volume sliders for Music and SFX in settings, with instantaneous mute/unmute on pause and lifecycle suspend.
 
 ---
 
-## 8. OpenGGS Maker / Level Editor Adaptation
+## 8. OpenGGS Maker / Level Editor (Deferred)
 
-The built-in Level Editor is fully adapted for 46-key keyboard operation on 320×170:
-- **Cursor Mode:** Move cursor with Arrow keys / `WASD`. Press `SPACE` to place selected tile, `BS` / `X` to delete tile.
-- **Palette Selector:** Press `TAB` to toggle tile palette selector popup overlay. Cycle categories with `1` (Ground), `2` (Bricks), `3` (Power-ups), `4` (Enemies).
-- **Stage Testing:** Press `ENTER` to immediately test play the current stage from the cursor position. Press `ESC` to return to editor.
-- **Save/Load:** Saves custom maps directly to `$XDG_DATA_HOME/openggs/custom_stages/stage_XX.dat`.
+*Status: **Deferred** from on-device handheld deployment to minimize package size, eliminate mouse dependencies, and keep the handheld UI focused strictly on arcade gameplay.*
+- The level editor source code remains modularized and can be built for desktop targets if needed, but is omitted from the Cardputer ZERO device launcher and binary build.
 
 ---
 
@@ -277,7 +275,7 @@ cardputerzero-openggs_1.0.0-1_arm64.deb
 | `cz-ggz-bf4.3` | Graphics | Implement native 320x170 display resolution and viewport scaling | `P1` | 45m | Open |
 | `cz-ggz-bf4.4` | UI/HUD | Redesign HUD layout and menus for 320x170 screen geometry | `P2` | 30m | Open |
 | `cz-ggz-bf4.5` | Controls | Adapt input system for Cardputer ZERO 46-key matrix keyboard | `P1` | 30m | Open |
-| `cz-ggz-bf4.6` | Audio | Optimize audio pipeline for BCM2837 / ES8389 on Cardputer ZERO | `P2` | 25m | Open |
+| `cz-ggz-bf4.6` | Audio | Optimize audio pipeline for BCM2837 / ES8389 on Cardputer ZERO | `P1` | 25m | Open |
 | `cz-ggz-bf4.7` | Packaging | Create APPLaunch .desktop integration, icon, and Debian packaging (.deb) | `P1` | 35m | Open |
 | `cz-ggz-bf4.8` | CI / QA | Build validation suite: headless smoke tests and CI build matrix | `P2` | 30m | Open |
 | `cz-ggz-bf4.9` | Tooling | Setup CardputerZero official czdev emulator runtime integration | `P2` | 25m | Open |
@@ -286,5 +284,5 @@ cardputerzero-openggs_1.0.0-1_arm64.deb
 | `cz-ggz-bf4.12` | Power/OS | Implement battery monitoring, power management, and suspend/resume | `P2` | 30m | Open |
 | `cz-ggz-bf4.13` | Input | Implement SDL2 GameController hot-plugging & external gamepads | `P2` | 25m | Open |
 | `cz-ggz-bf4.14` | UI/Settings | Implement on-device settings menu, visual filters, and help overlay | `P2` | 30m | Open |
-| `cz-ggz-bf4.15` | Level Editor| Adapt OpenGGS Maker / Level Editor for 320x170 keyboard navigation | `P3` | 35m | Open |
+| `cz-ggz-bf4.15` | Level Editor| Adapt OpenGGS Maker / Level Editor for 320x170 keyboard navigation | `P3` | 35m | **Deferred** |
 | `cz-ggz-bf4.16` | Store/Pub | Generate CardputerZero Store registry entry and distribution assets | `P2` | 20m | Open |
