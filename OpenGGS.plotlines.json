@@ -1,0 +1,698 @@
+{
+  "version": 1,
+  "config": {
+    "name": "OpenGGS Cardputer ZERO",
+    "lanes": [
+      "Beads"
+    ],
+    "sprintLengthDays": 14,
+    "startDate": "2026-09-12",
+    "themeId": "professional",
+    "beads": {
+      "projectRoot": "/Users/johan/GGZ",
+      "enabled": true,
+      "pollIntervalSeconds": 3,
+      "preserveLocalSchedule": false,
+      "defaultLane": "Beads",
+      "showIssueIdInTaskNames": true
+    },
+    "cursorAgent": {
+      "enabled": true
+    },
+    "agents": {
+      "preferredProvider": "cursor"
+    },
+    "defaultViewMode": "kanban"
+  },
+  "tasks": [
+    {
+      "id": "cz-ggz-bf4_2e_11",
+      "externalId": "cz-ggz-bf4.11",
+      "title": "Implement XDG-compliant persistent storage and portable save-state system",
+      "description": "Refactor engine file I/O to strictly follow XDG Base Directory specification: read-only assets in /usr/share/openggs/data/, writable configuration in $XDG_CONFIG_HOME/openggs/ (options.cfg, keymap.cfg), and writable data in $XDG_DATA_HOME/openggs/ (hiscores.dat, save_states/, custom_levels/). Implement multi-slot (1-5) quick-save and auto-save on stage transition.",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "statusEnteredAt": "2026-09-12T00:27:48Z",
+      "priorityRank": 10,
+      "epic": "cz-ggz-bf4",
+      "status": "todo",
+      "assignee": "johan.lofgren@gmail.com",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "a02401574eb87aadc29f8f36b3e153edb16bb68cb2721c63393f98383934c407",
+        "remoteId": "cz-ggz-bf4.11",
+        "remoteStatus": "open",
+        "remoteUpdatedAt": "2026-09-12T00:27:48Z",
+        "remoteCreatedAt": "2026-09-11T22:27:48Z",
+        "claimedBy": null,
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "task"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    },
+    {
+      "id": "cz-ggz-bf4_2e_7",
+      "externalId": "cz-ggz-bf4.7",
+      "title": "Create APPLaunch .desktop integration, app icon, and Debian packaging (.deb)",
+      "description": "Create /usr/share/APPLaunch/applications/openggs.desktop entry conforming to CardputerZero launcher standard. Create dedicated Cardputer ZERO app icon (openggs.png 64x64) installed into /usr/share/APPLaunch/share/images/. Author packaging scripts (packaging/pack-deb.sh, DEBIAN/control, postinst, prerm) producing cardputerzero-openggs_arm64.deb.",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "statusEnteredAt": "2026-09-12T00:21:37Z",
+      "priorityRank": 10,
+      "epic": "cz-ggz-bf4",
+      "status": "todo",
+      "assignee": "johan.lofgren@gmail.com",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "00c4f567803aa43d849f59a0c603b242a4560b9ce516595a30fc8f8274643724",
+        "remoteId": "cz-ggz-bf4.7",
+        "remoteStatus": "open",
+        "remoteUpdatedAt": "2026-09-12T00:21:37Z",
+        "remoteCreatedAt": "2026-09-11T22:21:38Z",
+        "claimedBy": null,
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "task"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    },
+    {
+      "id": "cz-ggz-bf4_2e_6",
+      "externalId": "cz-ggz-bf4.6",
+      "title": "Optimize audio pipeline for BCM2837 / ES8389 on Cardputer ZERO",
+      "description": "High-priority core feature: Ingest and optimize full game audio pipeline (all original C64/OpenGGS BGM chiptune soundtracks and 16 sound effects). Tune SDL2_mixer (Mix_OpenAudio 22050Hz/44100Hz, S16SYS, stereo, buffer 1024) specifically for the ES8389 codec, AW8737A speaker amp, and 3.5mm TRRS jack on Cardputer ZERO. Ensure zero stutter, glitch-free audio looping, dedicated volume controls in settings, and instant mute during pause/suspend.",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "statusEnteredAt": "2026-09-11T22:34:47Z",
+      "priorityRank": 10,
+      "epic": "cz-ggz-bf4",
+      "status": "todo",
+      "assignee": "johan.lofgren@gmail.com",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "da4827104ba2198ab65e72ffddc7690f850fe039432e4a5014924d0752d7e715",
+        "remoteId": "cz-ggz-bf4.6",
+        "remoteStatus": "open",
+        "remoteUpdatedAt": "2026-09-11T22:34:47Z",
+        "remoteCreatedAt": "2026-09-11T22:21:27Z",
+        "claimedBy": null,
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "task"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    },
+    {
+      "id": "cz-ggz-bf4_2e_5",
+      "externalId": "cz-ggz-bf4.5",
+      "title": "Adapt input system for Cardputer ZERO 46-key matrix keyboard",
+      "description": "Update SYSTEM_SDL_input.cpp to support Cardputer ZERO 46-key layout: Arrow keys + WASD for directional movement; SPACE, UP, W, and K for jump; ENTER, J, and RSHIFT for fire/action; P for pause; ESC for menu/exit. Implement clean debounce and repeat handling tailored to tactile switches.",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "statusEnteredAt": "2026-09-12T00:21:17Z",
+      "priorityRank": 10,
+      "epic": "cz-ggz-bf4",
+      "status": "todo",
+      "assignee": "johan.lofgren@gmail.com",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "09300e8d165a79da6ff04f8e32a5dab38c5251b23562f2a27ee6484fe1bccf3d",
+        "remoteId": "cz-ggz-bf4.5",
+        "remoteStatus": "open",
+        "remoteUpdatedAt": "2026-09-12T00:21:17Z",
+        "remoteCreatedAt": "2026-09-11T22:21:17Z",
+        "claimedBy": null,
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "task"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    },
+    {
+      "id": "cz-ggz-bf4_2e_3",
+      "externalId": "cz-ggz-bf4.3",
+      "title": "Implement native 320x170 display resolution and viewport scaling in engine",
+      "description": "Add RESOLUTION_320x170 constant to GAME_ENVIRONMENT.h. Update SYSTEM_SDL_init.cpp and SYSTEM_SetResolution to default to 320x170 with SDL_RenderSetLogicalSize(gRenderer, 320, 170) and nearest texture filtering. Set visible tile calculation: 20 horizontal tiles (320/16) and 10 vertical tiles. Update player camera tracking in PLAYER.cpp and STAGE_Draw.cpp to keep scrolling centered on Giana in the 320x170 viewport.",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "statusEnteredAt": "2026-09-12T00:21:00Z",
+      "priorityRank": 10,
+      "epic": "cz-ggz-bf4",
+      "status": "todo",
+      "assignee": "johan.lofgren@gmail.com",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "f3e3da04e382c64a6ac1d02b3bd8d2b16326c36ac08698739457b1b41ee7dd72",
+        "remoteId": "cz-ggz-bf4.3",
+        "remoteStatus": "open",
+        "remoteUpdatedAt": "2026-09-12T00:21:00Z",
+        "remoteCreatedAt": "2026-09-11T22:21:00Z",
+        "claimedBy": null,
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "task"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    },
+    {
+      "id": "cz-ggz-bf4_2e_2",
+      "externalId": "cz-ggz-bf4.2",
+      "title": "Ingest upstream bugix/OpenGGS C64 game codebase and assets",
+      "description": "Ingest upstream OpenGGS source files (src/*), CMake build files, and base game assets (base/ sprites, tiles, levels, audio) from bugix/OpenGGS. Standardize asset directory layout and implement dynamic base directory lookup (DATA_DIR fallback for both installed /usr/share/openggs/data and local ./base/ runner paths). Modernize CMakeLists.txt for libsdl2, libsdl2_image, libsdl2_mixer.",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "statusEnteredAt": "2026-09-12T00:20:51Z",
+      "priorityRank": 10,
+      "epic": "cz-ggz-bf4",
+      "status": "todo",
+      "assignee": "johan.lofgren@gmail.com",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "e48f5caedfea20a286cfbd822952a00b42e2eff74fc0ca656998519d43116003",
+        "remoteId": "cz-ggz-bf4.2",
+        "remoteStatus": "open",
+        "remoteUpdatedAt": "2026-09-12T00:20:51Z",
+        "remoteCreatedAt": "2026-09-11T22:20:51Z",
+        "claimedBy": null,
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "task"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    },
+    {
+      "id": "cz-ggz-bf4_2e_1",
+      "externalId": "cz-ggz-bf4.1",
+      "title": "Setup Cardputer Zero App Template Runner and build harness",
+      "description": "Set up the Cardputer Zero app development harness and template runner environment. Provide CMake presets for local desktop preview (macOS / Linux SDL2 compositor at 320x170 scaled window) and cross-compilation target for ARM64 CM0. Add app-builder.json manifest conforming to CardputerZero AppBuilder schema and scripts/run-desktop.sh.",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "startedAt": "2026-09-11T22:42:34Z",
+      "statusEnteredAt": "2026-09-11T22:42:35Z",
+      "priorityRank": 10,
+      "epic": "cz-ggz-bf4",
+      "status": "in_progress",
+      "assignee": "strax-hacks",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "63f0614189c24c830dfbf8e6301777072ae8f21cf9e0dac52ccc13a1966643c8",
+        "remoteId": "cz-ggz-bf4.1",
+        "remoteStatus": "in_progress",
+        "remoteUpdatedAt": "2026-09-11T22:42:35Z",
+        "remoteCreatedAt": "2026-09-11T22:20:42Z",
+        "claimedBy": "strax-hacks",
+        "claimedAt": "2026-09-11T22:42:35Z",
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "task"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    },
+    {
+      "id": "cz-ggz-bf4",
+      "externalId": "cz-ggz-bf4",
+      "title": "Port and package OpenGGS (C64 clone) for M5Stack Cardputer ZERO",
+      "description": "Complete fork, engine adaptation, 320x170 display support, 46-key control mapping, app runner setup, and APPLaunch Debian packaging for Cardputer ZERO.",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "statusEnteredAt": "2026-09-11T22:20:17Z",
+      "priorityRank": 10,
+      "status": "todo",
+      "assignee": "johan.lofgren@gmail.com",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "3117933f9f4e3441b41bca976b04016f295c93d871ac80e6d67aad0751fa6f2b",
+        "remoteId": "cz-ggz-bf4",
+        "remoteStatus": "open",
+        "remoteUpdatedAt": "2026-09-11T22:20:17Z",
+        "remoteCreatedAt": "2026-09-11T22:20:17Z",
+        "claimedBy": null,
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "epic"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    },
+    {
+      "id": "cz-ggz-bf4_2e_16",
+      "externalId": "cz-ggz-bf4.16",
+      "title": "Generate CardputerZero Store registry entry and release distribution assets",
+      "description": "Create CardputerZero AppStore online registry definition (registry entry JSON / YAML with name, slug, author, version, download.deb url, md5 hash, category 'Games', 320x170 preview screenshots, changelog, and license compliance documentation under GPL-2.0).",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "statusEnteredAt": "2026-09-12T00:28:32Z",
+      "priorityRank": 20,
+      "epic": "cz-ggz-bf4",
+      "status": "todo",
+      "assignee": "johan.lofgren@gmail.com",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "895fa7962e6e452d8cdbcc30fd568856f30fad969713ad55e597a452ab860485",
+        "remoteId": "cz-ggz-bf4.16",
+        "remoteStatus": "open",
+        "remoteUpdatedAt": "2026-09-12T00:28:32Z",
+        "remoteCreatedAt": "2026-09-11T22:28:32Z",
+        "claimedBy": null,
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "task"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    },
+    {
+      "id": "cz-ggz-bf4_2e_14",
+      "externalId": "cz-ggz-bf4.14",
+      "title": "Implement on-device settings menu, visual filters, and help keymap overlay",
+      "description": "Build an in-game Options and Pause screen adapted for 320x170: custom key remapping UI, volume sliders (Music/SFX), visual mode toggles (1:1 aspect ratio vs 320x170 stretch, optional CRT scanline effect, FPS overlay), game mode switcher (C64 vs Amiga vs OpenGGS Enhanced), and a full-screen interactive Keyboard Layout & Controls cheat sheet (accessible via Fn+H or Help menu).",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "statusEnteredAt": "2026-09-12T00:28:14Z",
+      "priorityRank": 20,
+      "epic": "cz-ggz-bf4",
+      "status": "todo",
+      "assignee": "johan.lofgren@gmail.com",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "3f235b08a2f338ae10e4022fe651ba898f9f052d311583dba015cf4493359b1d",
+        "remoteId": "cz-ggz-bf4.14",
+        "remoteStatus": "open",
+        "remoteUpdatedAt": "2026-09-12T00:28:14Z",
+        "remoteCreatedAt": "2026-09-11T22:28:15Z",
+        "claimedBy": null,
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "task"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    },
+    {
+      "id": "cz-ggz-bf4_2e_13",
+      "externalId": "cz-ggz-bf4.13",
+      "title": "Implement SDL2 GameController hot-plugging and external USB/Bluetooth gamepad support",
+      "description": "Implement SDL_CONTROLLERDEVICEADDED and SDL_CONTROLLERDEVICEREMOVED event listeners with automatic GameController mapping. Support seamless hot-plugging of USB and Bluetooth controllers (8BitDo, DualShock, Xbox, standard HID gamepads) alongside the built-in 46-key keyboard matrix, with unified input routing and deadzone filtering.",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "statusEnteredAt": "2026-09-12T00:28:05Z",
+      "priorityRank": 20,
+      "epic": "cz-ggz-bf4",
+      "status": "todo",
+      "assignee": "johan.lofgren@gmail.com",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "2579544d4b376fe9c358e3f1db725d3ef3dd7679cffeb8b944f0af4c991ac418",
+        "remoteId": "cz-ggz-bf4.13",
+        "remoteStatus": "open",
+        "remoteUpdatedAt": "2026-09-12T00:28:05Z",
+        "remoteCreatedAt": "2026-09-11T22:28:06Z",
+        "claimedBy": null,
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "task"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    },
+    {
+      "id": "cz-ggz-bf4_2e_12",
+      "externalId": "cz-ggz-bf4.12",
+      "title": "Implement battery monitoring, power management, and lifecycle suspend/resume",
+      "description": "Integrate Linux power supply sysfs (/sys/class/power_supply/) and cardputer-zero-os power events: display low-battery warning overlay on HUD (<15%), auto-pause on window focus loss (Wayland/Xwayland focus events), handle SIGTERM/SIGINT with emergency auto-save, and clamp rendering loop to precise 60 FPS frame-pacing to conserve battery and avoid CPU thermal throttling on CM0.",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "statusEnteredAt": "2026-09-12T00:27:57Z",
+      "priorityRank": 20,
+      "epic": "cz-ggz-bf4",
+      "status": "todo",
+      "assignee": "johan.lofgren@gmail.com",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "fd73276e5ff7f1c239010d6276114d2e87f7697402043ff7412c59cc616a0c47",
+        "remoteId": "cz-ggz-bf4.12",
+        "remoteStatus": "open",
+        "remoteUpdatedAt": "2026-09-12T00:27:57Z",
+        "remoteCreatedAt": "2026-09-11T22:27:57Z",
+        "claimedBy": null,
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "task"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    },
+    {
+      "id": "cz-ggz-bf4_2e_9",
+      "externalId": "cz-ggz-bf4.9",
+      "title": "Setup CardputerZero official czdev emulator runtime integration",
+      "description": "Integrate the app with the official CardputerZero czdev emulator toolchain. Ensure app-builder.json manifest, library symbols, and runtime configs allow launching via 'czdev run' and building in the official online AppBuilder pipeline.",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "statusEnteredAt": "2026-09-12T00:26:32Z",
+      "priorityRank": 20,
+      "epic": "cz-ggz-bf4",
+      "status": "todo",
+      "assignee": "johan.lofgren@gmail.com",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "50c01e78c0bae769cecae15895ff55458f3164c9fb7fae327a9d431f7f3d5534",
+        "remoteId": "cz-ggz-bf4.9",
+        "remoteStatus": "open",
+        "remoteUpdatedAt": "2026-09-12T00:26:32Z",
+        "remoteCreatedAt": "2026-09-11T22:26:16Z",
+        "claimedBy": null,
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "task"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    },
+    {
+      "id": "cz-ggz-bf4_2e_8",
+      "externalId": "cz-ggz-bf4.8",
+      "title": "Build validation suite: headless smoke tests and CI build matrix",
+      "description": "Implement automated smoke test script (tests/smoke_test.sh) that initializes engine with SDL_VIDEODRIVER=dummy and SDL_AUDIODRIVER=dummy, verifies stage loading, runs 100 simulation frames, and exits cleanly. Add GitHub Actions CI workflow (.github/workflows/build-and-package.yml) for native desktop build and ARM64 deb generation.",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "statusEnteredAt": "2026-09-12T00:21:47Z",
+      "priorityRank": 20,
+      "epic": "cz-ggz-bf4",
+      "status": "todo",
+      "assignee": "johan.lofgren@gmail.com",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "20280b3c929a780bbdb0200494ae84c0a3d743c0fcbdb67d28a9af1181f32924",
+        "remoteId": "cz-ggz-bf4.8",
+        "remoteStatus": "open",
+        "remoteUpdatedAt": "2026-09-12T00:21:47Z",
+        "remoteCreatedAt": "2026-09-11T22:21:47Z",
+        "claimedBy": null,
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "task"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    },
+    {
+      "id": "cz-ggz-bf4_2e_4",
+      "externalId": "cz-ggz-bf4.4",
+      "title": "Redesign HUD layout and menus for 320x170 screen geometry",
+      "description": "Redesign HUD element coordinates (HUD.PlayerX, HUD.LivesX, HUD.BonusX, HUD.StageX, HUD.TimeX, HUD.SmallCoinX) to fit into a compact 16px high header band across 320px width. Adjust main menu, pause menu, and level-selection screens in LOOP_Menu.cpp and LOOP_Options.cpp to fit within the 170px vertical limit without overlapping options. Adjust splash screens.",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "statusEnteredAt": "2026-09-12T00:21:09Z",
+      "priorityRank": 20,
+      "epic": "cz-ggz-bf4",
+      "status": "todo",
+      "assignee": "johan.lofgren@gmail.com",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "d7c9ace18e19d64325c0d5d2745e1b65017dcb0e65b1e2404217e22f7571e47b",
+        "remoteId": "cz-ggz-bf4.4",
+        "remoteStatus": "open",
+        "remoteUpdatedAt": "2026-09-12T00:21:09Z",
+        "remoteCreatedAt": "2026-09-11T22:21:09Z",
+        "claimedBy": null,
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "task"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    },
+    {
+      "id": "cz-ggz-bf4_2e_15",
+      "externalId": "cz-ggz-bf4.15",
+      "title": "Adapt OpenGGS Maker / Level Editor for 320x170 keyboard-only navigation",
+      "description": "Adapt the built-in Stage Creator / Level Editor (LOOP_Editor_*.cpp) for handheld operation without mouse: implement directional keyboard cursor navigation, compact tile palette overlay window, quick element hotkeys (numeric keys 1-9, Fn shortcuts), stage test run hotkey, and export to user level directory ($XDG_DATA_HOME/openggs/custom_levels/).",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "statusEnteredAt": "2026-09-11T22:34:37Z",
+      "priorityRank": 30,
+      "epic": "cz-ggz-bf4",
+      "status": "backlog",
+      "assignee": "johan.lofgren@gmail.com",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "1088ba50965d8581ad642d33273208fae8d7efd589db26d7766bec3ba95ee127",
+        "remoteId": "cz-ggz-bf4.15",
+        "remoteStatus": "deferred",
+        "remoteUpdatedAt": "2026-09-11T22:34:37Z",
+        "remoteCreatedAt": "2026-09-11T22:28:24Z",
+        "claimedBy": null,
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "task"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    },
+    {
+      "id": "cz-ggz-bf4_2e_10",
+      "externalId": "cz-ggz-bf4.10",
+      "title": "Setup QEMU ARM64 cardputer-zero-os system image runner",
+      "description": "Create scripts/run-qemu.sh to boot the Raspberry Pi CM0 cardputer-zero-os system image in QEMU ARM64 with virtual DRM display and network port forwarding to test .deb package installation in the real target OS environment.",
+      "lane": "Beads",
+      "tags": [],
+      "start": "2026-09-11",
+      "statusEnteredAt": "2026-09-12T00:26:32Z",
+      "priorityRank": 30,
+      "epic": "cz-ggz-bf4",
+      "status": "todo",
+      "assignee": "johan.lofgren@gmail.com",
+      "blocked": false,
+      "beadsSync": {
+        "lastSynced": "2026-09-11T23:35:05.989Z",
+        "remoteHash": "d295d3181f41be93eb9028bbd9e2d3f41f40a2fc68f415bea25d6b98497f7895",
+        "remoteId": "cz-ggz-bf4.10",
+        "remoteStatus": "open",
+        "remoteUpdatedAt": "2026-09-12T00:26:32Z",
+        "remoteCreatedAt": "2026-09-11T22:26:24Z",
+        "claimedBy": null,
+        "closeReason": null,
+        "externalRef": null,
+        "labels": [],
+        "metadata": {
+          "issue_type": "task"
+        },
+        "blockNotes": null,
+        "syncState": "current",
+        "syncError": null,
+        "linkedBy": "import"
+      }
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "cz-ggz-bf4_2e_2",
+      "to": "cz-ggz-bf4_2e_11"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_5",
+      "to": "cz-ggz-bf4_2e_7"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_11",
+      "to": "cz-ggz-bf4_2e_7"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_14",
+      "to": "cz-ggz-bf4_2e_7"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_6",
+      "to": "cz-ggz-bf4_2e_7"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_4",
+      "to": "cz-ggz-bf4_2e_7"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_2",
+      "to": "cz-ggz-bf4_2e_6"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_3",
+      "to": "cz-ggz-bf4_2e_5"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_2",
+      "to": "cz-ggz-bf4_2e_3"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_1",
+      "to": "cz-ggz-bf4_2e_2"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_7",
+      "to": "cz-ggz-bf4_2e_16"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_5",
+      "to": "cz-ggz-bf4_2e_14"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_4",
+      "to": "cz-ggz-bf4_2e_14"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_5",
+      "to": "cz-ggz-bf4_2e_13"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_3",
+      "to": "cz-ggz-bf4_2e_12"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_1",
+      "to": "cz-ggz-bf4_2e_9"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_12",
+      "to": "cz-ggz-bf4_2e_8"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_7",
+      "to": "cz-ggz-bf4_2e_8"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_3",
+      "to": "cz-ggz-bf4_2e_4"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_5",
+      "to": "cz-ggz-bf4_2e_15"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_4",
+      "to": "cz-ggz-bf4_2e_15"
+    },
+    {
+      "from": "cz-ggz-bf4_2e_7",
+      "to": "cz-ggz-bf4_2e_10"
+    }
+  ]
+}

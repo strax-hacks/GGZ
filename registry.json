@@ -1,0 +1,37 @@
+{
+  "id": "cardputerzero-openggs",
+  "name": "OpenGGS C64",
+  "version": "1.0.0-1",
+  "slug": "openggs-c64",
+  "category": "Games",
+  "author": "OpenGGS Team / CardputerZero Community",
+  "license": "GPL-2.0",
+  "description": "The Great Giana Sisters C64 remake natively ported and adapted for M5Stack Cardputer ZERO ST7789 320x170 display and 46-key mechanical tactile matrix keyboard.",
+  "display": {
+    "resolution": "320x170",
+    "orientation": "landscape",
+    "fps": 60
+  },
+  "controls": {
+    "type": "keyboard_matrix_46_key",
+    "gamepad_supported": true
+  },
+  "icon": "https://cardputerzero.github.io/packages/icons/openggs.png",
+  "preview_images": [
+    "https://cardputerzero.github.io/packages/previews/openggs_stage1.png",
+    "https://cardputerzero.github.io/packages/previews/openggs_title.png"
+  ],
+  "download": {
+    "type": "deb",
+    "architecture": "arm64",
+    "url": "https://github.com/CardputerZero/packages/raw/main/pool/main/cardputerzero-openggs_1.0.0-1_arm64.deb",
+    "sha256": "3a7b1b594b2f2d9198642137682a87d6e6fe236f3ebc6e8e0c90066b539bfb1b",
+    "md5": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "changelog": [
+    {
+      "version": "1.0.0-1",
+      "notes": "Initial Cardputer ZERO release with native 320x170 logical resolution, compact 1-line HUD, 46-key matrix bindings, multi-slot save states, ES8389 audio optimization, battery monitoring, and APPLaunch integration."
+    }
+  ]
+}

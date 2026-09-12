@@ -1,0 +1,16 @@
+/Users/johan/  GGZ/build/desktop/CMakeFiles/openggs-cz.dir
+/Users/johan/  GGZ/build/desktop/CMakeFiles/test.dir
+/Users/johan/  GGZ/build/desktop/CMakeFiles/edit_cache.dir
+/Users/johan/  GGZ/build/desktop/CMakeFiles/rebuild_cache.dir
+/Users/johan/  GGZ/build/desktop/CMakeFiles/list_install_components.dir
+/Users/johan/  GGZ/build/desktop/CMakeFiles/install.dir
+/Users/johan/  GGZ/build/desktop/CMakeFiles/install/local.dir
+/Users/johan/  GGZ/build/desktop/CMakeFiles/install/strip.dir
+/Users/johan/  GGZ/build/desktop/tests/CMakeFiles/smoke_test.dir
+/Users/johan/  GGZ/build/desktop/tests/CMakeFiles/test.dir
+/Users/johan/  GGZ/build/desktop/tests/CMakeFiles/edit_cache.dir
+/Users/johan/  GGZ/build/desktop/tests/CMakeFiles/rebuild_cache.dir
+/Users/johan/  GGZ/build/desktop/tests/CMakeFiles/list_install_components.dir
+/Users/johan/  GGZ/build/desktop/tests/CMakeFiles/install.dir
+/Users/johan/  GGZ/build/desktop/tests/CMakeFiles/install/local.dir
+/Users/johan/  GGZ/build/desktop/tests/CMakeFiles/install/strip.dir
