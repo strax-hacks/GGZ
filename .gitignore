@@ -1,3 +1,17 @@
+# Build artifacts
+build/
+dist/
+bin/
+*.deb
+*.o
+*.o.d
+*.a
+*.so
+*.dylib
+
+# OS files
+.DS_Store
+Thumbs.db
 
 # Beads / Dolt files (added by bd init)
 .dolt/

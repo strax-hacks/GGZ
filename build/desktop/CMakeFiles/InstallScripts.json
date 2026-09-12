@@ -1,8 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/Users/johan/  GGZ/build/desktop/cmake_install.cmake",
-		"/Users/johan/  GGZ/build/desktop/tests/cmake_install.cmake"
-	],
-	"Parallel" : false
-}
