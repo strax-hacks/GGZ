@@ -103,7 +103,15 @@ void LOOP_Menu()
     {
       if(GV.Resolution == RESOLUTION_320x170)
       {
-        if((Key_ENTER_pressed || Key_SPACE_pressed || Joy_OK_pressed) && Menu.ActiveMainMenu == 0) { LOOP_Gameloop_Standard(); }
+        if((Key_ENTER_pressed || Key_SPACE_pressed || Joy_OK_pressed) && Menu.ActiveMainMenu == 0) {
+          if (PC.Stage <= 0) {
+            int startStage = (GV.Cheat_StartAtLastFinishedLevel && GV.LastFinishedLevel >= 1 && GV.LastFinishedLevel <= 33)
+                               ? GV.LastFinishedLevel
+                               : 1;
+            STAGE_Load(startStage, 0, false, false);
+          }
+          LOOP_Gameloop_Standard();
+        }
         if((Key_ENTER_pressed || Key_SPACE_pressed || Joy_OK_pressed) && Menu.ActiveMainMenu == 1) { LOOP_Options(); }
         if((Key_ENTER_pressed || Key_SPACE_pressed || Joy_OK_pressed) && Menu.ActiveMainMenu == 2) { LOOP_Controls_Help(); }
         if((Key_ENTER_pressed || Key_SPACE_pressed || Joy_OK_pressed) && Menu.ActiveMainMenu == 3) { LOOP_Story(); }
@@ -112,7 +120,15 @@ void LOOP_Menu()
       }
       else
       {
-        if((Key_ENTER_pressed || Key_SPACE_pressed || Joy_OK_pressed) && Menu.ActiveMainMenu == 0) { LOOP_Gameloop_Standard(); }
+        if((Key_ENTER_pressed || Key_SPACE_pressed || Joy_OK_pressed) && Menu.ActiveMainMenu == 0) {
+          if (PC.Stage <= 0) {
+            int startStage = (GV.Cheat_StartAtLastFinishedLevel && GV.LastFinishedLevel >= 1 && GV.LastFinishedLevel <= 33)
+                               ? GV.LastFinishedLevel
+                               : 1;
+            STAGE_Load(startStage, 0, false, false);
+          }
+          LOOP_Gameloop_Standard();
+        }
         if((Key_ENTER_pressed || Key_SPACE_pressed || Joy_OK_pressed) && Menu.ActiveMainMenu == 1) { GV.GameType = TYPE_C64; GAMETYPE_Load(); }
         if((Key_ENTER_pressed || Key_SPACE_pressed || Joy_OK_pressed) && Menu.ActiveMainMenu == 2) { GV.GameType = TYPE_AMIGA; GAMETYPE_Load(); }
         if((Key_ENTER_pressed || Key_SPACE_pressed || Joy_OK_pressed) && Menu.ActiveMainMenu == 3) { LOOP_Editor_Stages(); }
@@ -161,7 +177,7 @@ void LOOP_Menu_Draw()
     Print((320 - 23 * 8) / 2, 14, 3, 0, "THE GREAT GIANA SISTERS");
 
     const char* label[6] = {
-      (PC.Stage > 1 || PC.Points > 0) ? "RESUME" : "START",
+      (PC.Points > 0) ? "RESUME" : "START",
       "OPTIONS",
       "CONTROLS",
       "STORY",

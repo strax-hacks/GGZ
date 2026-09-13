@@ -20,9 +20,6 @@ void STAGE_Draw()
     virtualHeight = 340;
   }
 
-  int screenWTiles = (virtualWidth / 16);
-  int screenHTiles = (virtualHeight / 16);
-
   if(PC.PosX < virtualWidth/2)   {PC.StagePosX = 0;}
   if(PC.PosX+1 > virtualWidth/2) {PC.StagePosX = PC.PosX-virtualWidth/2;}
   if(PC.PosX+1-(virtualWidth/2) > StageC64.StageWidthPixels-virtualWidth) {PC.StagePosX = StageC64.StageWidthPixels-virtualWidth;}
@@ -47,33 +44,20 @@ void STAGE_Draw()
     }
   }
 
-  // BACKGROUND
-  for(y=0; y<screenHTiles+1; y++)
-  {
-    for(x=0; x<screenWTiles+1; x++)
-    {
-      if(StageC64.BackgroundColour == 0){TILE_Draw((x*TS.Tile_Width), y*TS.Tile_Height, 0);}  // BLUE BACKGROUND
-      if(StageC64.BackgroundColour == 1){TILE_Draw((x*TS.Tile_Width), y*TS.Tile_Height, 40);} // BLACK BACKGROUND
-    }
+  // Tiles 0 and 40 are solid opaque colors in the C64 tile sheet. Clearing
+  // once is pixel-equivalent and avoids one render submission per cell.
+  if (StageC64.BackgroundColour == 0) {
+    SDL_SetRenderDrawColor(gRenderer, 124, 112, 218, 255);
+  } else {
+    SDL_SetRenderDrawColor(gRenderer, 18, 18, 18, 255);
   }
-  // BACKGROUND
+  SDL_RenderClear(gRenderer);
+
+  const int screenWTiles = virtualWidth / 16;
 
   if(StageC64.BackgroundColour == 0){BACKGROUND_ELEMENTS_Outdoors_Draw();}
   if(StageC64.BackgroundColour == 1){BACKGROUND_ELEMENTS_Indoors_Draw();}
 
-  if(TS.NextFrame)
-  {
-    for(y=0; y<StageC64.StageHeight; y++)
-    {
-      for(x=0; x<StageC64.StageWidth; x++)
-      {
-        if(StageC64.TileNumber[x][y] !=0)
-        {
-          SwitchTileToNextFrame(x, y);
-        }
-      }
-    }
-  }
   TS.NextFrame = false;
 
   for(y=0; y<StageC64.StageHeight; y++)

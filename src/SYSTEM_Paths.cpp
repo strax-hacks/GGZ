@@ -93,6 +93,17 @@ std::string GetAssetPath(const std::string& relativePath) {
         return baseRelative;
     }
 
+    // Check parent directories (e.g., when running tests in build/ or build/desktop/)
+    const std::vector<std::string> prefixes = {"../", "../../", "../../../", "../../../../"};
+    for (const auto& p : prefixes) {
+        if (FileExists(p + relativePath) || DirExists(p + relativePath)) {
+            return p + relativePath;
+        }
+        if (FileExists(p + baseRelative) || DirExists(p + baseRelative)) {
+            return p + baseRelative;
+        }
+    }
+
     // Check system data directory
     std::string sysData = std::string(OPENGGS_DATADIR) + "/" + relativePath;
     if (FileExists(sysData) || DirExists(sysData)) {
@@ -108,6 +119,11 @@ std::string GetAssetPath(const std::string& relativePath) {
     // Check if relativePath starts with "base/"
     if (relativePath.rfind("base/", 0) == 0) {
         std::string sub = relativePath.substr(5);
+        for (const auto& p : prefixes) {
+            if (FileExists(p + sub) || DirExists(p + sub)) {
+                return p + sub;
+            }
+        }
         std::string sysSub = std::string(OPENGGS_DATADIR) + "/" + sub;
         if (FileExists(sysSub) || DirExists(sysSub)) {
             return sysSub;

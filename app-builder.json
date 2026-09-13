@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "name": "cardputerzero-openggs",
-  "display_name": "OpenGGS C64",
+  "display_name": "Giana Sisters Zero",
   "version": "1.0.0",
   "runtime": "legacy-deb-only",
   "bin_name": "openggs-cz",

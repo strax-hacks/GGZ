@@ -3,6 +3,17 @@
 Uint32 timecounter_Update_Screen;
 void Hide_Borders_Widescreen();
 
+bool RenderRectOutsideViewport(const SDL_Rect& rect)
+{
+  const int virtualWidth = (GV.Resolution == RESOLUTION_320x170 &&
+                            GV.ViewMode == VIEW_MODE_C64_SCALED) ? 640 : GV.Screen_Width;
+  const int virtualHeight = (GV.Resolution == RESOLUTION_320x170 &&
+                             GV.ViewMode == VIEW_MODE_C64_SCALED) ? 340 : GV.Screen_Height;
+
+  return rect.x + rect.w <= 0 || rect.y + rect.h <= 0 ||
+         rect.x >= virtualWidth || rect.y >= virtualHeight;
+}
+
 // ##############################################
 // ##############################################
 // ##############################################
@@ -20,8 +31,6 @@ void Update_Screen()
       if(GV.Resolution == RESOLUTION_320x170 && GV.ViewMode == VIEW_MODE_C64_SCALED && gameplayTargetTexture != NULL)
       {
         SDL_SetRenderTarget(gRenderer, gameplayTargetTexture);
-        SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
-        SDL_RenderClear(gRenderer);
 
         STAGE_Draw();
         PC_Draw(PC.PosX, PC.PosY);

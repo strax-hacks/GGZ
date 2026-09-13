@@ -17,7 +17,7 @@ void GAME_ENVIRONMENT_Define()
   World.Friction = 1;
   World.TerminalVelocity = 15;
   World.WallFriction = 7;
-  World.TileSwitchSpeed = 50;
+  World.TileSwitchSpeed = 4;
 
   Sprite_Bullet.ExplosionAnimation = 0;
   Sprite_Bullet.ExplosionX = 0;
@@ -31,6 +31,8 @@ void GAME_ENVIRONMENT_Define()
   GV.ViewMode = VIEW_MODE_C64_SCALED;
   GV.PixelPerfectRunning = true; // SO FAR THERE IS NO REASON EVER TO SWITCH THIS TO FALSE
   GV.RandomLevels = false;
+  GV.Cheat_StartAtLastFinishedLevel = false;
+  GV.LastFinishedLevel = 1;
 
   GV.ShowDebugInfos_Tiles = false;
   GV.SplashscreensEnabled = true;
@@ -40,6 +42,8 @@ void GAME_ENVIRONMENT_Define()
   GV.TempMusicVolume = 0; // 0-128
   GV.TempMusicOffCounter = 0; // USED TO FADE OUT MUSIC DURING POWER UP
   GV.MusicEnabled = true;
+
+  Stage_AnimationCounters_Reset();
 
   GV.DirAmigaExists = false;
   GV.DirDefaultExists = false;
@@ -106,6 +110,8 @@ void Options_Save()
   SavedOptions.VolumeSounds = VolumePercentage_Sound;
   SavedOptions.GameType = GV.GameType;
   SavedOptions.Var4 = GV.ViewMode;
+  SavedOptions.Var5 = GV.Cheat_StartAtLastFinishedLevel ? 1 : 0;
+  SavedOptions.Var6 = GV.LastFinishedLevel;
 
   std::string optPath = GetConfigPath("options.cfg");
   FILE *Options_File = fopen (optPath.c_str(), "wb");
@@ -142,6 +148,8 @@ void Options_Load()
     VolumePercentage_Sound = SavedOptions.VolumeSounds;
     VolumePercentage_Music = SavedOptions.VolumeMusic;
     GV.ViewMode = (SavedOptions.Var4 == VIEW_MODE_1X_ZOOMED) ? VIEW_MODE_1X_ZOOMED : VIEW_MODE_C64_SCALED;
+    GV.Cheat_StartAtLastFinishedLevel = (SavedOptions.Var5 == 1);
+    GV.LastFinishedLevel = (SavedOptions.Var6 >= 1 && SavedOptions.Var6 <= 33) ? SavedOptions.Var6 : 1;
 
     AUDIO_Volume_Change_Music(VolumePercentage_Music, false);
     AUDIO_Volume_Change_Sound(VolumePercentage_Sound, false);
@@ -154,6 +162,8 @@ void Options_Load()
     GV.Screen_Width = 320;
     GV.Screen_Height = 170;
     GV.ViewMode = VIEW_MODE_C64_SCALED;
+    GV.Cheat_StartAtLastFinishedLevel = false;
+    GV.LastFinishedLevel = 1;
   }
 }
 

@@ -293,13 +293,13 @@ void STAGE_Load(int StageNumber, int CheckPointNumber, bool ShowSplashScreen, bo
     }
   }
 
+  Stage_AnimationCounters_Reset();
   for(y = 0; y < 30; y++)
   {
     for (x = 0; x < 256; x++)
     {
       StageC64.TileNumber[x][y] = StageCache_C64.TileNumber[StageNumber][x][y];
       if(StageC64.TileNumber[x][y] != 0){LastColWithTile = x;}
-      StageC64.AnimationCounter[x][y] = 0;
     }
   }
 

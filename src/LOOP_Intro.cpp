@@ -30,15 +30,55 @@ void LOOP_Intro_Draw()
     }
   }
 
-  // Render top retro C64 green banner text (Color 3 = Green)
+  // Render top retro C64 green banner bar
+  SDL_Rect topBar = { 0, 0, virtualWidth, 28 };
+  SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
+  SDL_RenderFillRect(gRenderer, &topBar);
+
+  int creditCycle = (SDL_GetTicks() / 3000) % 3;
+
   if (GV.Resolution == RESOLUTION_320x170) {
-    Print((320 - 33 * 8) / 2, 0, 3, 0, "**** THE GREAT GIANA SISTERS ****");
-    Print((320 - 25 * 8) / 2, 9, 3, 0, "SPACE TO PLAY  M FOR MENU");
-    Print((320 - 29 * 8) / 2, 18, 3, 0, "(C) 1987 TIME WARP / SOFTGOLD");
+    Print((320 - 33 * 8) / 2, 1, 3, 0, "**** THE GREAT GIANA SISTERS ****");
+    Print((320 - 26 * 8) / 2, 10, 3, 0, "SPACE TO PLAY - M FOR MENU");
+    if (creditCycle == 0) {
+      Print((320 - 29 * 8) / 2, 19, 3, 0, "(C) 1987 TIME WARP / SOFTGOLD");
+    } else if (creditCycle == 1) {
+      Print((320 - 26 * 8) / 2, 19, 3, 0, "BASED ON OPENGGS BY ROMANH");
+    } else {
+      Print((320 - 32 * 8) / 2, 19, 3, 0, "CARDPUTER ZERO PORT: STRAX-HACKS");
+    }
   } else {
     Print(GV.Screen_Width / 2 - 160, 2, 3, 0, "**** THE GREAT GIANA SISTERS ****");
-    Print(GV.Screen_Width / 2 - 135, 11, 3, 0, "SPACE TO PLAY    M FOR MENU");
-    Print(GV.Screen_Width / 2 - 145, 20, 3, 0, "(C) 1987 TIME WARP / SOFTGOLD");
+    Print((GV.Screen_Width - 26 * 8) / 2, 11, 3, 0, "SPACE TO PLAY - M FOR MENU");
+    if (creditCycle == 0) {
+      Print(GV.Screen_Width / 2 - 145, 20, 3, 0, "(C) 1987 TIME WARP / SOFTGOLD");
+    } else if (creditCycle == 1) {
+      Print((GV.Screen_Width - 26 * 8) / 2, 20, 3, 0, "BASED ON OPENGGS BY ROMANH");
+    } else {
+      Print((GV.Screen_Width - 32 * 8) / 2, 20, 3, 0, "CARDPUTER ZERO PORT: STRAX-HACKS");
+    }
+  }
+
+  // Render bottom retro scroller ticker
+  const char scrollerText[] = "+++ THE GREAT GIANA SISTERS +++ CARDPUTER ZERO PORT BY STRAX-HACKS +++ BASED ON OPENGGS 2.0 BY ROMANH +++ ORIGINAL GAME (C) 1987 TIME WARP / SOFTGOLD +++ GREETINGS TO ALL RETRO GAMING FANS! +++ SPACE TO PLAY - M FOR MENU +++ ";
+  const int textLen = (int)(sizeof(scrollerText) - 1);
+  const int textPixelWidth = textLen * 8;
+  int scrollOffset = ((int)(PC.StagePosX * 1.5f)) % textPixelWidth;
+  int startX = -scrollOffset;
+  int bottomY = (GV.Resolution == RESOLUTION_320x170) ? 161 : (GV.Screen_Height - 10);
+
+  SDL_Rect bottomBar = { 0, bottomY - 1, virtualWidth, 10 };
+  SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
+  SDL_RenderFillRect(gRenderer, &bottomBar);
+
+  while (startX < virtualWidth) {
+    for (int i = 0; i < textLen; ++i) {
+      int charX = startX + i * 8;
+      if (charX >= -8 && charX < virtualWidth) {
+        DrawChar(charX, bottomY, 2, 0, scrollerText[i]);
+      }
+    }
+    startX += textPixelWidth;
   }
 }
 
@@ -67,7 +107,11 @@ void LOOP_Intro()
     // SPACE, ENTER, 1, Gamepad OK -> Start Game
     if (Key_SPACE_pressed || Key_ENTER_pressed || Key_1_pressed || Joy_OK_pressed) {
       AUDIO_Sound_Play(AUDIO_CLICK);
-      STAGE_Load(1, 0, false, false);
+      PC_Define();
+      int startStage = (GV.Cheat_StartAtLastFinishedLevel && GV.LastFinishedLevel >= 1 && GV.LastFinishedLevel <= 33)
+                         ? GV.LastFinishedLevel
+                         : 1;
+      STAGE_Load(startStage, 0, false, false);
       LOOP_Gameloop_Standard();
       if (!QuitProgram) {
         // Return to Intro after finishing or quitting standard gameloop

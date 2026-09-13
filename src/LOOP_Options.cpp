@@ -6,14 +6,73 @@ Options_Def Options;
 // ##############################################
 // ##############################################
 
+void LOOP_Cheats()
+{
+  bool inCheats = true;
+  AUDIO_Sound_Play(AUDIO_CLICK);
+  while(inCheats && !QuitProgram && !QuitToMenu) {
+    getInput();
+    INPUT_General();
+    if(Key_ESCAPE_pressed || Joy_ESCAPE_pressed) {
+      inCheats = false;
+    }
+    if(!Key_LALT && (Key_ENTER_pressed || Key_SPACE_pressed || Joy_OK_pressed || Key_RIGHT_pressed || Key_LEFT_pressed)) {
+      GV.Cheat_StartAtLastFinishedLevel = !GV.Cheat_StartAtLastFinishedLevel;
+      Options_Save();
+      AUDIO_Sound_Play(AUDIO_CLICK);
+    }
+    drawGround(0);
+    if (GV.Resolution == RESOLUTION_320x170) {
+      Print((320 - 12 * 8) / 2, 10, 3, 0, "CHEAT ENGINE");
+      Print(16, 30, 0, 0, "1. START AT LAST LEVEL");
+
+      char statusBuf[48];
+      snprintf(statusBuf, sizeof(statusBuf), "STATUS: [%s]", GV.Cheat_StartAtLastFinishedLevel ? "ENABLED" : "DISABLED");
+      Print(16, 46, GV.Cheat_StartAtLastFinishedLevel ? 3 : 2, 0, statusBuf);
+
+      char lvlBuf[48];
+      snprintf(lvlBuf, sizeof(lvlBuf), "LAST FINISHED: STAGE %d", GV.LastFinishedLevel);
+      Print(16, 64, 0, 0, lvlBuf);
+
+      Print(16, 88, 2, 0, "When active, new game begins");
+      Print(16, 100, 2, 0, "at last finished level.");
+
+      Print((320 - 32 * 8) / 2, 146, 2, 0, "ENTER:TOGGLE CHEAT  ESC:RETURN");
+    } else {
+      Print((GV.Screen_Width - 12 * 8) / 2, 30, 3, 0, "CHEAT ENGINE");
+      Print(40, 80, 0, 0, "1. START AT LAST LEVEL");
+
+      char statusBuf[48];
+      snprintf(statusBuf, sizeof(statusBuf), "STATUS: [%s]", GV.Cheat_StartAtLastFinishedLevel ? "ENABLED" : "DISABLED");
+      Print(40, 110, GV.Cheat_StartAtLastFinishedLevel ? 3 : 2, 0, statusBuf);
+
+      char lvlBuf[48];
+      snprintf(lvlBuf, sizeof(lvlBuf), "LAST FINISHED: STAGE %d", GV.LastFinishedLevel);
+      Print(40, 150, 0, 0, lvlBuf);
+
+      Print(40, 190, 2, 0, "When active, new game starts at last finished level.");
+      Print((GV.Screen_Width - 32 * 8) / 2, GV.Screen_Height - 40, 2, 0, "ENTER:TOGGLE CHEAT  ESC:RETURN");
+    }
+    SDL_RenderPresent(gRenderer);
+    SDL_Delay(30);
+  }
+  AUDIO_Sound_Play(AUDIO_CLICK);
+  Options_Save();
+}
+
+// ##############################################
+// ##############################################
+// ##############################################
+
 void LOOP_Options()
 {
   int GameModeTemp = GV.Mode;
   GV.Mode = MODE_OPTIONS;
   Menu.Active = 0;
 
-  Menu.MenuEntriesOptions = 8;
+  Menu.MenuEntriesOptions = 10;
   Menu.ActiveOptions = 0;
+  Menu.Cols = 2;
 
   Options.x_off = 20;
   Options.y_off = 20;
@@ -90,6 +149,13 @@ void LOOP_Options()
     if(!Key_LALT && (Key_ENTER_pressed || Key_SPACE_pressed || Joy_OK_pressed) && Menu.ActiveOptions == 7) {
       LOOP_Controls_Help();
     }
+    if(!Key_LALT && (Key_ENTER_pressed || Key_SPACE_pressed || Joy_OK_pressed) && Menu.ActiveOptions == 8) {
+      LOOP_Cheats();
+    }
+    if(!Key_LALT && (Key_ENTER_pressed || Key_SPACE_pressed || Joy_OK_pressed) && Menu.ActiveOptions == 9) {
+      QuitToMenu = true;
+      AUDIO_Sound_Play(AUDIO_CLICK);
+    }
 
     Update_Screen();
   }
@@ -117,13 +183,13 @@ void LOOP_Options_Draw()
 
   if (GV.Resolution == RESOLUTION_320x170)
   {
-    Print((320 - 18 * 8) / 2, 8, 3, 0, "SETTINGS / OPTIONS");
+    Print((320 - 18 * 8) / 2, 6, 3, 0, "SETTINGS / OPTIONS");
 
     int optCols = 2;
     int optStartX = 14;
-    int optStartY = 26;
+    int optStartY = 20;
     int optSpacingX = 152;
-    int optSpacingY = 26;
+    int optSpacingY = 24;
 
     for(x = 0; x < Menu.MenuEntries; x++)
     {
@@ -159,6 +225,10 @@ void LOOP_Options_Draw()
         snprintf(optBuf, sizeof(optBuf), "RANDOM: %s", GV.RandomLevels ? "ON" : "OFF");
       } else if (x == 7) {
         snprintf(optBuf, sizeof(optBuf), "KEYMAP / HELP");
+      } else if (x == 8) {
+        snprintf(optBuf, sizeof(optBuf), "CHEATS: %s", GV.Cheat_StartAtLastFinishedLevel ? "ON" : "OFF");
+      } else if (x == 9) {
+        snprintf(optBuf, sizeof(optBuf), "BACK");
       }
 
       int textLen = (int)strlen(optBuf);
@@ -236,5 +306,16 @@ void LOOP_Options_Draw()
     // Option 7: Keymap & Controls Help
     Print(Menu.x[7]+10, Menu.y[7]+10, 3, 0, "Keymap /");
     Print(Menu.x[7]+10, Menu.y[7]+22, 3, 0, "Controls");
+
+    // Option 8: Cheats
+    Colour = (Menu.Active == 8) ? 3 : 0;
+    Print(Menu.x[8]+10, Menu.y[8]+10, Colour, 0, "Cheats");
+    Print(Menu.x[8]+10, Menu.y[8]+22, 3, 0, GV.Cheat_StartAtLastFinishedLevel ? "ON" : "OFF");
+    Print(Menu.x[8]+10, Menu.y[8]+34, 2, 0, "Start Last");
+
+    // Option 9: Back
+    Colour = (Menu.Active == 9) ? 3 : 0;
+    Print(Menu.x[9]+10, Menu.y[9]+10, Colour, 0, "Back to");
+    Print(Menu.x[9]+10, Menu.y[9]+22, 3, 0, "Menu");
   }
 }

@@ -6,6 +6,6 @@ Architecture: arm64
 Depends: libsdl2-2.0-0 (>= 2.0.10), libsdl2-image-2.0-0, libsdl2-mixer-2.0-0, libc6 (>= 2.31)
 Maintainer: CardputerZero Community <dev@cardputerzero.local>
 Homepage: https://github.com/CardputerZero
-Description: OpenGGS (The Great Giana Sisters C64 clone) for M5Stack Cardputer ZERO
+Description: Giana Sisters Zero (The Great Giana Sisters C64 clone) for M5Stack Cardputer ZERO
  Native ARM64 build adapted for Cardputer ZERO ST7789 320x170 display,
  46-key tactile keyboard matrix, and cardputer-zero-os / APPLaunch launcher.

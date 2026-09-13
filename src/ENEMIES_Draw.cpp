@@ -54,7 +54,11 @@ void ENEMY_Draw(int EnemyNumber)
     DstRect.h = SrcRect.h;
     DstRect.x = Enemy[EnemyNumber].PosX-(int)(SrcRect.w/2)-PC.StagePosX;
     DstRect.y = Enemy[EnemyNumber].PosY-SrcRect.h-PC.StagePosY;
-    SDL_RenderCopyEx(gRenderer, EnemiesTexture, &SrcRect, &DstRect, 0, NULL, SDL_FLIP_NONE );
+    if (RenderRectOutsideViewport(DstRect)) {
+      return;
+    }
+    RenderStats_RecordSubmission();
+    SDL_RenderCopy(gRenderer, EnemiesTexture, &SrcRect, &DstRect);
     //int GrabberX = DstRect.x;
     //int GrabberY = DstRect.y;
     //PrintInt(GrabberX, GrabberY, 0,0, Enemy[EnemyNumber].Type);

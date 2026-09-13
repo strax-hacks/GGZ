@@ -15,6 +15,10 @@ void TILE_Draw(int x, int y, int Number);
 void TileSheet_Load();
 void SwitchTileToNextFrame(int x, int y);
 void Check_Switch_Tile_Down(int x, int y);
+void Stage_AnimationCounter_Set(int x, int y, int counter);
+void Stage_AnimationCounters_Reset();
+void Stage_Animation_Tick();
+int Stage_Animation_ActiveCount();
 
 void SPRITES_Define();
 void SPRITES_Draw();
@@ -23,6 +27,15 @@ void SPRITE_SmallCoin_Activate(int x, int y);
 void SPRITE_PowerUp_Activate(int x, int y);
 void SPRITE_Bullet_Activate();
 void SPRITE_Bullet_Move();
+
+#ifdef OPENGGS_RENDER_STATS
+extern unsigned long long RenderSubmissionCount;
+void RenderStats_Reset();
+inline void RenderStats_RecordSubmission() { ++RenderSubmissionCount; }
+#else
+inline void RenderStats_Reset() {}
+inline void RenderStats_RecordSubmission() {}
+#endif
 
 int ElementWidth(int ElementNumber);
 int ElementHeight(int ElementNumber);

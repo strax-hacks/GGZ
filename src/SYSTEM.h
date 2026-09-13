@@ -12,6 +12,7 @@ void show_DebugInfos();
 void toggleScreenmode();
 void SYSTEM_SetResolution(int Resolution);
 void Update_Screen();
+bool RenderRectOutsideViewport(const SDL_Rect& rect);
 
 // ##############################################
 // ##############################################

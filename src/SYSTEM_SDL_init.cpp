@@ -32,7 +32,7 @@ void init()
 
     if (GV.Resolution == RESOLUTION_320x170)
     {
-      gWindow = SDL_CreateWindow("OpenGGS C64 (Cardputer ZERO)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 320, 170, SDL_WINDOW_SHOWN);
+      gWindow = SDL_CreateWindow("Giana Sisters Zero", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 320, 170, SDL_WINDOW_SHOWN);
     }
     else
     {
@@ -78,7 +78,7 @@ void init()
    if (gameplayTargetTexture == NULL) {
      printf("Warning: gameplayTargetTexture could not be created: %s\n", SDL_GetError());
    } else {
-     SDL_SetTextureBlendMode(gameplayTargetTexture, SDL_BLENDMODE_BLEND);
+     SDL_SetTextureBlendMode(gameplayTargetTexture, SDL_BLENDMODE_NONE);
    }
 
   int i;
@@ -230,4 +230,3 @@ void SYSTEM_SetResolution(int Resolution)
 // ##############################################
 // ##############################################
 // ##############################################
-

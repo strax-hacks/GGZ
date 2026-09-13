@@ -17,6 +17,13 @@ void LOOP_Gameloop_Standard()
   int GameModeTemp = GV.Mode;
   GV.Mode = MODE_GAMELOOP;
 
+  if (PC.Stage <= 0) {
+    int startStage = (GV.Cheat_StartAtLastFinishedLevel && GV.LastFinishedLevel >= 1 && GV.LastFinishedLevel <= 33)
+                       ? GV.LastFinishedLevel
+                       : 1;
+    STAGE_Load(startStage, 0, false, false);
+  }
+
   TS.NextFrame = false;
   timecounter=SDL_GetTicks();
   timecounter_Animation=SDL_GetTicks();
@@ -44,12 +51,12 @@ void LOOP_Gameloop_Standard()
     if(Key_F2_pressed) {STAGE_Load(PC.Stage, 0, true, false);}
     if(Key_F3_pressed)
     {
-      PC.Stage++;  if(PC.Stage > 37){PC.Stage = 0;}
+      PC.Stage++;  if(PC.Stage > 37){PC.Stage = 1;}
       STAGE_Load(PC.Stage, 0, true, false);
     }
     if(Key_F4_pressed)
     {
-      PC.Stage--; if(PC.Stage < 0){PC.Stage = 37;}
+      PC.Stage--; if(PC.Stage < 1){PC.Stage = 37;}
       STAGE_Load(PC.Stage, 0, true, false);
     }
     //if(Key_F5_pressed) {GV.ShowDebugInfos_Tiles = !GV.ShowDebugInfos_Tiles;}
@@ -95,7 +102,19 @@ void LOOP_Gameloop_Standard()
 
     if(PC.Exit_Reached)
     {
-      if(PC.Stage == 33){PC.Stage = 1; STAGE_Load(PC.Stage, 0, false, false); QuitToMenu = true;}  // LAST STAGE
+      if(PC.Stage >= 1 && PC.Stage <= 33)
+      {
+        if(PC.Stage > GV.LastFinishedLevel)
+        {
+          GV.LastFinishedLevel = PC.Stage;
+          Options_Save();
+        }
+      }
+      if(PC.Stage == 33){
+        PC_Define();
+        STAGE_Load(PC.Stage, 0, false, false);
+        QuitToMenu = true;
+      }  // LAST STAGE
       else if(PC.Stage > 33){PC.Stage = PC.SubStageEntryStage; STAGE_Load(PC.Stage, 3, false, false);} // EXITING A SUBSTAGE
       else if(PC.Stage < 33){PC.Stage++; STAGE_Load(PC.Stage, 0, true, true);}                   // NORMAL STAGE
     }

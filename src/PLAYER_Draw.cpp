@@ -46,7 +46,11 @@ void PC_Draw(int x, int y)
 
   DstRect.x = PC.PosX - int(SrcRect.w/2) - PC.StagePosX;
   DstRect.y = y - SrcRect.h - PC.StagePosY;
-  SDL_RenderCopyEx(gRenderer, PlayerTexture, &SrcRect, &DstRect, 0, NULL, SDL_FLIP_NONE );
+  if (RenderRectOutsideViewport(DstRect)) {
+    return;
+  }
+  RenderStats_RecordSubmission();
+  SDL_RenderCopy(gRenderer, PlayerTexture, &SrcRect, &DstRect);
 
   if(PC.ShowBorder)
   {

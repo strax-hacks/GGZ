@@ -1,4 +1,5 @@
 #include "globals.h"
+#include "SYSTEM_Paths.h"
 
 TileEditor_Type TE;
 Uint32 timecounter_Scrolling;
@@ -328,7 +329,8 @@ void TileSheet_Load()
 {
   int x;
   FILE *Spritesheet_File;
-  Spritesheet_File = fopen ("base/Tilesheetinfo.tsi", "rb");
+  std::string tsiPath = GetAssetPath("base/Tilesheetinfo.tsi");
+  Spritesheet_File = fopen (tsiPath.c_str(), "rb");
 
   if (Spritesheet_File != NULL)
   {

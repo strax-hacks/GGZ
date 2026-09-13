@@ -40,7 +40,9 @@ void PC_Define()
   PC.ColHeightQuart = PC.ColHeight/4;
   PC.ColHeight = PC.ColHeight;
 
-  PC.Stage = 1;
+  PC.Stage = (GV.Cheat_StartAtLastFinishedLevel && GV.LastFinishedLevel >= 1 && GV.LastFinishedLevel <= 33)
+               ? GV.LastFinishedLevel
+               : 1;
   PC.Coins = 0;
   PC_PowerUp_Set(0);
 

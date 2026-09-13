@@ -1,4 +1,5 @@
 #include "globals.h"
+#include "SYSTEM_Paths.h"
 
 Sprite_SmallCoinDefinition Sprite_SmallCoin[20];
 Sprite_PowerUp_Definition Sprite_PowerUp[10];
@@ -34,7 +35,8 @@ void SPRITES_Define()
   // LOAD POWERUP DEFINITIONS
   FILE* bonusfile;
   Uint32 temparray[40];  // 15*46
-  bonusfile = fopen(FileName.PowerUpDefinition,  "r");
+  std::string powerDefPath = GetAssetPath(FileName.PowerUpDefinition);
+  bonusfile = fopen(powerDefPath.c_str(),  "r");
   if (bonusfile == NULL)
   {
     fprintf(stderr,"SPRITE DIMENSIONS NOT FOUND!!!");

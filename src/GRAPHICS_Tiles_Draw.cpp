@@ -1,5 +1,14 @@
 #include "globals.h"
 
+#ifdef OPENGGS_RENDER_STATS
+unsigned long long RenderSubmissionCount = 0;
+
+void RenderStats_Reset()
+{
+  RenderSubmissionCount = 0;
+}
+#endif
+
 // ##############################################
 // ##############################################
 // ##############################################
@@ -34,7 +43,7 @@ void drawGround(int Colour)
     {
       DstRect.x = i*TS.Tile_Width;
       DstRect.y = j*TS.Tile_Height;
-      SDL_RenderCopyEx(gRenderer, InterfaceTexture, &SrcRect, &DstRect, 0, NULL, SDL_FLIP_NONE );
+      SDL_RenderCopy(gRenderer, InterfaceTexture, &SrcRect, &DstRect);
     }
   }
 }
@@ -56,6 +65,12 @@ void TILE_Draw(int x, int y, int Number)
   DstRect.h = SrcRect.h;
   DstRect.x = x;
   DstRect.y = y;
+
+  // ANIMATE 16x16 INTRO DIAMOND
+  if(Number == 2182)
+  {
+    SrcRect.x += (ME.Frame_6 * TS.Tile_Width);
+  }
 
   // ANMIATE COIN
   if(TileType[Number].Coin)
@@ -111,13 +126,15 @@ void TILE_Draw(int x, int y, int Number)
   // IF NOT IN MODE_GAMELOOP DRAW EVERYTHING
   if(GV.Mode != MODE_GAMELOOP)
   {
-    SDL_RenderCopyEx(gRenderer, TilesTexture, &SrcRect, &DstRect, 0, NULL, SDL_FLIP_NONE );
+    RenderStats_RecordSubmission();
+    SDL_RenderCopy(gRenderer, TilesTexture, &SrcRect, &DstRect);
   }
 
   // MAKE SURE NOT TO DRAW HIDDEN STUFF IN MODE_GAMELOOP
   if(GV.Mode == MODE_GAMELOOP && !TileType[Number].WarpStone)
   {
-    SDL_RenderCopyEx(gRenderer, TilesTexture, &SrcRect, &DstRect, 0, NULL, SDL_FLIP_NONE );
+    RenderStats_RecordSubmission();
+    SDL_RenderCopy(gRenderer, TilesTexture, &SrcRect, &DstRect);
   }
 }
 

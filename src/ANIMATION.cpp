@@ -6,8 +6,6 @@
 
 void Animation()
 {
-  int x, y;
-
     if(SDL_GetTicks() - timecounter_Animation_Tiles_Fast > 200)
     {
       timecounter_Animation_Tiles_Fast = SDL_GetTicks();
@@ -35,34 +33,13 @@ void Animation()
     if(SDL_GetTicks() - timecounter_TileSwitch > 1)
     {
       timecounter_TileSwitch = SDL_GetTicks();
-      for(y=0; y<StageC64.StageHeight; y++)
-      {
-        for(x=(int)(PC.StagePosX/16); x<(int)(PC.StagePosX/16)+GV.ScreenWidthTiles+1; x++)
-        {
-          if(StageC64.AnimationCounter[x][y] > 0){StageC64.AnimationCounter[x][y]--;}
-        }
-      }
+      Stage_Animation_Tick();
       if(Sprite_Bullet.ExplosionAnimation>0){Sprite_Bullet.ExplosionAnimation--;}
       if(PC.MorphingCounter > 0)            {PC.MorphingCounter--;}
       if(PC.WarpCounter > 0)                {PC.WarpCounter--;}
       if(PC.OnGroundDelay > 0)              {PC.OnGroundDelay--;}
       if(GV.TempMusicOffCounter > 0)        {GV.TempMusicOffCounter--;}
-
-
-
-/*
-      for(y = 0; y < 30; y++)
-      {
-        for (x = 0; x < 256; x++)
-        {
-          if(StageC64.AnimationCounter[x][y] > 0){StageC64.AnimationCounter[x][y]--;}
-        }
-      }
-*/
     }
-
-
-
 }
 
 // ##############################################

@@ -23,7 +23,7 @@ void LOOP_Credits()
 
     if(Key_DOWN_pressed || Joy_DOWN_pressed)
     {
-      if (Credits.y_off > -130) Credits.y_off -= 12;
+      if (Credits.y_off > -150) Credits.y_off -= 12;
     }
     if(Key_UP_pressed || Joy_UP_pressed)
     {
@@ -63,10 +63,11 @@ void LOOP_Credits_Draw()
   Print(xBase, 116 + yBase, 0, 0, "Music:        Alejandro Altimari");
 
   Print(xBase, 136 + yBase, 2, 0, "Cardputer ZERO Port");
-  Print(xBase, 148 + yBase, 0, 0, "Port & Opt:   CardputerZero Community");
+  Print(xBase, 148 + yBase, 0, 0, "Port & Dev:   strax-hacks");
   Print(xBase, 160 + yBase, 0, 0, "Display:      ST7789v3 320x170 Native");
+  Print(xBase, 172 + yBase, 0, 0, "GitHub:       strax-hacks/GGZ");
 
-  Print(xBase, 180 + yBase, 2, 0, "Thanks to all retro gaming fans!");
+  Print(xBase, 192 + yBase, 2, 0, "Thanks to all retro gaming fans!");
 
   SDL_RenderSetClipRect(gRenderer, NULL);
 

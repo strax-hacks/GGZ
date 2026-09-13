@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=OpenGGS C64
+Name=Giana Sisters Zero
 Comment=The Great Giana Sisters C64 Remake for Cardputer ZERO
 Exec=/usr/share/openggs/bin/openggs-cz
 Icon=/usr/share/APPLaunch/share/images/openggs.png

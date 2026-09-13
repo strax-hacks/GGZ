@@ -69,7 +69,7 @@ Upstream OpenGGS hardcodes standard PC 4:3 resolutions (640×480, 800×600, 1280
 
 ```cpp
 // SYSTEM_SDL_init.cpp
-gWindow = SDL_CreateWindow("OpenGGS C64",
+gWindow = SDL_CreateWindow("Giana Sisters Zero",
                            SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                            320, 170,
                            SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -231,7 +231,7 @@ cardputerzero-openggs_1.0.0-1_arm64.deb
 ```json
 {
   "id": "cardputerzero-openggs",
-  "name": "OpenGGS C64",
+  "name": "Giana Sisters Zero",
   "version": "1.0.0-1",
   "category": "Games",
   "author": "OpenGGS Team / CardputerZero Community",

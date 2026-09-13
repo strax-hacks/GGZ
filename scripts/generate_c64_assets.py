@@ -258,6 +258,7 @@ def generate_giana_brick_interface():
     print('Generated Giana Brick buttons in base/Interface.png')
 
 def generate_c64_intro_tiles():
+    import os
     tiles_img = Image.open('base/c64/Tiles.png').convert('RGBA')
 
     C_BLACK   = (0, 0, 0, 255)
@@ -272,6 +273,28 @@ def generate_c64_intro_tiles():
     C_DBLUE   = (65, 55, 205, 255)
     C_CYAN    = (170, 255, 238, 255)
     C_TRANS   = (255, 0, 255, 255)
+
+    def get_source_asset_1x(pattern):
+        # Look in assets/c64/ or ~/.cursor/projects/Users-johan-GGZ/assets/
+        search_dirs = [
+            'assets/c64',
+            '/Users/johan/.cursor/projects/Users-johan-GGZ/assets'
+        ]
+        for sdir in search_dirs:
+            if os.path.isdir(sdir):
+                for f in os.listdir(sdir):
+                    if f.startswith(pattern) and f.endswith('.png'):
+                        im = Image.open(os.path.join(sdir, f)).convert('RGBA')
+                        w_1x = im.width // 2
+                        h_1x = im.height // 2
+                        im_1x = Image.new('RGBA', (w_1x, h_1x), (0, 0, 0, 0))
+                        for y in range(h_1x):
+                            for x in range(w_1x):
+                                p = im.getpixel((x * 2, y * 2))
+                                if p[3] > 0 and (p[0], p[1], p[2]) != (124, 112, 218) and (p[0], p[1], p[2]) != (255, 0, 255):
+                                    im_1x.putpixel((x, y), (p[0], p[1], p[2], 255))
+                        return im_1x
+        return None
 
     def create_cobble_top():
         img = Image.new('RGBA', (16, 16), C_TRANS)
@@ -392,61 +415,39 @@ def generate_c64_intro_tiles():
 
     def create_mushroom_cap_and_stem():
         img = Image.new('RGBA', (16, 16), C_TRANS)
-        for y in range(16):
-            for x in range(16):
-                if 2 <= y <= 9:
-                    dx = abs(x - 7.5)
-                    dy = (y - 9)
-                    if dx*dx + dy*dy * 1.4 <= 38:
-                        if (x in (3, 4) and y in (4, 5)) or (x in (11, 12) and y in (4, 5)) or (x in (7, 8) and y in (5, 6)) or (x in (5, 6) and y in (3, 4)) or (x in (9, 10) and y in (3, 4)):
-                            img.putpixel((x, y), C_WHITE)
-                        elif y == 2 or dx > 5.5:
-                            img.putpixel((x, y), C_BLACK)
-                        else:
-                            img.putpixel((x, y), C_RED)
-                elif 10 <= y <= 15:
-                    if 5 <= x <= 10:
-                        if x == 5 or x == 10 or y == 15:
-                            img.putpixel((x, y), C_BLACK)
-                        elif (x + y) % 2 == 0:
-                            img.putpixel((x, y), C_YELLOW)
-                        else:
-                            img.putpixel((x, y), C_WHITE)
-        return img
-
-    def create_bush_pair():
-        bush_art = [
-            '................................',
-            '............##.###..............',
-            '.........#######.######.........',
-            '.......##################.......',
-            '.....######################.....',
-            '....########################....',
-            '...##########################...',
-            '..############################..',
-            '..############################..',
-            '.##############################.',
-            '.##############################.',
-            '.#############..###############.',
-            '.############.MM.##############.',
-            '..##########.MLLM.############..',
-            '...#########.MMMM.###########...',
-            '.....######..MMMM..########.....',
+        art = [
+            "................",
+            "................",
+            ".....######.....",
+            "...##RRWWWRR##..",
+            "..#RRRRWWWRRRR#.",
+            "..#RRWWWRRRWWR#.",
+            "..#RRWWWRRRWWR#.",
+            "...############.",
+            "......#GGGG#....",
+            "......#GYYG#....",
+            "......#GYYG#....",
+            "......#GYYG#....",
+            "......#GYYG#....",
+            "......#GYYG#....",
+            "......######....",
+            "................",
         ]
-        bush = Image.new('RGBA', (32, 16), C_TRANS)
         for y in range(16):
-            row = bush_art[y]
-            for x in range(32):
+            row = art[y]
+            for x in range(16):
                 c = row[x]
                 if c == '#':
-                    bush.putpixel((x, y), C_GREEN)
-                elif c == 'M':
-                    bush.putpixel((x, y), C_MGREY)
-                elif c == 'L':
-                    bush.putpixel((x, y), C_LGREY)
-        left = bush.crop((0, 0, 16, 16))
-        right = bush.crop((16, 0, 32, 16))
-        return left, right
+                    img.putpixel((x, y), C_BLACK)
+                elif c == 'R':
+                    img.putpixel((x, y), C_RED)
+                elif c == 'W':
+                    img.putpixel((x, y), C_WHITE)
+                elif c == 'G':
+                    img.putpixel((x, y), C_LGREY)
+                elif c == 'Y':
+                    img.putpixel((x, y), C_YELLOW)
+        return img
 
     def create_full_bevel_block():
         img = Image.new('RGBA', (16, 16), C_BLACK)
@@ -478,42 +479,6 @@ def generate_c64_intro_tiles():
                     img.putpixel((x, y), C_MGREY)
                 else:
                     img.putpixel((x, y), C_BLACK)
-        return img
-
-    def create_full_diamond():
-        img = Image.new('RGBA', (16, 16), C_TRANS)
-        art = [
-            '................',
-            '................',
-            '.....######.....',
-            '...##WWWWCC##...',
-            '..#WWWWWWCCCC#..',
-            '..#WWWWWWCCCC#..',
-            '..#WWWWBBCCCC#..',
-            '...#WWWBBCCD#...',
-            '...#WWBBBCCD#...',
-            '....#BBBDDD#....',
-            '....#BBBDDD#....',
-            '.....#BBDD#.....',
-            '......####......',
-            '................',
-            '................',
-            '................',
-        ]
-        for y in range(16):
-            row = art[y]
-            for x in range(16):
-                c = row[x]
-                if c == '#':
-                    img.putpixel((x, y), C_BLACK)
-                elif c == 'W':
-                    img.putpixel((x, y), C_WHITE)
-                elif c == 'C':
-                    img.putpixel((x, y), C_CYAN)
-                elif c == 'B':
-                    img.putpixel((x, y), C_BLUE)
-                elif c == 'D':
-                    img.putpixel((x, y), C_DBLUE)
         return img
 
     def create_blue_water_surf(frame=0):
@@ -556,11 +521,60 @@ def generate_c64_intro_tiles():
         2179: create_full_bevel_block(),
         2180: create_blue_water_surf(0),
         2181: create_blue_water_deep(),
-        2182: create_full_diamond(),
     }
-    t_bl, t_br = create_bush_pair()
-    tile_map[2177] = t_bl
-    tile_map[2178] = t_br
+
+    # 1. Authentic Small Bush (T_1B_kleiner_Busch -> 48x14 -> 3 tiles: 2177, 2178, 2188)
+    t1b_1x = get_source_asset_1x('T_1B_kleiner_Busch')
+    if t1b_1x:
+        c_t1b = Image.new('RGBA', (48, 16), C_TRANS)
+        c_t1b.paste(t1b_1x, (0, 2), t1b_1x)
+        tile_map[2177] = c_t1b.crop((0, 0, 16, 16))
+        tile_map[2178] = c_t1b.crop((16, 0, 32, 16))
+        tile_map[2188] = c_t1b.crop((32, 0, 48, 16))
+
+    # 2. Authentic Round Bush (T_12_Busch_e -> 32x23 -> 2 tiles: 2189, 2190)
+    t12_1x = get_source_asset_1x('T_12_Busch_e')
+    if t12_1x:
+        c_t12 = Image.new('RGBA', (32, 16), C_TRANS)
+        t12_scaled = t12_1x.resize((32, 16), Image.Resampling.NEAREST)
+        c_t12.paste(t12_scaled, (0, 0), t12_scaled)
+        tile_map[2189] = c_t12.crop((0, 0, 16, 16))
+        tile_map[2190] = c_t12.crop((16, 0, 32, 16))
+
+    # 3. Authentic Red Cone Spike (T_29_Spitze -> 16x16: 2191)
+    t29_1x = get_source_asset_1x('T_29_Spitze')
+    if t29_1x:
+        bbox = t29_1x.getbbox()
+        pyr_clean = t29_1x.crop(bbox) if bbox else t29_1x
+        c_t29 = Image.new('RGBA', (16, 16), C_TRANS)
+        t29_scaled = pyr_clean.resize((16, 16), Image.Resampling.NEAREST)
+        c_t29.paste(t29_scaled, (0, 0), t29_scaled)
+        tile_map[2191] = c_t29
+
+    # 4. Authentic Moss (T_0D_Moos_l & T_0E_Moos_r -> 32x8 -> 4 tiles: 2193, 2194, 2195, 2196)
+    t0d_1x = get_source_asset_1x('T_0D_Moos_l')
+    if t0d_1x:
+        c_t0d = Image.new('RGBA', (32, 16), C_TRANS)
+        c_t0d.paste(t0d_1x, (0, 8), t0d_1x)
+        tile_map[2193] = c_t0d.crop((0, 0, 16, 16))
+        tile_map[2194] = c_t0d.crop((16, 0, 32, 16))
+
+    t0e_1x = get_source_asset_1x('T_0E_Moos_r')
+    if t0e_1x:
+        c_t0e = Image.new('RGBA', (32, 16), C_TRANS)
+        c_t0e.paste(t0e_1x, (0, 8), t0e_1x)
+        tile_map[2195] = c_t0e.crop((0, 0, 16, 16))
+        tile_map[2196] = c_t0e.crop((16, 0, 32, 16))
+
+    # 5. Authentic Round Bush Variant (T_13_Busch_d -> 40x23 -> 3 tiles: 2197, 2198, 2199)
+    t13_1x = get_source_asset_1x('T_13_Busch_d')
+    if t13_1x:
+        c_t13 = Image.new('RGBA', (48, 16), C_TRANS)
+        t13_scaled = t13_1x.resize((44, 16), Image.Resampling.NEAREST)
+        c_t13.paste(t13_scaled, (2, 0), t13_scaled)
+        tile_map[2197] = c_t13.crop((0, 0, 16, 16))
+        tile_map[2198] = c_t13.crop((16, 0, 32, 16))
+        tile_map[2199] = c_t13.crop((32, 0, 48, 16))
 
     # Also update animated water frames at row 54 (2160..2168) and static water at row 6
     t_ws0 = create_blue_water_surf(0)
@@ -587,6 +601,26 @@ def generate_c64_intro_tiles():
         c = tid % 40
         r = tid // 40
         tiles_img.paste(t_img, (c*16, r*16))
+
+    # Generate 6 frames of authentic 16x16 crystal diamonds downsampled from 32x32 diamonds at rows 52-53
+    for f in range(6):
+        coin_32 = Image.new('RGBA', (32, 32))
+        t3 = tiles_img.crop((f * 32, 52 * 16, f * 32 + 16, 52 * 16 + 16))
+        t4 = tiles_img.crop((f * 32 + 16, 52 * 16, f * 32 + 32, 52 * 16 + 16))
+        t43 = tiles_img.crop((f * 32, 53 * 16, f * 32 + 16, 53 * 16 + 16))
+        t44 = tiles_img.crop((f * 32 + 16, 53 * 16, f * 32 + 32, 53 * 16 + 16))
+        coin_32.paste(t3, (0, 0))
+        coin_32.paste(t4, (16, 0))
+        coin_32.paste(t43, (0, 16))
+        coin_32.paste(t44, (16, 16))
+
+        coin_16 = Image.new('RGBA', (16, 16))
+        for y in range(16):
+            for x in range(16):
+                coin_16.putpixel((x, y), coin_32.getpixel((x * 2, y * 2)))
+
+        tiles_img.paste(coin_16, ((22 + f) * 16, 54 * 16)) # 2182..2187
+        tiles_img.paste(coin_16, (f * 16, 57 * 16))         # row 57 (small coin sprite)
 
     tiles_img.save('base/c64/Tiles.png')
     print('Generated C64 authentic intro tiles in base/c64/Tiles.png')

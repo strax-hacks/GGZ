@@ -96,6 +96,8 @@ typedef struct {
   int FPS_Counter;
   bool RandomLevels;
   int ViewMode;
+  bool Cheat_StartAtLastFinishedLevel;
+  int LastFinishedLevel;
 } GameVariables_Type;
 
 extern GameVariables_Type GV;

@@ -71,6 +71,8 @@ target_include_directories(smoke_test PRIVATE
     ${SDL2_MIXER_INCLUDE_DIRS}
 )
 
+target_compile_definitions(smoke_test PRIVATE OPENGGS_RENDER_STATS=1)
+
 target_link_directories(smoke_test PRIVATE
     /opt/homebrew/lib
     ${SDL2_LIBRARY_DIRS}
@@ -157,6 +159,8 @@ target_include_directories(capture_screens PRIVATE
     ${SDL2_IMAGE_INCLUDE_DIRS}
     ${SDL2_MIXER_INCLUDE_DIRS}
 )
+
+target_compile_definitions(capture_screens PRIVATE OPENGGS_RENDER_STATS=1)
 
 target_link_directories(capture_screens PRIVATE
     /opt/homebrew/lib

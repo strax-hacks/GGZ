@@ -32,6 +32,7 @@ void LOOP_Menu();
 void LOOP_Menu_Draw();
 void LOOP_Menu_Define_Positions(int Cols);
 void LOOP_Controls_Help();
+void LOOP_Cheats();
 void LOOP_Options();
 void LOOP_Options_Draw();
 void LOOP_Story();
