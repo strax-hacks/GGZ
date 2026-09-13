@@ -22,9 +22,10 @@ Thumbs.db
 *.log
 my_std*.txt
 
-# Plotlines local cache / history
+# Plotlines local cache / history / roadmap
 .plotlines/
 .plotlines.config.json
+*.plotlines.json
 
 # Beads / Dolt files (added by bd init)
 .dolt/
