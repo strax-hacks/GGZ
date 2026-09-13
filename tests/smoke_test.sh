@@ -17,8 +17,12 @@ if [[ ! -f "${ROOT_DIR}/build/desktop/tests/smoke_test" ]]; then
 fi
 
 echo "--> Running smoke_test..."
-export SDL_VIDEODRIVER=dummy
-export SDL_AUDIODRIVER=dummy
+if [ -z "${DISPLAY:-}" ] && [ -z "${SDL_VIDEODRIVER:-}" ]; then
+    export SDL_VIDEODRIVER=dummy
+fi
+if [ -z "${SDL_AUDIODRIVER:-}" ]; then
+    export SDL_AUDIODRIVER=dummy
+fi
 cd "${ROOT_DIR}"
 "${ROOT_DIR}/build/desktop/tests/smoke_test"
 

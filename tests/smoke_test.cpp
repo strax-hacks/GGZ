@@ -11,9 +11,9 @@ Config_Type Config;
 int main(int argc, char* argv[]) {
     std::cout << "[SMOKE TEST] Initializing Cardputer ZERO OpenGGS headless test..." << std::endl;
 
-    // Set SDL dummy video and audio drivers for headless validation
-    setenv("SDL_VIDEODRIVER", "dummy", 1);
-    setenv("SDL_AUDIODRIVER", "dummy", 1);
+    // Set SDL dummy video and audio drivers for headless validation if not specified
+    setenv("SDL_VIDEODRIVER", "dummy", 0);
+    setenv("SDL_AUDIODRIVER", "dummy", 0);
 
     GAME_ENVIRONMENT_Define();
     init();

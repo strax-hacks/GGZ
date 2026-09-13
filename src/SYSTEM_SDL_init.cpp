@@ -44,11 +44,17 @@ void init()
     }
     else
     {
-      // Create renderer for window
-      // gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED );
-      // gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE );
-      // gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-      gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED);
+      // Create renderer for window: try accelerated first, fall back to software
+      gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED );
+      if( gRenderer == NULL )
+      {
+        gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_SOFTWARE );
+      }
+      if( gRenderer == NULL )
+      {
+        gRenderer = SDL_CreateRenderer( gWindow, -1, 0 );
+      }
+
       if( gRenderer == NULL )
       {
         printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -57,28 +63,33 @@ void init()
       {
         //Initialize renderer color
         SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
-        //Initialize PNG loading
-        int imgFlags = IMG_INIT_PNG;
-        if( !( IMG_Init( imgFlags ) & imgFlags ) )
-        {
-          printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
-        }
+      }
+
+      //Initialize PNG loading
+      int imgFlags = IMG_INIT_PNG;
+      if( !( IMG_Init( imgFlags ) & imgFlags ) )
+      {
+        printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
       }
     }
   }
 
    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
-   SDL_RenderSetLogicalSize(gRenderer, GV.Screen_Width, GV.Screen_Height);
+   if (gRenderer != NULL) {
+     SDL_RenderSetLogicalSize(gRenderer, GV.Screen_Width, GV.Screen_Height);
+   }
 
    if (gameplayTargetTexture != NULL) {
      SDL_DestroyTexture(gameplayTargetTexture);
      gameplayTargetTexture = NULL;
    }
-   gameplayTargetTexture = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 640, 340);
-   if (gameplayTargetTexture == NULL) {
-     printf("Warning: gameplayTargetTexture could not be created: %s\n", SDL_GetError());
-   } else {
-     SDL_SetTextureBlendMode(gameplayTargetTexture, SDL_BLENDMODE_NONE);
+   if (gRenderer != NULL) {
+     gameplayTargetTexture = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 640, 340);
+     if (gameplayTargetTexture == NULL) {
+       printf("Warning: gameplayTargetTexture could not be created: %s\n", SDL_GetError());
+     } else {
+       SDL_SetTextureBlendMode(gameplayTargetTexture, SDL_BLENDMODE_NONE);
+     }
    }
 
   int i;

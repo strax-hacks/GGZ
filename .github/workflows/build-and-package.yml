@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev
+          sudo apt-get install -y cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev xvfb
 
       - name: Configure CMake
         run: cmake -B build/desktop -DCMAKE_BUILD_TYPE=Release -DTARGET_DEVICE=DESKTOP -DBUILD_TESTS=ON
@@ -28,10 +28,10 @@ jobs:
       - name: Run Smoke Test
         run: |
           chmod +x tests/smoke_test.sh
-          ./tests/smoke_test.sh
+          xvfb-run --auto-servernum ./tests/smoke_test.sh
 
       - name: Run CTest Suite
-        run: ctest --test-dir build/desktop --output-on-failure
+        run: xvfb-run --auto-servernum ctest --test-dir build/desktop --output-on-failure
 
   build-cardputer-zero:
     name: Build Cardputer ZERO (ARM64) Packages

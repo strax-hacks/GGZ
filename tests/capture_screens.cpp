@@ -84,7 +84,8 @@ static void RenderGameplayFrame(int viewMode)
     RenderStats_Reset();
 
     const bool scaled = (GV.Resolution == RESOLUTION_320x170 &&
-                         viewMode == VIEW_MODE_C64_SCALED);
+                         viewMode == VIEW_MODE_C64_SCALED &&
+                         gameplayTargetTexture != nullptr);
     if (scaled) {
         SDL_SetRenderTarget(gRenderer, gameplayTargetTexture);
 
@@ -128,9 +129,9 @@ static double BenchmarkGameplayFrames(int viewMode, int frameCount,
 }
 
 int main(int argc, char* argv[]) {
-    // Dummy video driver to allow rendering headless offscreen
-    setenv("SDL_VIDEODRIVER", "dummy", 1);
-    setenv("SDL_AUDIODRIVER", "dummy", 1);
+    // Default to dummy video/audio driver for headless validation if not specified
+    setenv("SDL_VIDEODRIVER", "dummy", 0);
+    setenv("SDL_AUDIODRIVER", "dummy", 0);
 
     GAME_ENVIRONMENT_Define();
     Options_Load();
