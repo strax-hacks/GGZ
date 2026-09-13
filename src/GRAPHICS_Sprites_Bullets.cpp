@@ -114,10 +114,11 @@ void SPRITE_Bullet_Move()
   }
 
   // DEACTIVATE BULLET IF OFF SCREEN
+  int viewWidth = (GV.Resolution == RESOLUTION_320x170 && GV.ViewMode == VIEW_MODE_C64_SCALED) ? 640 : GV.Screen_Width;
   if(Sprite_Bullet.PosY < 0 ||
-     Sprite_Bullet.PosY > GV.Screen_Height + 32 ||
+     Sprite_Bullet.PosY > StageC64.StageHeightPixels + 32 ||
      Sprite_Bullet.PosX-PC.StagePosX < 0 ||
-     Sprite_Bullet.PosX-PC.StagePosX > GV.Screen_Width + 32)
+     Sprite_Bullet.PosX-PC.StagePosX > viewWidth + 32)
   {Sprite_Bullet.Active = false;}
 
 }
@@ -131,12 +132,12 @@ bool Sprite_Bullet_Collision_Right()
   bool ReturnValue = false;
 
   // CHECK FOR WALLS
-  if(TileType[StageC64.TileNumber[(int)((Sprite_Bullet.PosX+Sprite_Bullet.w)/TS.Tile_Width)][(int)((Sprite_Bullet.PosY+Sprite_Bullet.h)/TS.Tile_Height)-1]].Solid)   // CHECK BOTTOM-RIGHT
+  if(GetTileTypeAt((int)((Sprite_Bullet.PosX+Sprite_Bullet.w)/TS.Tile_Width), (int)((Sprite_Bullet.PosY+Sprite_Bullet.h)/TS.Tile_Height)-1).Solid)   // CHECK BOTTOM-RIGHT
   {
     ReturnValue = true;
   }
 
-  if(TileType[StageC64.TileNumber[(int)((Sprite_Bullet.PosX+Sprite_Bullet.w)/TS.Tile_Width)][(int)(Sprite_Bullet.PosY/TS.Tile_Height)]].Solid)   // CHECK TOP-RIGHT
+  if(GetTileTypeAt((int)((Sprite_Bullet.PosX+Sprite_Bullet.w)/TS.Tile_Width), (int)(Sprite_Bullet.PosY/TS.Tile_Height)).Solid)   // CHECK TOP-RIGHT
   {
     ReturnValue = true;
   }
@@ -153,13 +154,12 @@ bool Sprite_Bullet_Collision_Left()
   bool ReturnValue = false;
 
   // CHECK FOR WALLS
-  if(TileType[StageC64.TileNumber[(int)(Sprite_Bullet.PosX/TS.Tile_Width)][(int)((Sprite_Bullet.PosY+Sprite_Bullet.h)/TS.Tile_Height)-1]].Solid)   // CHECK BOTTOM-LEFT
-
+  if(GetTileTypeAt((int)(Sprite_Bullet.PosX/TS.Tile_Width), (int)((Sprite_Bullet.PosY+Sprite_Bullet.h)/TS.Tile_Height)-1).Solid)   // CHECK BOTTOM-LEFT
   {
     ReturnValue = true;
   }
 
-  if(TileType[StageC64.TileNumber[(int)(Sprite_Bullet.PosX/TS.Tile_Width)][(int)(Sprite_Bullet.PosY/TS.Tile_Height)]].Solid)   // CHECK TOP-LEFT
+  if(GetTileTypeAt((int)(Sprite_Bullet.PosX/TS.Tile_Width), (int)(Sprite_Bullet.PosY/TS.Tile_Height)).Solid)   // CHECK TOP-LEFT
   {
     ReturnValue = true;
   }
@@ -179,12 +179,11 @@ bool Sprite_Bullet_Collision_Bottom()
 
   // CHECK FOR WALLS
   if(Sprite_Bullet.Direction == PC_RIGHT){XPOS = (int)((Sprite_Bullet.PosX+Sprite_Bullet.w)/TS.Tile_Width);}
-
   else {XPOS = (int)(Sprite_Bullet.PosX/TS.Tile_Width);}
 
   YPOS = (int)((Sprite_Bullet.PosY+Sprite_Bullet.h)/TS.Tile_Height);
 
-  if(TileType[StageC64.TileNumber[XPOS][YPOS]].Solid)   // CHECK BOTTOM-LEFT
+  if(GetTileTypeAt(XPOS, YPOS).Solid)   // CHECK BOTTOM-LEFT
   {
     ReturnValue = true;
   }
@@ -204,12 +203,11 @@ bool Sprite_Bullet_Collision_Top()
 
   // CHECK FOR WALLS
   if(Sprite_Bullet.Direction == PC_RIGHT){XPOS = (int)((Sprite_Bullet.PosX+Sprite_Bullet.w)/TS.Tile_Width);}
-
   else {XPOS = (int)(Sprite_Bullet.PosX/TS.Tile_Width);}
 
   YPOS = (int)((Sprite_Bullet.PosY-3)/TS.Tile_Height);
 
-  if(TileType[StageC64.TileNumber[XPOS][YPOS]].Solid)   // CHECK BOTTOM-LEFT
+  if(GetTileTypeAt(XPOS, YPOS).Solid)   // CHECK BOTTOM-LEFT
   {
     ReturnValue = true;
   }

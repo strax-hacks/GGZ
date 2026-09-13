@@ -13,6 +13,18 @@ bin/
 .DS_Store
 Thumbs.db
 
+# Editor & temporary files
+*.bak
+*.bak.*
+*.swp
+*.swo
+*~
+*.log
+my_std*.txt
+
+# Plotlines local cache / history
+.plotlines/
+
 # Beads / Dolt files (added by bd init)
 .dolt/
 *.db

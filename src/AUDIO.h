@@ -1,4 +1,6 @@
 
+#pragma once
+
 #define AUDIO_DISK 0
 #define AUDIO_JUMP 1
 #define AUDIO_DING 2
@@ -23,6 +25,7 @@
 
 extern void AUDIO_Define();
 extern void AUDIO_Music_Play(int MusicNumber);
+extern void AUDIO_Music_Halt();
 extern void AUDIO_Sound_Play(int SoundNumber);
 extern void AUDIO_Volume_Change_Music(int VolumePercentage, bool ShowVolumeOverlay);
 extern void AUDIO_Volume_Change_Sound(int VolumePercentage, bool ShowVolumeOverlay);
@@ -36,3 +39,5 @@ extern Mix_Chunk* WavChunk[20];    //SOUND CHUNKS = WAV-FILES
 extern Mix_Music* BGM_Title;
 extern Mix_Music* BGM_Outdoors;
 extern Mix_Music* BGM_Indoors;
+extern Mix_Music* BGM_Highscore;
+extern Mix_Music* BGM_MultiSong;

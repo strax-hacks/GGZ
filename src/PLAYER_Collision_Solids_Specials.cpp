@@ -6,35 +6,34 @@
 
 void PC_Collision_PowerUpBlock()
 {
-  int TileX, TileY;
+  int TileX = 0, TileY = 0;
   bool HitAPowerUpBlock = false;
 
   if(PC.JumpVelocity > 0) // JUMPING UP
   {
-    if(TileType[StageC64.TileNumber[(int)(PC.PosX/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].PowerUpBlock)
+    if(GetTileTypeAt((int)(PC.PosX/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).PowerUpBlock)
     {
       TileX = (int)(PC.PosX/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitAPowerUpBlock = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitAPowerUpBlock = true;}
     }
-    if(!HitAPowerUpBlock && TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].PowerUpBlock)
+    if(!HitAPowerUpBlock && GetTileTypeAt((int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).PowerUpBlock)
     {
       TileX = (int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitAPowerUpBlock = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitAPowerUpBlock = true;}
     }
-    if(!HitAPowerUpBlock && TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].PowerUpBlock)
+    if(!HitAPowerUpBlock && GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).PowerUpBlock)
     {
       TileX = (int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitAPowerUpBlock = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitAPowerUpBlock = true;}
     }
-    if(HitAPowerUpBlock)
+    if(HitAPowerUpBlock && TileX >= 2 && TileX < 254 && TileY >= 1 && TileY < 29)
     {
-       AUDIO_Sound_Play(AUDIO_DING);
-      //timecounter_Animation_Tiles_Fast = SDL_GetTicks(); // RESET ANIMATION COUNTER
+      AUDIO_Sound_Play(AUDIO_DING);
       if(StageC64.TileNumber[TileX-2][TileY] == StageC64.TileNumber[TileX][TileY]-2 &&
-         TileType[StageC64.TileNumber[TileX-2][TileY]].PowerUpBlock)
+         GetTileTypeAt(TileX-2, TileY).PowerUpBlock)
       {
         StageC64.TileNumber[TileX-2][TileY-1] = 587; StageC64.AnimationCounter[TileX-2][TileY] = World.TileSwitchSpeed;
         StageC64.TileNumber[TileX-1][TileY-1] = 588; StageC64.AnimationCounter[TileX-1][TileY] = World.TileSwitchSpeed;
@@ -46,7 +45,7 @@ void PC_Collision_PowerUpBlock()
         SPRITE_PowerUp_Activate((TileX-1)*TS.Tile_Width, (TileY-2)*TS.Tile_Height);
       }
       if(HitAPowerUpBlock && StageC64.TileNumber[TileX+2][TileY] == StageC64.TileNumber[TileX][TileY]+2 &&
-         TileType[StageC64.TileNumber[TileX+2][TileY]].PowerUpBlock)
+         GetTileTypeAt(TileX+2, TileY).PowerUpBlock)
       {
         StageC64.TileNumber[TileX][TileY-1] = 587;   StageC64.AnimationCounter[TileX][TileY] = World.TileSwitchSpeed;
         StageC64.TileNumber[TileX+1][TileY-1] = 588; StageC64.AnimationCounter[TileX+1][TileY] = World.TileSwitchSpeed;
@@ -60,8 +59,8 @@ void PC_Collision_PowerUpBlock()
       if(HitAPowerUpBlock &&
          StageC64.TileNumber[TileX+1][TileY] == StageC64.TileNumber[TileX][TileY]+1 &&
          StageC64.TileNumber[TileX-1][TileY] == StageC64.TileNumber[TileX][TileY]-1 &&
-         TileType[StageC64.TileNumber[TileX+1][TileY]].PowerUpBlock &&
-         TileType[StageC64.TileNumber[TileX-1][TileY]].PowerUpBlock)
+         GetTileTypeAt(TileX+1, TileY).PowerUpBlock &&
+         GetTileTypeAt(TileX-1, TileY).PowerUpBlock)
       {
         StageC64.TileNumber[TileX-1][TileY-1] = 587; StageC64.AnimationCounter[TileX-1][TileY] = World.TileSwitchSpeed;
         StageC64.TileNumber[TileX][TileY-1] = 588;   StageC64.AnimationCounter[TileX][TileY] = World.TileSwitchSpeed;
@@ -81,35 +80,34 @@ void PC_Collision_PowerUpBlock()
 
 void PC_Collision_CoinBlock()
 {
-  int TileX, TileY;
+  int TileX = 0, TileY = 0;
   bool HitACoinBlock = false;
 
   if(PC.JumpVelocity > 0) // JUMPING UP
   {
-    if(TileType[StageC64.TileNumber[(int)(PC.PosX/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].CoinBlock)
+    if(GetTileTypeAt((int)(PC.PosX/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).CoinBlock)
     {
       TileX = (int)(PC.PosX/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitACoinBlock = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitACoinBlock = true;}
     }
-    if(!HitACoinBlock && TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].CoinBlock)
+    if(!HitACoinBlock && GetTileTypeAt((int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).CoinBlock)
     {
       TileX = (int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitACoinBlock = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitACoinBlock = true;}
     }
-    if(!HitACoinBlock && TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].CoinBlock)
+    if(!HitACoinBlock && GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).CoinBlock)
     {
       TileX = (int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitACoinBlock = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitACoinBlock = true;}
     }
-    if(HitACoinBlock)
+    if(HitACoinBlock && TileX >= 2 && TileX < 254 && TileY >= 1 && TileY < 29)
     {
       AUDIO_Sound_Play(AUDIO_DING);
-      //timecounter_Animation_Tiles_Fast = SDL_GetTicks(); // RESET ANIMATION COUNTER
       if(StageC64.TileNumber[TileX-2][TileY] == StageC64.TileNumber[TileX][TileY]-2 &&
-         TileType[StageC64.TileNumber[TileX-2][TileY]].CoinBlock)
+         GetTileTypeAt(TileX-2, TileY).CoinBlock)
       {
         StageC64.TileNumber[TileX-2][TileY] += 3;   StageC64.AnimationCounter[TileX-2][TileY] = World.TileSwitchSpeed;
         StageC64.TileNumber[TileX-1][TileY] += 3;   StageC64.AnimationCounter[TileX-1][TileY] = World.TileSwitchSpeed;
@@ -121,7 +119,7 @@ void PC_Collision_CoinBlock()
         SPRITE_SmallCoin_Activate((TileX-1)*TS.Tile_Width, (TileY-2)*TS.Tile_Height);
       }
       if(HitACoinBlock && StageC64.TileNumber[TileX+2][TileY] == StageC64.TileNumber[TileX][TileY]+2 &&
-         TileType[StageC64.TileNumber[TileX+2][TileY]].CoinBlock)
+         GetTileTypeAt(TileX+2, TileY).CoinBlock)
       {
         StageC64.TileNumber[TileX+2][TileY] += 3;   StageC64.AnimationCounter[TileX+2][TileY] = World.TileSwitchSpeed;
         StageC64.TileNumber[TileX+1][TileY] += 3;   StageC64.AnimationCounter[TileX+1][TileY] = World.TileSwitchSpeed;
@@ -135,8 +133,8 @@ void PC_Collision_CoinBlock()
       if(HitACoinBlock &&
          StageC64.TileNumber[TileX+1][TileY] == StageC64.TileNumber[TileX][TileY]+1 &&
          StageC64.TileNumber[TileX-1][TileY] == StageC64.TileNumber[TileX][TileY]-1 &&
-         TileType[StageC64.TileNumber[TileX+1][TileY]].CoinBlock &&
-         TileType[StageC64.TileNumber[TileX-1][TileY]].CoinBlock)
+         GetTileTypeAt(TileX+1, TileY).CoinBlock &&
+         GetTileTypeAt(TileX-1, TileY).CoinBlock)
       {
         StageC64.TileNumber[TileX-1][TileY] += 3;   StageC64.AnimationCounter[TileX-1][TileY] = World.TileSwitchSpeed;
         StageC64.TileNumber[TileX+1][TileY] += 3;   StageC64.AnimationCounter[TileX+1][TileY] = World.TileSwitchSpeed;
@@ -156,35 +154,34 @@ void PC_Collision_CoinBlock()
 
 void PC_Collision_CoinBlockHelmet()
 {
-  int TileX, TileY;
+  int TileX = 0, TileY = 0;
   bool HitACoinBlock = false;
 
   if(PC.JumpVelocity > 0) // JUMPING UP
   {
-    if(TileType[StageC64.TileNumber[(int)(PC.PosX/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].CoinBlockHelmet)
+    if(GetTileTypeAt((int)(PC.PosX/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).CoinBlockHelmet)
     {
       TileX = (int)(PC.PosX/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitACoinBlock = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitACoinBlock = true;}
     }
-    if(!HitACoinBlock && TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].CoinBlockHelmet)
+    if(!HitACoinBlock && GetTileTypeAt((int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).CoinBlockHelmet)
     {
       TileX = (int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitACoinBlock = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitACoinBlock = true;}
     }
-    if(!HitACoinBlock && TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].CoinBlockHelmet)
+    if(!HitACoinBlock && GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).CoinBlockHelmet)
     {
       TileX = (int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitACoinBlock = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitACoinBlock = true;}
     }
-    if(HitACoinBlock)
+    if(HitACoinBlock && TileX >= 2 && TileX < 254 && TileY >= 1 && TileY < 29)
     {
-       AUDIO_Sound_Play(AUDIO_DING);
-      //timecounter_Animation_Tiles_Fast = SDL_GetTicks(); // RESET ANIMATION COUNTER
+      AUDIO_Sound_Play(AUDIO_DING);
       if(StageC64.TileNumber[TileX-2][TileY] == StageC64.TileNumber[TileX][TileY]-2 &&
-         TileType[StageC64.TileNumber[TileX-2][TileY]].CoinBlockHelmet)
+         GetTileTypeAt(TileX-2, TileY).CoinBlockHelmet)
       {
         StageC64.TileNumber[TileX-2][TileY] += 3;   StageC64.AnimationCounter[TileX-2][TileY] = World.TileSwitchSpeed;
         StageC64.TileNumber[TileX-1][TileY] += 3;   StageC64.AnimationCounter[TileX-1][TileY] = World.TileSwitchSpeed;
@@ -196,7 +193,7 @@ void PC_Collision_CoinBlockHelmet()
         SPRITE_SmallCoin_Activate((TileX-1)*TS.Tile_Width, (TileY-2)*TS.Tile_Height);
       }
       if(HitACoinBlock && StageC64.TileNumber[TileX+2][TileY] == StageC64.TileNumber[TileX][TileY]+2 &&
-         TileType[StageC64.TileNumber[TileX+2][TileY]].CoinBlockHelmet)
+         GetTileTypeAt(TileX+2, TileY).CoinBlockHelmet)
       {
         StageC64.TileNumber[TileX+2][TileY] += 3;   StageC64.AnimationCounter[TileX+2][TileY] = World.TileSwitchSpeed;
         StageC64.TileNumber[TileX+1][TileY] += 3;   StageC64.AnimationCounter[TileX+1][TileY] = World.TileSwitchSpeed;
@@ -210,8 +207,8 @@ void PC_Collision_CoinBlockHelmet()
       if(HitACoinBlock &&
          StageC64.TileNumber[TileX+1][TileY] == StageC64.TileNumber[TileX][TileY]+1 &&
          StageC64.TileNumber[TileX-1][TileY] == StageC64.TileNumber[TileX][TileY]-1 &&
-         TileType[StageC64.TileNumber[TileX+1][TileY]].CoinBlockHelmet &&
-         TileType[StageC64.TileNumber[TileX-1][TileY]].CoinBlockHelmet)
+         GetTileTypeAt(TileX+1, TileY).CoinBlockHelmet &&
+         GetTileTypeAt(TileX-1, TileY).CoinBlockHelmet)
       {
         StageC64.TileNumber[TileX-1][TileY] += 3;   StageC64.AnimationCounter[TileX-1][TileY] = World.TileSwitchSpeed;
         StageC64.TileNumber[TileX+1][TileY] += 3;   StageC64.AnimationCounter[TileX+1][TileY] = World.TileSwitchSpeed;
@@ -231,34 +228,33 @@ void PC_Collision_CoinBlockHelmet()
 
 void PC_Collision_Breakable()
 {
-  int TileX, TileY;
+  int TileX = 0, TileY = 0;
   bool HitABreakable = false;
 
   if(PC.JumpVelocity > 0) // JUMPING UP
   {
-    if(TileType[StageC64.TileNumber[(int)(PC.PosX/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].Breakable)
+    if(GetTileTypeAt((int)(PC.PosX/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).Breakable)
     {
       TileX = (int)(PC.PosX/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitABreakable = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitABreakable = true;}
     }
-    if(!HitABreakable && TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].Breakable)
+    if(!HitABreakable && GetTileTypeAt((int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).Breakable)
     {
       TileX = (int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitABreakable = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitABreakable = true;}
     }
-    if(!HitABreakable && TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].Breakable)
+    if(!HitABreakable && GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).Breakable)
     {
       TileX = (int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitABreakable = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitABreakable = true;}
     }
-    if(HitABreakable)
+    if(HitABreakable && TileX >= 2 && TileX < 254 && TileY >= 1 && TileY < 29)
     {
-      //timecounter_Animation_Tiles_Fast = SDL_GetTicks(); // RESET ANIMATION COUNTER
       if(StageC64.TileNumber[TileX-2][TileY] == StageC64.TileNumber[TileX][TileY]-2 &&
-         TileType[StageC64.TileNumber[TileX-2][TileY]].Breakable)
+         GetTileTypeAt(TileX-2, TileY).Breakable)
       {
         StageC64.TileNumber[TileX-2][TileY] += 3;   StageC64.AnimationCounter[TileX-2][TileY] = World.TileSwitchSpeed;
         StageC64.TileNumber[TileX-1][TileY] += 3;   StageC64.AnimationCounter[TileX-1][TileY] = World.TileSwitchSpeed;
@@ -270,7 +266,7 @@ void PC_Collision_Breakable()
         AUDIO_Sound_Play(AUDIO_CRACK);
       }
       if(HitABreakable && StageC64.TileNumber[TileX+2][TileY] == StageC64.TileNumber[TileX][TileY]+2 &&
-         TileType[StageC64.TileNumber[TileX+2][TileY]].Breakable)
+         GetTileTypeAt(TileX+2, TileY).Breakable)
       {
         StageC64.TileNumber[TileX+2][TileY] += 3;   StageC64.AnimationCounter[TileX+2][TileY] = World.TileSwitchSpeed;
         StageC64.TileNumber[TileX+1][TileY] += 3;   StageC64.AnimationCounter[TileX+1][TileY] = World.TileSwitchSpeed;
@@ -284,8 +280,8 @@ void PC_Collision_Breakable()
       if(HitABreakable &&
          StageC64.TileNumber[TileX+1][TileY] == StageC64.TileNumber[TileX][TileY]+1 &&
          StageC64.TileNumber[TileX-1][TileY] == StageC64.TileNumber[TileX][TileY]-1 &&
-         TileType[StageC64.TileNumber[TileX+1][TileY]].Breakable &&
-         TileType[StageC64.TileNumber[TileX-1][TileY]].Breakable)
+         GetTileTypeAt(TileX+1, TileY).Breakable &&
+         GetTileTypeAt(TileX-1, TileY).Breakable)
       {
         StageC64.TileNumber[TileX-1][TileY] += 3;   StageC64.AnimationCounter[TileX-1][TileY] = World.TileSwitchSpeed;
         StageC64.TileNumber[TileX+1][TileY] += 3;   StageC64.AnimationCounter[TileX+1][TileY] = World.TileSwitchSpeed;
@@ -305,30 +301,30 @@ void PC_Collision_Breakable()
 
 void PC_Collision_DropStone()
 {
-  int TileX, TileY;
+  int TileX = 0, TileY = 0;
   bool HitABreakable = false;
   int DropStoneNumber = 0;
   int i;
 
   if(PC.JumpVelocity > 0) // JUMPING UP
   {
-    if(TileType[StageC64.TileNumber[(int)(PC.PosX/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].DropStone)
+    if(GetTileTypeAt((int)(PC.PosX/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).DropStone)
     {
       TileX = (int)(PC.PosX/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitABreakable = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitABreakable = true;}
     }
-    if(!HitABreakable && TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].DropStone)
+    if(!HitABreakable && GetTileTypeAt((int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).DropStone)
     {
       TileX = (int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitABreakable = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitABreakable = true;}
     }
-    if(!HitABreakable && TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].DropStone)
+    if(!HitABreakable && GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).DropStone)
     {
       TileX = (int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitABreakable = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitABreakable = true;}
     }
 
     if(HitABreakable)
@@ -337,10 +333,10 @@ void PC_Collision_DropStone()
       Sprite_DropStone[DropStoneNumber].inUse = true;
     }
 
-    if(HitABreakable && DropStoneNumber > 0 && DropStoneNumber < 30)
+    if(HitABreakable && DropStoneNumber > 0 && DropStoneNumber < 30 && TileX >= 2 && TileX < 254 && TileY >= 1 && TileY < 29)
     {
       if(StageC64.TileNumber[TileX-2][TileY] == StageC64.TileNumber[TileX][TileY]-2 &&
-         TileType[StageC64.TileNumber[TileX-2][TileY]].DropStone)
+         GetTileTypeAt(TileX-2, TileY).DropStone)
       {
         Sprite_DropStone[DropStoneNumber].PosX = (TileX-2)*TS.Tile_Width;
         Sprite_DropStone[DropStoneNumber].PosY = (TileY-1)*TS.Tile_Width;
@@ -355,7 +351,7 @@ void PC_Collision_DropStone()
         AUDIO_Sound_Play(AUDIO_CRACK);
       }
       if(HitABreakable && StageC64.TileNumber[TileX+2][TileY] == StageC64.TileNumber[TileX][TileY]+2 &&
-         TileType[StageC64.TileNumber[TileX+2][TileY]].DropStone)
+         GetTileTypeAt(TileX+2, TileY).DropStone)
       {
         Sprite_DropStone[DropStoneNumber].PosX = (TileX)*TS.Tile_Width;
         Sprite_DropStone[DropStoneNumber].PosY = (TileY-1)*TS.Tile_Width;
@@ -372,8 +368,8 @@ void PC_Collision_DropStone()
       if(HitABreakable &&
          StageC64.TileNumber[TileX+1][TileY] == StageC64.TileNumber[TileX][TileY]+1 &&
          StageC64.TileNumber[TileX-1][TileY] == StageC64.TileNumber[TileX][TileY]-1 &&
-         TileType[StageC64.TileNumber[TileX+1][TileY]].DropStone &&
-         TileType[StageC64.TileNumber[TileX-1][TileY]].DropStone)
+         GetTileTypeAt(TileX+1, TileY).DropStone &&
+         GetTileTypeAt(TileX-1, TileY).DropStone)
       {
         Sprite_DropStone[DropStoneNumber].PosX = (TileX-1)*TS.Tile_Width;
         Sprite_DropStone[DropStoneNumber].PosY = (TileY-1)*TS.Tile_Width;
@@ -395,28 +391,28 @@ void PC_Collision_DropStone()
 
 void PC_Collision_WarpStone()
 {
-  int TileX, TileY;
+  int TileX = 0, TileY = 0;
   bool HitAWarpStone = false;
 
   if(PC.JumpVelocity > 0) // JUMPING UP
   {
-    if(TileType[StageC64.TileNumber[(int)(PC.PosX/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].WarpStone)
+    if(GetTileTypeAt((int)(PC.PosX/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).WarpStone)
     {
       TileX = (int)(PC.PosX/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitAWarpStone = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitAWarpStone = true;}
     }
-    if(!HitAWarpStone && TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].WarpStone)
+    if(!HitAWarpStone && GetTileTypeAt((int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).WarpStone)
     {
       TileX = (int)((PC.PosX-PC.ColWidthHalf+2)/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitAWarpStone = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitAWarpStone = true;}
     }
-    if(!HitAWarpStone && TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].WarpStone)
+    if(!HitAWarpStone && GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).WarpStone)
     {
       TileX = (int)((PC.PosX+PC.ColWidthHalf-2)/TS.Tile_Width);
       TileY = (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height);
-      if(!TileType[StageC64.TileNumber[TileX][TileY+1]].Solid){HitAWarpStone = true;}
+      if(!GetTileTypeAt(TileX, TileY+1).Solid){HitAWarpStone = true;}
     }
 
     if(HitAWarpStone)
@@ -427,11 +423,10 @@ void PC_Collision_WarpStone()
       PC.RunVelocity = 0;
     }
 
-
-    if(HitAWarpStone)
+    if(HitAWarpStone && TileX >= 2 && TileX < 254 && TileY >= 1 && TileY < 29)
     {
       if(StageC64.TileNumber[TileX-2][TileY] == StageC64.TileNumber[TileX][TileY]-2 &&
-         TileType[StageC64.TileNumber[TileX-2][TileY]].WarpStone)
+         GetTileTypeAt(TileX-2, TileY).WarpStone)
       {
         StageC64.TileNumber[TileX-2][TileY] = 603;   StageC64.AnimationCounter[TileX-2][TileY] = World.TileSwitchSpeed;
         StageC64.TileNumber[TileX-1][TileY] = 604;   StageC64.AnimationCounter[TileX-1][TileY] = World.TileSwitchSpeed;
@@ -442,7 +437,7 @@ void PC_Collision_WarpStone()
         HitAWarpStone = false;
       }
       if(HitAWarpStone && StageC64.TileNumber[TileX+2][TileY] == StageC64.TileNumber[TileX][TileY]+2 &&
-         TileType[StageC64.TileNumber[TileX+2][TileY]].WarpStone)
+         GetTileTypeAt(TileX+2, TileY).WarpStone)
       {
         StageC64.TileNumber[TileX][TileY] = 603;     StageC64.AnimationCounter[TileX][TileY] = World.TileSwitchSpeed;
         StageC64.TileNumber[TileX+1][TileY] = 604;   StageC64.AnimationCounter[TileX+1][TileY] = World.TileSwitchSpeed;
@@ -455,8 +450,8 @@ void PC_Collision_WarpStone()
       if(HitAWarpStone &&
          StageC64.TileNumber[TileX+1][TileY] == StageC64.TileNumber[TileX][TileY]+1 &&
          StageC64.TileNumber[TileX-1][TileY] == StageC64.TileNumber[TileX][TileY]-1 &&
-         TileType[StageC64.TileNumber[TileX+1][TileY]].WarpStone &&
-         TileType[StageC64.TileNumber[TileX-1][TileY]].WarpStone)
+         GetTileTypeAt(TileX+1, TileY).WarpStone &&
+         GetTileTypeAt(TileX-1, TileY).WarpStone)
       {
         StageC64.TileNumber[TileX-1][TileY] = 603;   StageC64.AnimationCounter[TileX-1][TileY] = World.TileSwitchSpeed;
         StageC64.TileNumber[TileX][TileY] = 604;     StageC64.AnimationCounter[TileX][TileY] = World.TileSwitchSpeed;
@@ -466,10 +461,5 @@ void PC_Collision_WarpStone()
         StageC64.TileNumber[TileX+1][TileY-1] = 565; StageC64.AnimationCounter[TileX+1][TileY-1] = World.TileSwitchSpeed;
       }
     }
-
   }
 }
-
-// ##############################################
-// ##############################################
-// ##############################################

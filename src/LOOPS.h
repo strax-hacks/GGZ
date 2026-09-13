@@ -1,4 +1,6 @@
 
+#pragma once
+
 #define MODE_MENU 0
 #define MODE_GAMELOOP 10
 #define MODE_EDITOR_STAGES 20
@@ -9,11 +11,14 @@
 #define MODE_SPLASHSCREEN 70
 #define MODE_WARPSCREEN 80
 #define MODE_STAGEFILE_LOAD 90
+#define MODE_INTRO 100
 
 // ##############################################
 // ##############################################
 // ##############################################
 
+void LOOP_Intro();
+void LOOP_Intro_Draw();
 void LOOP_Credits();
 void LOOP_Credits_Draw();
 void LOOP_Gameloop_Standard();
@@ -26,6 +31,7 @@ void LOOP_Stagefile_Load_Draw();
 void LOOP_Menu();
 void LOOP_Menu_Draw();
 void LOOP_Menu_Define_Positions(int Cols);
+void LOOP_Controls_Help();
 void LOOP_Options();
 void LOOP_Options_Draw();
 void LOOP_Story();

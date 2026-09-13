@@ -14,7 +14,7 @@ void LOOP_Editor_Stages()
 {
   int GameModeTemp = GV.Mode;
   GV.Mode = MODE_EDITOR_STAGES;
-  Mix_HaltMusic();
+  AUDIO_Music_Halt();
 
   timecounter_StageEditor=SDL_GetTicks();
 

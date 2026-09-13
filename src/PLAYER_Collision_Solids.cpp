@@ -85,11 +85,11 @@ bool PC_Collision_Down()
 
   if(PC.JumpVelocity < 0 && PC.RunVelocity == 0)
   {
-    if(TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthHalf+1)/TS.Tile_Width)][(int)(PC.PosY/TS.Tile_Height)]].Solid ||   // CHECK BOTTOM-LEFT
-       TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthQuart)/TS.Tile_Width)] [(int)(PC.PosY/TS.Tile_Height)]].Solid ||
-       TileType[StageC64.TileNumber[(int)(PC.PosX/TS.Tile_Width)]                    [(int)(PC.PosY/TS.Tile_Height)]].Solid ||   // CHECK BOTTOM-CENTER
-       TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthQuart)/TS.Tile_Width)] [(int)(PC.PosY/TS.Tile_Height)]].Solid ||
-       TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthHalf-1)/TS.Tile_Width)][(int)(PC.PosY/TS.Tile_Height)]].Solid)     // CHECK BOTTOM-RIGHT
+    if(GetTileTypeAt((int)((PC.PosX-PC.ColWidthHalf+1)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid ||   // CHECK BOTTOM-LEFT
+       GetTileTypeAt((int)((PC.PosX-PC.ColWidthQuart)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid ||
+       GetTileTypeAt((int)(PC.PosX/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid ||   // CHECK BOTTOM-CENTER
+       GetTileTypeAt((int)((PC.PosX+PC.ColWidthQuart)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid ||
+       GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf-1)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid)     // CHECK BOTTOM-RIGHT
     {
       ReturnValue = true;
     }
@@ -98,19 +98,20 @@ bool PC_Collision_Down()
   // PREVENTS GETTING STUCK ON THE WALL
   if(PC.JumpVelocity < 0 && PC.RunVelocity > 0)
   {
-    if(TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthHalf+1)/TS.Tile_Width)][(int)(PC.PosY/TS.Tile_Height)]].Solid ||   // CHECK BOTTOM-LEFT
-       TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthQuart)/TS.Tile_Width)] [(int)(PC.PosY/TS.Tile_Height)]].Solid ||
-       TileType[StageC64.TileNumber[(int)(PC.PosX/TS.Tile_Width)]                    [(int)(PC.PosY/TS.Tile_Height)]].Solid ||   // CHECK BOTTOM-CENTER
-       TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthQuart)/TS.Tile_Width)] [(int)(PC.PosY/TS.Tile_Height)]].Solid)     // CHECK BOTTOM-RIGHT
+    if(GetTileTypeAt((int)((PC.PosX-PC.ColWidthHalf+1)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid ||   // CHECK BOTTOM-LEFT
+       GetTileTypeAt((int)((PC.PosX-PC.ColWidthQuart)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid ||
+       GetTileTypeAt((int)(PC.PosX/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid ||   // CHECK BOTTOM-CENTER
+       GetTileTypeAt((int)((PC.PosX+PC.ColWidthQuart)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid ||
+       GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf-1)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid)     // CHECK BOTTOM-RIGHT
     {ReturnValue = true;}
   }
 
   if(PC.JumpVelocity < 0 && PC.RunVelocity < 0)
   {
-    if(TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthQuart)/TS.Tile_Width)] [(int)(PC.PosY/TS.Tile_Height)]].Solid ||
-       TileType[StageC64.TileNumber[(int)(PC.PosX/TS.Tile_Width)]                    [(int)(PC.PosY/TS.Tile_Height)]].Solid ||   // CHECK BOTTOM-CENTER
-       TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthQuart)/TS.Tile_Width)] [(int)(PC.PosY/TS.Tile_Height)]].Solid ||
-       TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthHalf-1)/TS.Tile_Width)][(int)(PC.PosY/TS.Tile_Height)]].Solid)     // CHECK BOTTOM-RIGHT
+    if(GetTileTypeAt((int)((PC.PosX-PC.ColWidthQuart)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid ||
+       GetTileTypeAt((int)(PC.PosX/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid ||   // CHECK BOTTOM-CENTER
+       GetTileTypeAt((int)((PC.PosX+PC.ColWidthQuart)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid ||
+       GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf-1)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid)     // CHECK BOTTOM-RIGHT
     {
       ReturnValue = true;
     }
@@ -118,12 +119,12 @@ bool PC_Collision_Down()
 
 
   // MAKE IT EASIER TO STAND ON LEDGE <<--- NEEDED!!! OTHERWISE PLAYER SINK INTO GROUND - BUT WHY???
-  if(TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthHalf-1)/TS.Tile_Width)][(int)(PC.PosY/TS.Tile_Height)]].Solid &&
-    !TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthHalf-1)/TS.Tile_Width)][(int)((PC.PosY-1)/TS.Tile_Height)]].Solid)
+  if(GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf-1)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid &&
+    !GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf-1)/TS.Tile_Width), (int)((PC.PosY-1)/TS.Tile_Height)).Solid)
     {ReturnValue = true;}
 
-  if(TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthHalf+1)/TS.Tile_Width)][(int)(PC.PosY/TS.Tile_Height)]].Solid &&
-    !TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthHalf+1)/TS.Tile_Width)][(int)((PC.PosY-1)/TS.Tile_Height)]].Solid)
+  if(GetTileTypeAt((int)((PC.PosX-PC.ColWidthHalf+1)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid &&
+    !GetTileTypeAt((int)((PC.PosX-PC.ColWidthHalf+1)/TS.Tile_Width), (int)((PC.PosY-1)/TS.Tile_Height)).Solid)
     {ReturnValue = true;}
   // MAKE IT EASIER TO STAND ON LEDGE
 
@@ -131,10 +132,10 @@ bool PC_Collision_Down()
   // CHECK WHETHER PLAYER STANDS ON CRUMBLING GROUND
   if(PC.JumpVelocity < 0)
   {
-    if(TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthQuart)/TS.Tile_Width)][(int)(PC.PosY/TS.Tile_Height)]].Solid ||
-       TileType[StageC64.TileNumber[(int)(PC.PosX/TS.Tile_Width)]              [(int)(PC.PosY/TS.Tile_Height)]].Solid ||   // CHECK BOTTOM-CENTER
-       TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthQuart)/TS.Tile_Width)][(int)(PC.PosY/TS.Tile_Height)]].Solid ||
-       TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthHalf-1)/TS.Tile_Width)][(int)(PC.PosY/TS.Tile_Height)]].Solid)     // CHECK BOTTOM-RIGHT
+    if(GetTileTypeAt((int)((PC.PosX-PC.ColWidthQuart)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid ||
+       GetTileTypeAt((int)(PC.PosX/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid ||   // CHECK BOTTOM-CENTER
+       GetTileTypeAt((int)((PC.PosX+PC.ColWidthQuart)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid ||
+       GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf-1)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height)).Solid)     // CHECK BOTTOM-RIGHT
     {
       Check_Switch_Tile_Down((int)((PC.PosX-PC.ColWidthHalf+1)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height));
       Check_Switch_Tile_Down((int)((PC.PosX)/TS.Tile_Width), (int)(PC.PosY/TS.Tile_Height));
@@ -143,7 +144,7 @@ bool PC_Collision_Down()
   }
 
 
-  if(PC.PosY > 479){ReturnValue = true; PC.gotKilled = true;}  // DON'T FALL OFF SCREEN
+  if(PC.PosY > StageC64.StageHeightPixels-1){ReturnValue = true; PC.gotKilled = true;}  // DON'T FALL OFF SCREEN
   if(PC.PosY < 0){ReturnValue = false;}  // DON'T GET STUCK ON TOP OF SCREEN
 
   if(Platform.inUse)
@@ -170,29 +171,29 @@ bool PC_Collision_Up()
   bool ReturnValue = false;
   if(PC.JumpVelocity > 0 && PC.RunVelocity == 0) // JUMPING UP
   {
-    if(TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthHalf+1)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].Solid ||
-       TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthQuart)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].Solid ||
-       TileType[StageC64.TileNumber[(int)(PC.PosX/TS.Tile_Width)]              [(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].Solid ||   // CHECK TOP-CENTER
-       TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthQuart)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].Solid ||
-       TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthHalf-1)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].Solid)
+    if(GetTileTypeAt((int)((PC.PosX-PC.ColWidthHalf+1)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).Solid ||
+       GetTileTypeAt((int)((PC.PosX-PC.ColWidthQuart)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).Solid ||
+       GetTileTypeAt((int)(PC.PosX/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).Solid ||   // CHECK TOP-CENTER
+       GetTileTypeAt((int)((PC.PosX+PC.ColWidthQuart)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).Solid ||
+       GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf-1)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).Solid)
     {ReturnValue = true;}
   }
 
   if(PC.JumpVelocity > 0 && PC.RunVelocity > 0) // JUMPING UP
   {
-    if(TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthHalf+1)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].Solid ||
-       TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthQuart)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].Solid ||
-       TileType[StageC64.TileNumber[(int)(PC.PosX/TS.Tile_Width)]              [(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].Solid ||   // CHECK TOP-CENTER
-       TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthQuart)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].Solid)
+    if(GetTileTypeAt((int)((PC.PosX-PC.ColWidthHalf+1)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).Solid ||
+       GetTileTypeAt((int)((PC.PosX-PC.ColWidthQuart)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).Solid ||
+       GetTileTypeAt((int)(PC.PosX/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).Solid ||   // CHECK TOP-CENTER
+       GetTileTypeAt((int)((PC.PosX+PC.ColWidthQuart)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).Solid)
     {ReturnValue = true;}
   }
 
   if(PC.JumpVelocity > 0 && PC.RunVelocity < 0) // JUMPING UP
   {
-    if(TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthQuart)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].Solid ||
-       TileType[StageC64.TileNumber[(int)(PC.PosX/TS.Tile_Width)]              [(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].Solid ||   // CHECK TOP-CENTER
-       TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthQuart)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].Solid ||
-       TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthHalf-1)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)]].Solid)
+    if(GetTileTypeAt((int)((PC.PosX-PC.ColWidthQuart)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).Solid ||
+       GetTileTypeAt((int)(PC.PosX/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).Solid ||   // CHECK TOP-CENTER
+       GetTileTypeAt((int)((PC.PosX+PC.ColWidthQuart)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).Solid ||
+       GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf-1)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeight)/TS.Tile_Height)).Solid)
     {ReturnValue = true;}
   }
 
@@ -233,8 +234,8 @@ bool PC_Collision_Right()
   bool ReturnValue = false;
   if(PC.RunVelocity > 0 && (PC.PosY > PC.ColHeight || !GV.PixelPerfectRunning)) // RUNNING TO THE RIGHT
   {
-    if(TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthHalf)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeightHalf)/TS.Tile_Height)]].Solid ||   // CHECK CENTER-RIGHT
-       TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthHalf)/TS.Tile_Width)][(int)((PC.PosY-1)/TS.Tile_Height)]].Solid)   // CHECK BOTTOM-RIGHT
+    if(GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeightHalf)/TS.Tile_Height)).Solid ||   // CHECK CENTER-RIGHT
+       GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf)/TS.Tile_Width), (int)((PC.PosY-1)/TS.Tile_Height)).Solid)   // CHECK BOTTOM-RIGHT
     {
       ReturnValue = true;
       if(GV.PixelPerfectRunning){PC.PosX--;}
@@ -243,7 +244,7 @@ bool PC_Collision_Right()
     if(PC.JumpVelocity < -5)
     {
       ReturnValue = false;
-      if(TileType[StageC64.TileNumber[(int)((PC.PosX+PC.ColWidthHalf)/TS.Tile_Width)][(int)((PC.PosY-1)/TS.Tile_Height)]].Solid)   // CHECK BOTTOM-RIGHT
+      if(GetTileTypeAt((int)((PC.PosX+PC.ColWidthHalf)/TS.Tile_Width), (int)((PC.PosY-1)/TS.Tile_Height)).Solid)   // CHECK BOTTOM-RIGHT
       {
         ReturnValue = true;
         if(PC.AccellRight){PC.WallGrinding = true;}
@@ -284,8 +285,8 @@ bool PC_Collision_Left()
   bool ReturnValue = false;
   if(PC.RunVelocity < 0 && (PC.PosY > PC.ColHeight || !GV.PixelPerfectRunning)) // RUNNING TO THE LEFT
   {
-    if(TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthHalf)/TS.Tile_Width)][(int)((PC.PosY-PC.ColHeightHalf)/TS.Tile_Height)]].Solid ||   // CHECK CENTER-LEFT
-       TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthHalf)/TS.Tile_Width)][(int)((PC.PosY-1)/TS.Tile_Height)]].Solid)   // CHECK BOTTOM-LEFT
+    if(GetTileTypeAt((int)((PC.PosX-PC.ColWidthHalf)/TS.Tile_Width), (int)((PC.PosY-PC.ColHeightHalf)/TS.Tile_Height)).Solid ||   // CHECK CENTER-LEFT
+       GetTileTypeAt((int)((PC.PosX-PC.ColWidthHalf)/TS.Tile_Width), (int)((PC.PosY-1)/TS.Tile_Height)).Solid)   // CHECK BOTTOM-LEFT
     {
       ReturnValue = true;
       if(GV.PixelPerfectRunning){PC.PosX++;}
@@ -294,7 +295,7 @@ bool PC_Collision_Left()
     if(PC.JumpVelocity < -5)
     {
       ReturnValue = false;
-      if(TileType[StageC64.TileNumber[(int)((PC.PosX-PC.ColWidthHalf)/TS.Tile_Width)][(int)((PC.PosY-1)/TS.Tile_Height)]].Solid)   // CHECK BOTTOM-RIGHT
+      if(GetTileTypeAt((int)((PC.PosX-PC.ColWidthHalf)/TS.Tile_Width), (int)((PC.PosY-1)/TS.Tile_Height)).Solid)   // CHECK BOTTOM-RIGHT
       {
         ReturnValue = true;
         if(PC.AccellRight){PC.WallGrinding = true;}

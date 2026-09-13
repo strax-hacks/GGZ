@@ -6,6 +6,7 @@
 
 void Check_Switch_Tile_Down(int x, int y)
 {
+  if (x < 0 || x >= 256 || y < 0 || y >= 30) return;
   if(StageC64.TileNumber[x][y] == 566){StageC64.TileNumber[x][y] = 568;}
   if(StageC64.TileNumber[x][y] == 567){StageC64.TileNumber[x][y] = 569;}
 }

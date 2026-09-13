@@ -13,7 +13,7 @@ void LOOP_Stagefile_Load()
   GV.Mode = MODE_STAGEFILE_LOAD;
   Menu.MenuEntriesFileLoad = 16;
   Menu.ActiveFileLoad = 0;
-  Mix_HaltMusic();
+  AUDIO_Music_Halt();
 
   StageFile_Load.x_off = 20;
   StageFile_Load.y_off = 20;

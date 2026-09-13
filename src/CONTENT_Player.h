@@ -1,4 +1,6 @@
 
+#pragma once
+
 #define PC_RIGHT 0
 #define PC_LEFT 1
 #define PC_MORPH 2
@@ -47,6 +49,7 @@ typedef struct {
   int PosX;
   int PosY;
   int StagePosX;
+  int StagePosY;
   float JumpVelocity;
   int JumpStrength;
   float RunVelocity;

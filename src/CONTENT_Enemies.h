@@ -1,3 +1,5 @@
+#pragma once
+
 #define NPC_LEFT 0
 #define NPC_RIGHT 1
 #define NPC_FRAME1 0

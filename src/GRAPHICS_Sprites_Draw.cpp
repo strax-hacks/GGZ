@@ -46,7 +46,7 @@ void SPRITE_PowerUp_Draw(int PowerUpNumber)
   DstRect.w = SrcRect.w;
   DstRect.h = SrcRect.h;
   DstRect.x = Sprite_PowerUp[PowerUpNumber].PosX-PC.StagePosX;
-  DstRect.y = Sprite_PowerUp[PowerUpNumber].PosY;
+  DstRect.y = Sprite_PowerUp[PowerUpNumber].PosY-PC.StagePosY;
 
   SDL_RenderCopyEx(gRenderer, PowerUpTexture, &SrcRect, &DstRect, 0, NULL, SDL_FLIP_NONE );
 }
@@ -69,10 +69,13 @@ void SPRITE_SmallCoin_Draw(int SmallCoinNumber)
   DstRect.w = SrcRect.w;
   DstRect.h = SrcRect.h;
   DstRect.x = Sprite_SmallCoin[SmallCoinNumber].PosX-PC.StagePosX;
-  DstRect.y = Sprite_SmallCoin[SmallCoinNumber].PosY;
+  DstRect.y = Sprite_SmallCoin[SmallCoinNumber].PosY-PC.StagePosY;
 
   if(SmallCoinNumber == 0) // DON'T MESS WITH SMALLCOIN[0] - IT'S USED IN THE INTERFACE
   {
+    if (GV.Resolution == RESOLUTION_320x170) {
+      return; // Handled in STAGE_Interface_Draw
+    }
     DstRect.x = Sprite_SmallCoin[SmallCoinNumber].PosX;
     DstRect.y = Sprite_SmallCoin[SmallCoinNumber].PosY;
   }
@@ -86,7 +89,8 @@ void SPRITE_SmallCoin_Draw(int SmallCoinNumber)
 
 void SPRITE_Platform_Draw()
 {
-  if(Platform.PosX - PC.PosX < 640)
+  int viewWidth = (GV.Resolution == RESOLUTION_320x170 && GV.ViewMode == VIEW_MODE_C64_SCALED) ? 640 : GV.Screen_Width;
+  if(Platform.PosX - PC.PosX < viewWidth + 128)
   {
     SDL_Rect SrcRect;
     SDL_Rect DstRect;
@@ -97,7 +101,7 @@ void SPRITE_Platform_Draw()
     DstRect.w = SrcRect.w;
     DstRect.h = SrcRect.h;
     DstRect.x = (Platform.PosX) - PC.StagePosX;
-    DstRect.y = (Platform.PosY);
+    DstRect.y = (Platform.PosY) - PC.StagePosY;
     SDL_RenderCopyEx(gRenderer, TilesTexture, &SrcRect, &DstRect, 0, NULL, SDL_FLIP_NONE );
   }
 }
@@ -118,7 +122,7 @@ void SPRITE_Bullet_Draw()
   DstRect.w = SrcRect.w;
   DstRect.h = SrcRect.h;
   DstRect.x = Sprite_Bullet.PosX-PC.StagePosX;
-  DstRect.y = Sprite_Bullet.PosY;
+  DstRect.y = Sprite_Bullet.PosY-PC.StagePosY;
 
   SDL_RenderCopyEx(gRenderer, PowerUpTexture, &SrcRect, &DstRect, 0, NULL, SDL_FLIP_NONE );
 
@@ -140,7 +144,7 @@ void SPRITE_Bullet_Explosion_Draw()
   DstRect.w = SrcRect.w;
   DstRect.h = SrcRect.h;
   DstRect.x = Sprite_Bullet.ExplosionX-PC.StagePosX;
-  DstRect.y = Sprite_Bullet.ExplosionY-(SrcRect.h/2);
+  DstRect.y = Sprite_Bullet.ExplosionY-(SrcRect.h/2)-PC.StagePosY;
 
   SDL_RenderCopyEx(gRenderer, PowerUpTexture, &SrcRect, &DstRect, 0, NULL, SDL_FLIP_NONE );
 }
@@ -162,7 +166,7 @@ void SPRITE_DropStone_Draw(int DropStoneNumber)
   DstRect.w = SrcRect.w;
   DstRect.h = SrcRect.h;
   DstRect.x = Sprite_DropStone[DropStoneNumber].PosX-PC.StagePosX;
-  DstRect.y = Sprite_DropStone[DropStoneNumber].PosY;
+  DstRect.y = Sprite_DropStone[DropStoneNumber].PosY-PC.StagePosY;
 
   SDL_RenderCopyEx(gRenderer, TilesTexture, &SrcRect, &DstRect, 0, NULL, SDL_FLIP_NONE );
 }

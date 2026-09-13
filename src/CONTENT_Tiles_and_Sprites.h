@@ -1,4 +1,6 @@
 
+#pragma once
+
 #define Tile_SmallCoin 45
 #define NUMBER_OF_TILES 2320
 #define TILESHEET_WIDTH_TILES 40
@@ -109,6 +111,29 @@ typedef struct {
   bool WarpStone;
 } TileTypesDefinition;
 extern TileTypesDefinition TileType[NUMBER_OF_TILES];
+
+inline int GetStageTile(int x, int y) {
+  if (x < 0 || x >= 256 || y < 0 || y >= 30) return 0;
+  return StageC64.TileNumber[x][y];
+}
+
+inline void SetStageTile(int x, int y, int val) {
+  if (x >= 0 && x < 256 && y >= 0 && y < 30) {
+    StageC64.TileNumber[x][y] = val;
+  }
+}
+
+inline const TileTypesDefinition& SafeTileType(int tileNum) {
+  if (tileNum < 0 || tileNum >= NUMBER_OF_TILES) {
+    return TileType[0];
+  }
+  return TileType[tileNum];
+}
+
+inline const TileTypesDefinition& GetTileTypeAt(int x, int y) {
+  int t = GetStageTile(x, y);
+  return SafeTileType(t);
+}
 
 // ##############################################
 // ##############################################

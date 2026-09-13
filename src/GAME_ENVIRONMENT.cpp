@@ -28,6 +28,7 @@ void GAME_ENVIRONMENT_Define()
   GV.Screen_Height = 170;
   GV.ScreenWidthTiles = (int)(GV.Screen_Width/16);
   GV.Resolution = RESOLUTION_320x170;
+  GV.ViewMode = VIEW_MODE_C64_SCALED;
   GV.PixelPerfectRunning = true; // SO FAR THERE IS NO REASON EVER TO SWITCH THIS TO FALSE
   GV.RandomLevels = false;
 
@@ -104,6 +105,7 @@ void Options_Save()
   SavedOptions.VolumeMusic = VolumePercentage_Music;
   SavedOptions.VolumeSounds = VolumePercentage_Sound;
   SavedOptions.GameType = GV.GameType;
+  SavedOptions.Var4 = GV.ViewMode;
 
   std::string optPath = GetConfigPath("options.cfg");
   FILE *Options_File = fopen (optPath.c_str(), "wb");
@@ -122,10 +124,6 @@ void Options_Load()
 {
   std::string optPath = GetConfigPath("options.cfg");
   FILE *Options_File = fopen (optPath.c_str(), "rb");
-  if (!Options_File) {
-    // Fallback to legacy path if present
-    Options_File = fopen ("base/Options.oi", "rb");
-  }
 
   if (Options_File != NULL)
   {
@@ -133,11 +131,17 @@ void Options_Load()
     GV.Screen_Width = SavedOptions.Screen_Width;
     GV.Screen_Height = SavedOptions.Screen_Height;
     if(GV.Screen_Width == 320 && GV.Screen_Height == 170){GV.Resolution = RESOLUTION_320x170;}
-    if(GV.Screen_Width == 640 && GV.Screen_Height == 480){GV.Resolution = RESOLUTION_640x480;}
-    if(GV.Screen_Width == 800 && GV.Screen_Height == 600){GV.Resolution = RESOLUTION_800x600;}
-    if(GV.Screen_Width == 1280 && GV.Screen_Height == 720){GV.Resolution = RESOLUTION_1280x720;}
+    else if(GV.Screen_Width == 640 && GV.Screen_Height == 480){GV.Resolution = RESOLUTION_640x480;}
+    else if(GV.Screen_Width == 800 && GV.Screen_Height == 600){GV.Resolution = RESOLUTION_800x600;}
+    else if(GV.Screen_Width == 1280 && GV.Screen_Height == 720){GV.Resolution = RESOLUTION_1280x720;}
+    else {
+      GV.Resolution = RESOLUTION_320x170;
+      GV.Screen_Width = 320;
+      GV.Screen_Height = 170;
+    }
     VolumePercentage_Sound = SavedOptions.VolumeSounds;
     VolumePercentage_Music = SavedOptions.VolumeMusic;
+    GV.ViewMode = (SavedOptions.Var4 == VIEW_MODE_1X_ZOOMED) ? VIEW_MODE_1X_ZOOMED : VIEW_MODE_C64_SCALED;
 
     AUDIO_Volume_Change_Music(VolumePercentage_Music, false);
     AUDIO_Volume_Change_Sound(VolumePercentage_Sound, false);
@@ -149,6 +153,7 @@ void Options_Load()
     GV.Resolution = RESOLUTION_320x170;
     GV.Screen_Width = 320;
     GV.Screen_Height = 170;
+    GV.ViewMode = VIEW_MODE_C64_SCALED;
   }
 }
 
@@ -160,15 +165,16 @@ void Option_GameType_Load()
 {
   std::string optPath = GetConfigPath("options.cfg");
   FILE *Options_File = fopen (optPath.c_str(), "rb");
-  if (!Options_File) {
-    Options_File = fopen ("base/Options.oi", "rb");
-  }
 
   if (Options_File != NULL)
   {
     fread (&SavedOptions, sizeof (SavedOptions), 1, Options_File);
     GV.GameType = SavedOptions.GameType;
     fclose (Options_File);
+  }
+  else
+  {
+    GV.GameType = TYPE_C64;
   }
 }
 

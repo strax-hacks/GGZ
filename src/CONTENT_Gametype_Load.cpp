@@ -36,6 +36,7 @@ void GAMETYPE_Load()
   snprintf(FileName.PowerUpDefinition, sizeof(char) * 128, "base/default/PowerUp.txt");
   snprintf(FileName.Interface, sizeof(char) * 128, "base/Interface.png");
   snprintf(FileName.Font, sizeof(char) * 128, "base/Font.png");
+  snprintf(FileName.MenuBackground, sizeof(char) * 128, "base/menu_background.png");
 
   snprintf(FileName.WavChunk[AUDIO_DISK], sizeof(char) * 128, "base/audio/disk.wav");
   snprintf(FileName.WavChunk[AUDIO_JUMP], sizeof(char) * 128, "base/audio/jump.wav");
@@ -47,9 +48,11 @@ void GAMETYPE_Load()
   snprintf(FileName.WavChunk[AUDIO_SHOOT], sizeof(char) * 128, "base/audio/shoot.wav");
   snprintf(FileName.WavChunk[AUDIO_CRACK], sizeof(char) * 128, "base/audio/crack.wav");
 
-  snprintf(FileName.BGM_Title, sizeof(char) * 128, "base/music/title.it");
-  snprintf(FileName.BGM_Outdoors, sizeof(char) * 128, "base/music/outdoors.it");
-  snprintf(FileName.BGM_Indoors, sizeof(char) * 128, "base/music/indoors.it");
+  snprintf(FileName.BGM_Title, sizeof(char) * 128, "base/music/title.mod");
+  snprintf(FileName.BGM_Outdoors, sizeof(char) * 128, "base/music/outdoors.mod");
+  snprintf(FileName.BGM_Indoors, sizeof(char) * 128, "base/music/indoors.mod");
+  snprintf(FileName.BGM_Highscore, sizeof(char) * 128, "base/music/highscore.mod");
+  snprintf(FileName.BGM_MultiSong, sizeof(char) * 128, "base/music/gianaing.mod");
 
   if(GV.GameType == TYPE_C64 && GV.DirC64Exists)
   {
@@ -86,10 +89,11 @@ void GAMETYPE_Load()
     snprintf(FileName.BGM_Title, sizeof(char) * 128, "base/amiga/title.mod");
     snprintf(FileName.BGM_Outdoors, sizeof(char) * 128, "base/amiga/outdoors.mod");
     snprintf(FileName.BGM_Indoors, sizeof(char) * 128, "base/amiga/indoors.mod");
+    snprintf(FileName.BGM_Highscore, sizeof(char) * 128, "base/amiga/highscore.mod");
+    snprintf(FileName.BGM_MultiSong, sizeof(char) * 128, "base/amiga/gianaing.mod");
   }
 
   AUDIO_Define();
-  Options_Load();
 
   loadTextures();
 

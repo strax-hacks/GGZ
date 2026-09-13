@@ -18,6 +18,7 @@ void iniSetup();
 int main( int argc, char* args[] )
 {
   GAME_ENVIRONMENT_Define();
+  Options_Load();
 
   init();               // Start up SDL and create window
   srand (time(NULL));   // initialize random seed
@@ -29,7 +30,11 @@ int main( int argc, char* args[] )
 
   QuitProgram = false;
 
-  LOOP_Menu();
+  LOOP_Intro();
+  if(!QuitProgram)
+  {
+    LOOP_Menu();
+  }
 
 
   Game_Close();  //Free resources and close SDL

@@ -86,6 +86,11 @@ void LOOP_Gameloop_Standard()
       SaveState_QuickLoad();
     }
 
+    if(Key_V_pressed) {
+      GV.ViewMode = (GV.ViewMode == VIEW_MODE_C64_SCALED) ? VIEW_MODE_1X_ZOOMED : VIEW_MODE_C64_SCALED;
+      AUDIO_Sound_Play(AUDIO_CLICK);
+    }
+
     if(Key_CTRL_pressed || Joy_SHOOT) {SPRITE_Bullet_Activate();}
 
     if(PC.Exit_Reached)
@@ -161,7 +166,7 @@ void LOOP_Gameloop_Standard()
         if(PC.Animation==1){PC.Stance = PC_WALK1;}
         if(PC.Animation==2){PC.Stance = PC_WALK2;}
       }
-      if(!PC.OnGround && PC.PosY < GV.Screen_Height){PC.Stance = PC_JUMP;}  // E.G. WALKING OFF A CLIFF
+      if(!PC.OnGround && PC.PosY < StageC64.StageHeightPixels){PC.Stance = PC_JUMP;}  // E.G. WALKING OFF A CLIFF
       if(PC.AccellLeft && PC.RunVelocity > 0) {PC.Stance = PC_TURN;}
       if(PC.AccellRight && PC.RunVelocity < 0){PC.Stance = PC_TURN;}
 

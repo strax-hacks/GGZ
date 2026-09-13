@@ -70,6 +70,17 @@ void init()
    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
    SDL_RenderSetLogicalSize(gRenderer, GV.Screen_Width, GV.Screen_Height);
 
+   if (gameplayTargetTexture != NULL) {
+     SDL_DestroyTexture(gameplayTargetTexture);
+     gameplayTargetTexture = NULL;
+   }
+   gameplayTargetTexture = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 640, 340);
+   if (gameplayTargetTexture == NULL) {
+     printf("Warning: gameplayTargetTexture could not be created: %s\n", SDL_GetError());
+   } else {
+     SDL_SetTextureBlendMode(gameplayTargetTexture, SDL_BLENDMODE_BLEND);
+   }
+
   int i;
   SDL_Init( SDL_INIT_GAMECONTROLLER );
   SDL_JoystickEventState(SDL_ENABLE);
@@ -80,6 +91,7 @@ void init()
     fprintf(stdout,"Joystick Found! - %i - \n\n", i); //SDL_JoystickName(i)
   }
 
+  SYSTEM_SetResolution(GV.Resolution);
 }
 
 // ##############################################
@@ -136,18 +148,18 @@ void SYSTEM_SetResolution(int Resolution)
     LOOP_Menu_Define_Positions(2);
 
     // Compact single-line HUD header for 320x170 display
-    HUD.PlayerX = 4;
+    HUD.PlayerX = 2;
     HUD.PlayerY = 2;
-    HUD.BonusX = 92;
+    HUD.SmallCoinX = 120;
+    HUD.SmallCoinY = 2;
+    HUD.BonusX = 138;
     HUD.BonusY = 2;
-    HUD.LivesX = 160;
+    HUD.LivesX = 174;
     HUD.LivesY = 2;
-    HUD.StageX = 215;
+    HUD.StageX = 222;
     HUD.StageY = 2;
     HUD.TimeX = 276;
     HUD.TimeY = 2;
-    HUD.SmallCoinX = 92;
-    HUD.SmallCoinY = 2;
   }
   else
   {
@@ -204,8 +216,13 @@ void SYSTEM_SetResolution(int Resolution)
   Sprite_SmallCoin[0].PosX = HUD.SmallCoinX;
   Sprite_SmallCoin[0].PosY = HUD.SmallCoinY;
 
-  SDL_SetWindowSize(gWindow,GV.Screen_Width,GV.Screen_Height);
-  SDL_SetWindowPosition(gWindow,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
+  if (gWindow != NULL) {
+    SDL_SetWindowSize(gWindow, GV.Screen_Width, GV.Screen_Height);
+    SDL_SetWindowPosition(gWindow, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+  }
+  if (gRenderer != NULL) {
+    SDL_RenderSetLogicalSize(gRenderer, GV.Screen_Width, GV.Screen_Height);
+  }
   GV.ScreenWidthTiles = (int)(GV.Screen_Width/TS.Tile_Width);
   GV.ScreenHeightTiles = (int)(GV.Screen_Height/TS.Tile_Height);
 }

@@ -14,6 +14,8 @@ Mix_Chunk* AUDIO_CHUNK_Crack;
 Mix_Music* BGM_Title;
 Mix_Music* BGM_Outdoors;
 Mix_Music* BGM_Indoors;
+Mix_Music* BGM_Highscore;
+Mix_Music* BGM_MultiSong;
 
 int VolumePercentage_Music;
 int VolumePercentage_Sound;
@@ -75,6 +77,12 @@ void AUDIO_Define()
   Mix_FreeMusic(BGM_Indoors); BGM_Indoors = NULL;
   BGM_Indoors = Mix_LoadMUS(GetAssetPath(FileName.BGM_Indoors).c_str());
 
+  Mix_FreeMusic(BGM_Highscore); BGM_Highscore = NULL;
+  BGM_Highscore = Mix_LoadMUS(GetAssetPath(FileName.BGM_Highscore).c_str());
+
+  Mix_FreeMusic(BGM_MultiSong); BGM_MultiSong = NULL;
+  BGM_MultiSong = Mix_LoadMUS(GetAssetPath(FileName.BGM_MultiSong).c_str());
+
 }
 
 // ##############################################
@@ -95,7 +103,7 @@ void AUDIO_Volume_Change_Music(int Percentage, bool ShowVolumeOverlay)
   }
 
   VolumePercentage_Music = Percentage;
-  GV.VolumeMusic = Value128/4;
+  GV.VolumeMusic = Value128;
   Mix_VolumeMusic(GV.VolumeMusic);
 
   if(ShowVolumeOverlay){ShowVolume_Music = 3;}
@@ -158,16 +166,36 @@ void AUDIO_Sound_Play(int SoundNumber)
 // ##############################################
 // ##############################################
 
+static int CurrentMusicNumber = -1;
+
+void AUDIO_Music_Halt()
+{
+  Mix_HaltMusic();
+  CurrentMusicNumber = -1;
+}
+
 void AUDIO_Music_Play(int MusicNumber)
 {
   if(GV.VolumeMusic > 0 && GV.MusicEnabled)
   {
+    if (CurrentMusicNumber == MusicNumber && Mix_PlayingMusic())
+    {
+      return;
+    }
+
     // PLAY MUSIC
-
-    if(MusicNumber == MUSIC_MENU)      {Mix_PlayMusic(BGM_Title,-1);}
-    if(MusicNumber == MUSIC_OUTDOORS)  {Mix_PlayMusic(BGM_Outdoors,-1);}
-    if(MusicNumber == MUSIC_INDOORS)   {Mix_PlayMusic(BGM_Indoors,-1);}
-   // if(MusicNumber == MUSIC_HIGHSCORE) {Mix_PlayMusic(BackgroundMusic[MUSIC_HIGHSCORE],-1);}
-
+    if(MusicNumber == MUSIC_MENU && BGM_Title)           {Mix_PlayMusic(BGM_Title,-1); CurrentMusicNumber = MUSIC_MENU;}
+    else if(MusicNumber == MUSIC_OUTDOORS && BGM_Outdoors)   {Mix_PlayMusic(BGM_Outdoors,-1); CurrentMusicNumber = MUSIC_OUTDOORS;}
+    else if(MusicNumber == MUSIC_INDOORS && BGM_Indoors)     {Mix_PlayMusic(BGM_Indoors,-1); CurrentMusicNumber = MUSIC_INDOORS;}
+    else if(MusicNumber == MUSIC_HIGHSCORE && BGM_Highscore) {Mix_PlayMusic(BGM_Highscore,-1); CurrentMusicNumber = MUSIC_HIGHSCORE;}
+    else if(BGM_MultiSong)
+    {
+      // Fallback if individual track not loaded: play multi-song at specific song position
+      Mix_PlayMusic(BGM_MultiSong, -1);
+      if(MusicNumber == MUSIC_MENU)           {Mix_SetMusicPosition(0.0); CurrentMusicNumber = MUSIC_MENU;}
+      else if(MusicNumber == MUSIC_OUTDOORS)   {Mix_SetMusicPosition(25.0); CurrentMusicNumber = MUSIC_OUTDOORS;}
+      else if(MusicNumber == MUSIC_INDOORS)    {Mix_SetMusicPosition(50.0); CurrentMusicNumber = MUSIC_INDOORS;}
+      else if(MusicNumber == MUSIC_HIGHSCORE)  {Mix_SetMusicPosition(67.0); CurrentMusicNumber = MUSIC_HIGHSCORE;}
+    }
   }
 }

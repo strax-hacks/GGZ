@@ -1,4 +1,6 @@
 
+#pragma once
+
 // ##############################################
 // ##############################################
 // ##############################################
@@ -34,6 +36,7 @@ extern bool Key_MINUS;     extern bool Key_MINUS_pressed;
 
 extern bool Key_P;         extern bool Key_P_pressed;
 extern bool Key_S;         extern bool Key_S_pressed;
+extern bool Key_V;         extern bool Key_V_pressed;
 extern bool Key_X;         extern bool Key_X_pressed;
 extern bool Key_Y;         extern bool Key_Y_pressed;
 

@@ -8,6 +8,8 @@ SDL_Texture* TilesTexture = NULL;
 SDL_Texture* EnemiesTexture = NULL;
 SDL_Texture* InterfaceTexture = NULL;
 SDL_Texture* PowerUpTexture = NULL;
+SDL_Texture* MenuBackgroundTexture = NULL;
+SDL_Texture* gameplayTargetTexture = NULL;
 SDL_Surface* tmpSurface;
 
 // ##############################################
@@ -24,6 +26,7 @@ void loadTextures()
   if (EnemiesTexture) { SDL_DestroyTexture(EnemiesTexture); EnemiesTexture = NULL; }
   if (InterfaceTexture) { SDL_DestroyTexture(InterfaceTexture); InterfaceTexture = NULL; }
   if (PowerUpTexture) { SDL_DestroyTexture(PowerUpTexture); PowerUpTexture = NULL; }
+  if (MenuBackgroundTexture) { SDL_DestroyTexture(MenuBackgroundTexture); MenuBackgroundTexture = NULL; }
 
   std::string fontPath = GetAssetPath(FileName.Font);
   tmpSurface = IMG_Load(fontPath.c_str());
@@ -70,6 +73,13 @@ void loadTextures()
   if (tmpSurface) {
     SDL_SetColorKey( tmpSurface, SDL_TRUE, SDL_MapRGB( tmpSurface->format, 255, 0, 255 ) );
     PowerUpTexture = SDL_CreateTextureFromSurface( gRenderer, tmpSurface );
+    SDL_FreeSurface( tmpSurface );
+  }
+
+  std::string bgPath = GetAssetPath(FileName.MenuBackground);
+  tmpSurface = IMG_Load(bgPath.c_str());
+  if (tmpSurface) {
+    MenuBackgroundTexture = SDL_CreateTextureFromSurface( gRenderer, tmpSurface );
     SDL_FreeSurface( tmpSurface );
   }
 }

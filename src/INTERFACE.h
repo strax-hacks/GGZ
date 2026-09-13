@@ -1,4 +1,6 @@
 
+#pragma once
+
 #define INTERFACE_MARK_SOLID 40
 #define INTERFACE_MARK_EXIT 41
 #define INTERFACE_MARK_LETHAL 42

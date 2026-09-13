@@ -48,6 +48,7 @@ set(OPENGGS_SOURCES
     src/ANIMATION.cpp
     src/AUDIO.cpp
     src/CONTENT_Gametype_Load.cpp
+    src/CONTENT_Intro_Stage0.cpp
     src/CONTENT_Stages_Load_Write.cpp
     src/ENEMIES.cpp
     src/ENEMIES_Collision.cpp
@@ -76,6 +77,7 @@ set(OPENGGS_SOURCES
     src/LOOP_Editor_Tiles.cpp
     src/LOOP_Gameloop.cpp
     src/LOOP_Gameloop_Splashscreens.cpp
+    src/LOOP_Intro.cpp
     src/LOOP_Menu.cpp
     src/LOOP_Options.cpp
     src/LOOP_Stagefile_Load.cpp

@@ -53,7 +53,7 @@ void ENEMY_Draw(int EnemyNumber)
     DstRect.w = SrcRect.w;
     DstRect.h = SrcRect.h;
     DstRect.x = Enemy[EnemyNumber].PosX-(int)(SrcRect.w/2)-PC.StagePosX;
-    DstRect.y = Enemy[EnemyNumber].PosY-SrcRect.h;
+    DstRect.y = Enemy[EnemyNumber].PosY-SrcRect.h-PC.StagePosY;
     SDL_RenderCopyEx(gRenderer, EnemiesTexture, &SrcRect, &DstRect, 0, NULL, SDL_FLIP_NONE );
     //int GrabberX = DstRect.x;
     //int GrabberY = DstRect.y;

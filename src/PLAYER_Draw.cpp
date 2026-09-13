@@ -44,21 +44,15 @@ void PC_Draw(int x, int y)
   DstRect.w = SrcRect.w;
   DstRect.h = SrcRect.h;
 
-  DstRect.x = GV.Screen_Width/2-int(SrcRect.w/2);
-
-  if(PC.PosX < GV.Screen_Width/2)
-    {DstRect.x = PC.PosX-int(SrcRect.w/2);}
-
-  DstRect.x = PC.PosX -int(SrcRect.w/2) - PC.StagePosX;
-
-  DstRect.y = y-SrcRect.h;
+  DstRect.x = PC.PosX - int(SrcRect.w/2) - PC.StagePosX;
+  DstRect.y = y - SrcRect.h - PC.StagePosY;
   SDL_RenderCopyEx(gRenderer, PlayerTexture, &SrcRect, &DstRect, 0, NULL, SDL_FLIP_NONE );
 
   if(PC.ShowBorder)
   {
     SDL_SetRenderDrawColor(gRenderer, 50, 50, 50, 255);
-    SDL_RenderDrawLine(gRenderer, DstRect.x+int(SrcRect.w/2), y-10, DstRect.x+int(SrcRect.w/2), y+10);
-    SDL_Rect outlineRect = {DstRect.x, y-SrcRect.h, SrcRect.w, SrcRect.h };
+    SDL_RenderDrawLine(gRenderer, DstRect.x+int(SrcRect.w/2), y-10-PC.StagePosY, DstRect.x+int(SrcRect.w/2), y+10-PC.StagePosY);
+    SDL_Rect outlineRect = {DstRect.x, y-SrcRect.h-PC.StagePosY, SrcRect.w, SrcRect.h };
     SDL_RenderDrawRect(gRenderer, &outlineRect);
   }
 }

@@ -1,5 +1,6 @@
 #include "globals.h"
 #include "SYSTEM_Paths.h"
+#include "CONTENT_Intro_Stage0.h"
 
 StageDef_C64 StageC64;
 StageCacheDef_C64 StageCache_C64;
@@ -178,7 +179,10 @@ void STAGES_Import()
       // IF RANDOMIZED LEVELS, CREATE A RANDOM LEVEL SET
     }
     fclose (Stages_File);
-   }
+  }
+
+  // Ensure Stage 0 is always populated with the DS panoramic layout & C64 block letters
+  STAGE_Intro_Generate();
 
   // LOAD FIRST STAGE
   STAGE_Load(1, 0, false, false);
@@ -237,6 +241,12 @@ void STAGE_Load(int StageNumber, int CheckPointNumber, bool ShowSplashScreen, bo
 {
   int x,y;
   int LastColWithTile = 0;
+
+  if (StageNumber < 0) StageNumber = 0;
+  if (StageNumber > 37) StageNumber = 37;
+  if (CheckPointNumber < 0 || CheckPointNumber > 3) CheckPointNumber = 0;
+
+  PC.Stage = StageNumber;
 
   // RESET EVERYTHING
   PC.RunVelocity = 0;
@@ -360,7 +370,7 @@ void STAGE_Load(int StageNumber, int CheckPointNumber, bool ShowSplashScreen, bo
 
   if(GV.Mode == MODE_GAMELOOP && StageC64.BackgroundColour == 0){AUDIO_Music_Play(MUSIC_OUTDOORS);}
   if(GV.Mode == MODE_GAMELOOP && StageC64.BackgroundColour == 1){AUDIO_Music_Play(MUSIC_INDOORS);}
-  if(GV.Mode == MODE_MENU){AUDIO_Music_Play(MUSIC_MENU);}
+  if(GV.Mode == MODE_MENU || GV.Mode == MODE_INTRO){AUDIO_Music_Play(MUSIC_MENU);}
 }
 
 // ##############################################
@@ -423,7 +433,7 @@ void STAGES_Files_Names_Load()
       if(strncmp("..", ent->d_name, 2) != 0 && strncmp(".", ent->d_name, 2) != 0)
       {
         snprintf(FileName.Stage[x], sizeof(char) * 128, "base/stages/%s",ent->d_name);
-        snprintf(FileName.StageShort[x], sizeof(char) * 128, ent->d_name);
+        snprintf(FileName.StageShort[x], sizeof(char) * 128, "%s", ent->d_name);
         x++;
         if(x>19){x=19;}
       }

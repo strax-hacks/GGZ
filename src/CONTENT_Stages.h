@@ -1,3 +1,5 @@
+#pragma once
+
 #define MAX_NUM_ENEMIES 50
 #define MAX_NUM_ENEMIES_MODULE 5
 #define NUM_MODULES_OUTDOORS 24

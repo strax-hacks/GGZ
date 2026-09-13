@@ -11,15 +11,24 @@ void LOOP_Credits()
   int GameModeTemp = GV.Mode;
   GV.Mode = MODE_CREDITS;
 
-  Credits.x_off = 20;
-  Credits.y_off = 20;
+  Credits.x_off = 16;
+  Credits.y_off = 28;
 
   while(!QuitProgram && !QuitToMenu)
   {
     getInput();
     INPUT_General();
 
-    if(Key_ESCAPE_pressed || Joy_ESCAPE_pressed){QuitToMenu = true;}
+    if(Key_ESCAPE_pressed || Joy_ESCAPE_pressed || Key_ENTER_pressed || Key_SPACE_pressed || Joy_OK_pressed){QuitToMenu = true;}
+
+    if(Key_DOWN_pressed || Joy_DOWN_pressed)
+    {
+      if (Credits.y_off > -130) Credits.y_off -= 12;
+    }
+    if(Key_UP_pressed || Joy_UP_pressed)
+    {
+      if (Credits.y_off < 28) Credits.y_off += 12;
+    }
 
     Update_Screen();  // draw the scene
   }
@@ -33,24 +42,33 @@ void LOOP_Credits()
 
 void LOOP_Credits_Draw()
 {
-  Print(16+Credits.x_off,8+Credits.y_off,2,0,"CREDITS");
-  Print(16+Credits.x_off,32+Credits.y_off,2,0,"The Great Giana Sisters (C64)");
-  Print(16+Credits.x_off,44+Credits.y_off,0,0,"1987 Softgold/Rainbow Arts");
-  Print(16+Credits.x_off,56+Credits.y_off,0,0,"Written:      Armin Gessert");
-  Print(16+Credits.x_off,68+Credits.y_off,0,0,"Artwork:      Manfred Trenz");
-  Print(16+Credits.x_off,80+Credits.y_off,0,0,"Music:        Chris Huelsbeck");
+  Print((320 - 7 * 8) / 2, 8, 3, 0, "CREDITS");
 
-  Print(16+Credits.x_off,104+Credits.y_off,2,0,"OpenGGS 2.0 - OpenGGS Maker");
-  Print(16+Credits.x_off,116+Credits.y_off,0,0,"Written:      RomanH");
-  Print(16+Credits.x_off,128+Credits.y_off,0,0,"Artwork:      RomanH");
-  Print(16+Credits.x_off,140+Credits.y_off,0,0,"Soundeffects: RomanH, Kenney (opengameart.org)");
-  Print(16+Credits.x_off,152+Credits.y_off,0,0,"Music:        Alejandro Altimari (puch666)");
+  int yBase = (Credits.y_off == 0) ? 26 : Credits.y_off;
+  int xBase = (Credits.x_off == 0) ? 16 : Credits.x_off;
 
-  Print(16+Credits.x_off,176+Credits.y_off,2,0,"Interface elements");
-  Print(16+Credits.x_off,188+Credits.y_off,0,0,"Clipart:      openclipart.org (Tango-Collection)");
-  Print(16+Credits.x_off,200+Credits.y_off,0,0,"Soundeffects: RomanH");
-  Print(16+Credits.x_off,212+Credits.y_off,0,0,"              Kenney (opengameart.org)");
+  SDL_Rect clip = { 0, 22, 320, 122 };
+  SDL_RenderSetClipRect(gRenderer, &clip);
 
-  Print(16+Credits.x_off,236+Credits.y_off,2,0,"Thanks to everybody involved in porting");
-  Print(16+Credits.x_off,248+Credits.y_off,2,0,"the game to different plattforms!!!");
+  Print(xBase, 0 + yBase, 2, 0, "The Great Giana Sisters (C64)");
+  Print(xBase, 12 + yBase, 0, 0, "1987 Softgold / Rainbow Arts");
+  Print(xBase, 24 + yBase, 0, 0, "Written:      Armin Gessert");
+  Print(xBase, 36 + yBase, 0, 0, "Artwork:      Manfred Trenz");
+  Print(xBase, 48 + yBase, 0, 0, "Music:        Chris Huelsbeck");
+
+  Print(xBase, 68 + yBase, 2, 0, "OpenGGS 2.0 (OpenGGS Maker)");
+  Print(xBase, 80 + yBase, 0, 0, "Written:      RomanH");
+  Print(xBase, 92 + yBase, 0, 0, "Artwork:      RomanH");
+  Print(xBase, 104 + yBase, 0, 0, "Sound FX:     RomanH, Kenney");
+  Print(xBase, 116 + yBase, 0, 0, "Music:        Alejandro Altimari");
+
+  Print(xBase, 136 + yBase, 2, 0, "Cardputer ZERO Port");
+  Print(xBase, 148 + yBase, 0, 0, "Port & Opt:   CardputerZero Community");
+  Print(xBase, 160 + yBase, 0, 0, "Display:      ST7789v3 320x170 Native");
+
+  Print(xBase, 180 + yBase, 2, 0, "Thanks to all retro gaming fans!");
+
+  SDL_RenderSetClipRect(gRenderer, NULL);
+
+  Print((320 - 30 * 8) / 2, 150, 2, 0, "UP/DOWN:SCROLL  ESC/ENTER:BACK");
 }

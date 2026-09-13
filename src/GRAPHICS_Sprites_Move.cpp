@@ -34,7 +34,7 @@ void SPRITES_Move()
       //Sprite_PowerUp_Walk(i);
       if(!Sprite_PowerUp[i].OnGround){Sprite_PowerUp_Gravity(i);}
       if(Sprite_PowerUp[i].PosY < -300 ||
-         Sprite_PowerUp[i].PosY > GV.Screen_Height ||
+         Sprite_PowerUp[i].PosY > StageC64.StageHeightPixels ||
          Sprite_PowerUp[i].PosX-PC.StagePosX < - 300 ||
          Sprite_PowerUp[i].PosX-PC.StagePosX > GV.Screen_Width + 300)
       {Sprite_PowerUp[i].Active = false;}
@@ -47,7 +47,7 @@ void SPRITES_Move()
     {
       SPRITE_DropStone_Gravity(i);
       if(Sprite_DropStone[i].PosY < -300 ||
-         Sprite_DropStone[i].PosY > GV.Screen_Height)
+         Sprite_DropStone[i].PosY > StageC64.StageHeightPixels)
       {Sprite_DropStone[i].inUse = false;}
     }
   }
@@ -72,7 +72,7 @@ void Sprite_SmallCoin_Gravity(int SmallCoinNumber)
 
   Sprite_SmallCoin[SmallCoinNumber].PosY -= int(Sprite_SmallCoin[SmallCoinNumber].JumpVelocity/2);
 
-  if(Sprite_SmallCoin[SmallCoinNumber].PosY > GV.Screen_Height){Sprite_SmallCoin[SmallCoinNumber].Active = false;}
+  if(Sprite_SmallCoin[SmallCoinNumber].PosY > StageC64.StageHeightPixels){Sprite_SmallCoin[SmallCoinNumber].Active = false;}
 
   // MOVE SMALCOIN SIDEWAYS
   // IT LOOKS COOLER WITHOUT SIDEWAYS MOVEMENT
@@ -169,9 +169,9 @@ bool Sprite_PowerUp_Collision_Down(int PowerUpNumber)
 
   if(Sprite_PowerUp[PowerUpNumber].JumpVelocity < 0)
   {
-    if(TileType[StageC64.TileNumber[(int)(Sprite_PowerUp[PowerUpNumber].PosX/TS.Tile_Width)]                                  [(int)((Sprite_PowerUp[PowerUpNumber].PosY+Sprite_PowerUp[PowerUpNumber].h)/TS.Tile_Height)]].Solid ||   // CHECK BOTTOM-LEFT
-       TileType[StageC64.TileNumber[(int)((Sprite_PowerUp[PowerUpNumber].PosX+Sprite_PowerUp[PowerUpNumber].w/2)/TS.Tile_Width)]                                    [(int)((Sprite_PowerUp[PowerUpNumber].PosY+Sprite_PowerUp[PowerUpNumber].h)/TS.Tile_Height)]].Solid ||   // CHECK BOTTOM-CENTER
-       TileType[StageC64.TileNumber[(int)((Sprite_PowerUp[PowerUpNumber].PosX+(Sprite_PowerUp[PowerUpNumber].w))/TS.Tile_Width)][(int)((Sprite_PowerUp[PowerUpNumber].PosY+Sprite_PowerUp[PowerUpNumber].h)/TS.Tile_Height)]].Solid)   // CHECK BOTTOM-RIGHT
+    if(GetTileTypeAt((int)(Sprite_PowerUp[PowerUpNumber].PosX/TS.Tile_Width), (int)((Sprite_PowerUp[PowerUpNumber].PosY+Sprite_PowerUp[PowerUpNumber].h)/TS.Tile_Height)).Solid ||   // CHECK BOTTOM-LEFT
+       GetTileTypeAt((int)((Sprite_PowerUp[PowerUpNumber].PosX+Sprite_PowerUp[PowerUpNumber].w/2)/TS.Tile_Width), (int)((Sprite_PowerUp[PowerUpNumber].PosY+Sprite_PowerUp[PowerUpNumber].h)/TS.Tile_Height)).Solid ||   // CHECK BOTTOM-CENTER
+       GetTileTypeAt((int)((Sprite_PowerUp[PowerUpNumber].PosX+(Sprite_PowerUp[PowerUpNumber].w))/TS.Tile_Width), (int)((Sprite_PowerUp[PowerUpNumber].PosY+Sprite_PowerUp[PowerUpNumber].h)/TS.Tile_Height)).Solid)   // CHECK BOTTOM-RIGHT
     {
       ReturnValue = true;
     }
@@ -189,13 +189,12 @@ bool Sprite_PowerUp_Collision_Left(int PowerUpNumber)
   bool ReturnValue = false;
 
   // CHECK FOR WALLS
-  if(TileType[StageC64.TileNumber[(int)(Sprite_PowerUp[PowerUpNumber].PosX/TS.Tile_Width)][(int)((Sprite_PowerUp[PowerUpNumber].PosY+Sprite_PowerUp[PowerUpNumber].h)/TS.Tile_Height)-1]].Solid)   // CHECK BOTTOM-LEFT
-
+  if(GetTileTypeAt((int)(Sprite_PowerUp[PowerUpNumber].PosX/TS.Tile_Width), (int)((Sprite_PowerUp[PowerUpNumber].PosY+Sprite_PowerUp[PowerUpNumber].h)/TS.Tile_Height)-1).Solid)   // CHECK BOTTOM-LEFT
   {
     ReturnValue = true;
   }
 
-  if(TileType[StageC64.TileNumber[(int)(Sprite_PowerUp[PowerUpNumber].PosX/TS.Tile_Width)][(int)(Sprite_PowerUp[PowerUpNumber].PosY/TS.Tile_Height)]].Solid)   // CHECK TOP-LEFT
+  if(GetTileTypeAt((int)(Sprite_PowerUp[PowerUpNumber].PosX/TS.Tile_Width), (int)(Sprite_PowerUp[PowerUpNumber].PosY/TS.Tile_Height)).Solid)   // CHECK TOP-LEFT
   {
     ReturnValue = true;
   }
@@ -212,13 +211,12 @@ bool Sprite_PowerUp_Collision_Right(int PowerUpNumber)
   bool ReturnValue = false;
 
   // CHECK FOR WALLS
-  if(TileType[StageC64.TileNumber[(int)((Sprite_PowerUp[PowerUpNumber].PosX+Sprite_PowerUp[PowerUpNumber].w)/TS.Tile_Width)][(int)((Sprite_PowerUp[PowerUpNumber].PosY+Sprite_PowerUp[PowerUpNumber].h)/TS.Tile_Height)-1]].Solid)   // CHECK BOTTOM-LEFT
-
+  if(GetTileTypeAt((int)((Sprite_PowerUp[PowerUpNumber].PosX+Sprite_PowerUp[PowerUpNumber].w)/TS.Tile_Width), (int)((Sprite_PowerUp[PowerUpNumber].PosY+Sprite_PowerUp[PowerUpNumber].h)/TS.Tile_Height)-1).Solid)   // CHECK BOTTOM-LEFT
   {
     ReturnValue = true;
   }
 
-  if(TileType[StageC64.TileNumber[(int)((Sprite_PowerUp[PowerUpNumber].PosX+Sprite_PowerUp[PowerUpNumber].w)/TS.Tile_Width)][(int)(Sprite_PowerUp[PowerUpNumber].PosY/TS.Tile_Height)]].Solid)   // CHECK TOP-LEFT
+  if(GetTileTypeAt((int)((Sprite_PowerUp[PowerUpNumber].PosX+Sprite_PowerUp[PowerUpNumber].w)/TS.Tile_Width), (int)(Sprite_PowerUp[PowerUpNumber].PosY/TS.Tile_Height)).Solid)   // CHECK TOP-LEFT
   {
     ReturnValue = true;
   }
@@ -237,7 +235,7 @@ void Sprite_Platform_Move()
     if(Platform.Direction == 1)
     {
       if(Platform.PosY < Platform.End_Y){Platform.PosY++;}
-     if(Platform.PosY > Platform.End_Y){Platform.PosY--;}
+      if(Platform.PosY > Platform.End_Y){Platform.PosY--;}
       if(Platform.PosY == Platform.End_Y){Platform.Direction = 0;}
     }
     if(Platform.Direction == 0)
@@ -260,9 +258,9 @@ void SPRITE_DropStone_Gravity(int DropStoneNumber)
 
   if(Sprite_DropStone[DropStoneNumber].JumpVelocity < 0)
   {
-    if(TileType[StageC64.TileNumber[(int)(Sprite_DropStone[DropStoneNumber].PosX/TS.Tile_Width)]                                      [(int)((Sprite_DropStone[DropStoneNumber].PosY+Sprite_DropStone[DropStoneNumber].h)/TS.Tile_Height)]].Solid ||   // CHECK BOTTOM-LEFT
-       TileType[StageC64.TileNumber[(int)((Sprite_DropStone[DropStoneNumber].PosX+Sprite_DropStone[DropStoneNumber].w/2)/TS.Tile_Width)]                                        [(int)((Sprite_DropStone[DropStoneNumber].PosY+Sprite_DropStone[DropStoneNumber].h)/TS.Tile_Height)]].Solid ||   // CHECK BOTTOM-CENTER
-       TileType[StageC64.TileNumber[(int)((Sprite_DropStone[DropStoneNumber].PosX+(Sprite_DropStone[DropStoneNumber].w))/TS.Tile_Width)][(int)((Sprite_DropStone[DropStoneNumber].PosY+Sprite_DropStone[DropStoneNumber].h)/TS.Tile_Height)]].Solid)   // CHECK BOTTOM-RIGHT
+    if(GetTileTypeAt((int)(Sprite_DropStone[DropStoneNumber].PosX/TS.Tile_Width), (int)((Sprite_DropStone[DropStoneNumber].PosY+Sprite_DropStone[DropStoneNumber].h)/TS.Tile_Height)).Solid ||   // CHECK BOTTOM-LEFT
+       GetTileTypeAt((int)((Sprite_DropStone[DropStoneNumber].PosX+Sprite_DropStone[DropStoneNumber].w/2)/TS.Tile_Width), (int)((Sprite_DropStone[DropStoneNumber].PosY+Sprite_DropStone[DropStoneNumber].h)/TS.Tile_Height)).Solid ||   // CHECK BOTTOM-CENTER
+       GetTileTypeAt((int)((Sprite_DropStone[DropStoneNumber].PosX+(Sprite_DropStone[DropStoneNumber].w))/TS.Tile_Width), (int)((Sprite_DropStone[DropStoneNumber].PosY+Sprite_DropStone[DropStoneNumber].h)/TS.Tile_Height)).Solid)   // CHECK BOTTOM-RIGHT
     {
       Sprite_DropStone[DropStoneNumber].JumpVelocity = 0;
       Sprite_DropStone[DropStoneNumber].PosY -= ((Sprite_DropStone[DropStoneNumber].PosY+ Sprite_DropStone[DropStoneNumber].h) % TS.Tile_Height);

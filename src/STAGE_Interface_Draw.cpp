@@ -14,10 +14,10 @@ void STAGE_Interface_Draw()
     snprintf(scoreStr, sizeof(scoreStr), "%06d", PC.Points);
     Print(HUD.PlayerX + 54, HUD.PlayerY, 3, 0, scoreStr);
 
-    Print(HUD.BonusX, HUD.BonusY, 0, 0, "$");
+    // Sprite_SmallCoin[0] is drawn automatically at HUD.SmallCoinX, HUD.SmallCoinY
     char coinStr[8];
     snprintf(coinStr, sizeof(coinStr), "x%02d", PC.Coins);
-    Print(HUD.BonusX + 12, HUD.BonusY, 3, 0, coinStr);
+    Print(HUD.BonusX, HUD.BonusY, 3, 0, coinStr);
 
     Print(HUD.LivesX, HUD.LivesY, 0, 0, "L");
     char livesStr[8];
@@ -29,7 +29,7 @@ void STAGE_Interface_Draw()
     Print(HUD.StageX, HUD.StageY, 0, 0, stageStr);
 
     Print(HUD.TimeX, HUD.TimeY, 0, 0, "T");
-    Print(HUD.TimeX + 12, HUD.TimeY, 3, 0, "---");
+    Print(HUD.TimeX + 10, HUD.TimeY, 3, 0, "---");
     return;
   }
 

@@ -25,6 +25,7 @@ bool Key_MINUS;     int Key_MINUS_pressed_value;     bool Key_MINUS_pressed;
 
 bool Key_P;         int Key_P_pressed_value;         bool Key_P_pressed;
 bool Key_S;         int Key_S_pressed_value;         bool Key_S_pressed;
+bool Key_V;         int Key_V_pressed_value;         bool Key_V_pressed;
 bool Key_X;         int Key_X_pressed_value;         bool Key_X_pressed;
 bool Key_Y;         int Key_Y_pressed_value;         bool Key_Y_pressed;
 bool Key_1;         int Key_1_pressed_value;         bool Key_1_pressed;
@@ -146,6 +147,7 @@ void getInput()
         case SDLK_KP_PLUS:   Key_PLUS = true;   break;
         case SDLK_KP_MINUS:  Key_MINUS = true;  break;
         case SDLK_p:      Key_P = true;      break;
+        case SDLK_v:      Key_V = true;      break;
         case SDLK_s:      Key_DOWN = true; Key_S = true; break; // S -> Down
         case SDLK_w:      Key_UP = true; break;                 // W -> Up / Jump
         case SDLK_a:      Key_LEFT = true; break;               // A -> Left
@@ -202,6 +204,7 @@ void getInput()
         case SDLK_KP_PLUS:   Key_PLUS = false;   break;
         case SDLK_KP_MINUS:  Key_MINUS = false;  break;
         case SDLK_p:      Key_P = false;      break;
+        case SDLK_v:      Key_V = false;      break;
         case SDLK_s:      Key_DOWN = false; Key_S = false; break;
         case SDLK_w:      Key_UP = false; break;
         case SDLK_a:      Key_LEFT = false; break;
@@ -307,6 +310,9 @@ void getInput()
   if (!Key_P)     {Key_P_pressed_value = 0; Key_P_pressed = false;} else
                   {if (Key_P_pressed_value == 2){Key_P_pressed_value = 1; Key_P_pressed = false;}
                    if (Key_P_pressed_value == 0){Key_P_pressed_value = 2; Key_P_pressed = true;}}
+  if (!Key_V)     {Key_V_pressed_value = 0; Key_V_pressed = false;} else
+                  {if (Key_V_pressed_value == 2){Key_V_pressed_value = 1; Key_V_pressed = false;}
+                   if (Key_V_pressed_value == 0){Key_V_pressed_value = 2; Key_V_pressed = true;}}
   if (!Key_S)     {Key_S_pressed_value = 0; Key_S_pressed = false;} else
                   {if (Key_S_pressed_value == 2){Key_S_pressed_value = 1; Key_S_pressed = false;}
                    if (Key_S_pressed_value == 0){Key_S_pressed_value = 2; Key_S_pressed = true;}}

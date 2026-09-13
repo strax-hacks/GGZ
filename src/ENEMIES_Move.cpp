@@ -15,35 +15,48 @@ void ENEMIES_Move()
 
   for (x = 1; x < MAX_NUM_ENEMIES; x++)  // CRASH IF x = 0!!
   {
+    if (!Enemy[x].inUse) {
+      continue;
+    }
+
+    int type = Enemy[x].Type;
+    if (type < 0 || type >= 30) {
+      continue;
+    }
+
+    // ACTIVATE ENEMIES
+    int viewWidth = (GV.Resolution == RESOLUTION_320x170 && GV.ViewMode == VIEW_MODE_C64_SCALED) ? 640 : GV.Screen_Width;
+    Enemy[x].Active = false;
+    if((Enemy[x].PosX - PC.StagePosX) < (viewWidth + Enemy_Type[type].ColWidth))
+    {
+      Enemy[x].Active = true;
+    }
+
+    // DEACTIVATE ENEMIES
+    if((Enemy[x].PosX - PC.StagePosX) < -100)
+    {
+      Enemy[x].Active = false;
+    }
+
+    if (!Enemy[x].Active) {
+      continue;
+    }
 
     ENEMY_Check_Tilecollision(x);
 
     if(Enemy[x].Active && Enemy[x].inUse){ENEMY_Gravity(x);}
 
-    if((Enemy_Type[Enemy[x].Type].Walker || Enemy_Type[Enemy[x].Type].Flying) && Enemy[x].Active && Enemy[x].inUse)
+    if((Enemy_Type[type].Walker || Enemy_Type[type].Flying) && Enemy[x].Active && Enemy[x].inUse)
     {ENEMY_Walk(x);}
 
-    if(Enemy_Type[Enemy[x].Type].JumpStrength != 0 && Enemy[x].Active && Enemy[x].inUse)
+    if(Enemy_Type[type].JumpStrength != 0 && Enemy[x].Active && Enemy[x].inUse)
     {ENEMY_Jump(x);}
-    //if((Enemy[x].PosX - PC.PosX) < (100+GV.Screen_Width/2)){Enemy[x].Active = true;}
 
-    if(Enemy_Type[Enemy[x].Type].SpecialPath_Dragon && Enemy[x].Active && Enemy[x].Alive && Enemy[x].inUse)
+    if(Enemy_Type[type].SpecialPath_Dragon && Enemy[x].Active && Enemy[x].Alive && Enemy[x].inUse)
     {ENEMY_Move_Dragon(x);}
 
-    if(Enemy_Type[Enemy[x].Type].SpecialPath_Spider && Enemy[x].Active && Enemy[x].Alive && Enemy[x].inUse)
+    if(Enemy_Type[type].SpecialPath_Spider && Enemy[x].Active && Enemy[x].Alive && Enemy[x].inUse)
     {ENEMY_Move_Spider(x);}
-
-    // ACTIVATE ENEMIES
-
-    Enemy[x].Active = false;
-    if((Enemy[x].PosX - PC.StagePosX) < (GV.Screen_Width+Enemy_Type[Enemy[x].Type].ColWidth) &&
-       Enemy[x].inUse)
-    {Enemy[x].Active = true;}
-
-
-    // DEACTIVATE ENEMIES
-    if((Enemy[x].PosX - PC.StagePosX) < -100 && Enemy[x].inUse){Enemy[x].Active = false;}
-
   }
 }
 
@@ -117,9 +130,9 @@ void ENEMY_Gravity(int EnemyNumber)
 
   if(Enemy[EnemyNumber].PosY > 800){Enemy[EnemyNumber].PosY=800;}  // MAKE SURE ENEMIES DON'T FALL FOREVER
 
-  if(Enemy[EnemyNumber].PosY > GV.Screen_Height+100 && Enemy_Type[Enemy[EnemyNumber].Type].JumpStrength == 0)
+  if(Enemy[EnemyNumber].PosY > StageC64.StageHeightPixels+100 && Enemy_Type[Enemy[EnemyNumber].Type].JumpStrength == 0)
   {
-    Enemy[EnemyNumber].PosY = GV.Screen_Height+100;  // MAKE SURE ENEMIES DON'T FALL FOREVER
+    Enemy[EnemyNumber].PosY = StageC64.StageHeightPixels+100;  // MAKE SURE ENEMIES DON'T FALL FOREVER
     Enemy[EnemyNumber].Alive = false;
     Enemy[EnemyNumber].Active = false;
   }

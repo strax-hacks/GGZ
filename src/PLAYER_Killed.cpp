@@ -39,7 +39,7 @@ void PC_Death_Routine()
   int StartPos = 0;
   if(PC.PosX > StageC64.CheckPointX[1]-10){StartPos = 1;}
   if(PC.PosX > StageC64.CheckPointX[2]-10){StartPos = 2;}
-  if(PC.PosY > GV.Screen_Height-1){STAGE_Load(PC.Stage, StartPos, true, false);}
+  if(PC.PosY > StageC64.StageHeightPixels-1){STAGE_Load(PC.Stage, StartPos, true, false);}
 }
 
 // ##############################################

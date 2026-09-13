@@ -11,17 +11,46 @@ void Background_DrawATube(int x, int y, bool Fire);
 void STAGE_Draw()
 {
   int x,y;
+  int virtualWidth = GV.Screen_Width;
+  int virtualHeight = GV.Screen_Height;
 
-  if(PC.PosX < GV.Screen_Width/2)   {PC.StagePosX = 0;}
-  if(PC.PosX+1 > GV.Screen_Width/2) {PC.StagePosX = PC.PosX-GV.Screen_Width/2;}
-  if(PC.PosX+1-(GV.Screen_Width/2) > StageC64.StageWidthPixels-GV.Screen_Width) {PC.StagePosX = StageC64.StageWidthPixels-GV.Screen_Width;}
+  if (GV.Resolution == RESOLUTION_320x170 && GV.ViewMode == VIEW_MODE_C64_SCALED)
+  {
+    virtualWidth = 640;
+    virtualHeight = 340;
+  }
 
-  //GV.ScreenWidthTiles = (int)(GV.Screen_Width/16);
+  int screenWTiles = (virtualWidth / 16);
+  int screenHTiles = (virtualHeight / 16);
+
+  if(PC.PosX < virtualWidth/2)   {PC.StagePosX = 0;}
+  if(PC.PosX+1 > virtualWidth/2) {PC.StagePosX = PC.PosX-virtualWidth/2;}
+  if(PC.PosX+1-(virtualWidth/2) > StageC64.StageWidthPixels-virtualWidth) {PC.StagePosX = StageC64.StageWidthPixels-virtualWidth;}
+
+  if (virtualHeight >= StageC64.StageHeightPixels) {
+    PC.StagePosY = 0;
+  } else {
+    if (GV.Resolution == RESOLUTION_320x170 && GV.ViewMode == VIEW_MODE_C64_SCALED) {
+      // In 640x340 C64 mode, stage is 480px high (30 tiles).
+      // Bottom ground is at 480px, so base camera offset is 480 - 340 = 140px.
+      // If Giana jumps into the upper clouds/platforms (PC.PosY < 180), track upwards smoothly.
+      PC.StagePosY = 140;
+      if (PC.PosY < 220) {
+        PC.StagePosY = PC.PosY - 80;
+      }
+    } else {
+      PC.StagePosY = PC.PosY - (virtualHeight / 2) - 10;
+    }
+    if (PC.StagePosY < 0) { PC.StagePosY = 0; }
+    if (PC.StagePosY > StageC64.StageHeightPixels - virtualHeight) {
+      PC.StagePosY = StageC64.StageHeightPixels - virtualHeight;
+    }
+  }
 
   // BACKGROUND
-  for(y=0; y<StageC64.StageHeight; y++)
+  for(y=0; y<screenHTiles+1; y++)
   {
-    for(x=0; x<GV.ScreenWidthTiles; x++)
+    for(x=0; x<screenWTiles+1; x++)
     {
       if(StageC64.BackgroundColour == 0){TILE_Draw((x*TS.Tile_Width), y*TS.Tile_Height, 0);}  // BLUE BACKGROUND
       if(StageC64.BackgroundColour == 1){TILE_Draw((x*TS.Tile_Width), y*TS.Tile_Height, 40);} // BLACK BACKGROUND
@@ -49,16 +78,18 @@ void STAGE_Draw()
 
   for(y=0; y<StageC64.StageHeight; y++)
   {
-    for(x=(int)(PC.StagePosX/16); x<(int)(PC.StagePosX/16)+GV.ScreenWidthTiles+1; x++)
+    int drawY = (y*TS.Tile_Height) - PC.StagePosY;
+    if (drawY < -TS.Tile_Height || drawY > virtualHeight) continue;
+    for(x=(int)(PC.StagePosX/16); x<(int)(PC.StagePosX/16)+screenWTiles+2; x++)
     {
-      if(StageC64.TileNumber[x][y] !=0)
+      if (x >= 0 && x < StageC64.StageWidth && StageC64.TileNumber[x][y] !=0)
       {
-        TILE_Draw((x*TS.Tile_Width)-PC.StagePosX, y*TS.Tile_Height, StageC64.TileNumber[x][y]);
+        TILE_Draw((x*TS.Tile_Width)-PC.StagePosX, drawY, StageC64.TileNumber[x][y]);
         if(GV.ShowDebugInfos_Tiles)
         {
-          if(TileType[StageC64.TileNumber[x][y]].Exit)   {INTERFACE_Tile_Draw((x*TS.Tile_Width)-PC.StagePosX, y*TS.Tile_Height, INTERFACE_MARK_EXIT);}
-          if(TileType[StageC64.TileNumber[x][y]].Lethal) {INTERFACE_Tile_Draw((x*TS.Tile_Width)-PC.StagePosX, y*TS.Tile_Height, INTERFACE_MARK_LETHAL);}
-          if(TileType[StageC64.TileNumber[x][y]].Coin)   {INTERFACE_Tile_Draw((x*TS.Tile_Width)-PC.StagePosX, y*TS.Tile_Height, INTERFACE_MARK_COIN);}
+          if(TileType[StageC64.TileNumber[x][y]].Exit)   {INTERFACE_Tile_Draw((x*TS.Tile_Width)-PC.StagePosX, drawY, INTERFACE_MARK_EXIT);}
+          if(TileType[StageC64.TileNumber[x][y]].Lethal) {INTERFACE_Tile_Draw((x*TS.Tile_Width)-PC.StagePosX, drawY, INTERFACE_MARK_LETHAL);}
+          if(TileType[StageC64.TileNumber[x][y]].Coin)   {INTERFACE_Tile_Draw((x*TS.Tile_Width)-PC.StagePosX, drawY, INTERFACE_MARK_COIN);}
         }
       }
     }
@@ -79,7 +110,11 @@ void BACKGROUND_ELEMENTS_Outdoors_Draw()
     for(x=0; x<12; x++)
     {
       CPosX = BackGroundElements.CloudPosX[x];
-      CPosY = BackGroundElements.CloudPosY[x];
+      if (GV.Resolution == RESOLUTION_320x170 && GV.ViewMode == VIEW_MODE_C64_SCALED) {
+        CPosY = BackGroundElements.CloudPosY[x] - int(PC.StagePosY / 4);
+      } else {
+        CPosY = BackGroundElements.CloudPosY[x] - int(PC.StagePosY / 2);
+      }
       TILE_Draw(CPosX-int(PC.StagePosX/2)+(0*TS.Tile_Width), CPosY, TileNumber+0);
       TILE_Draw(CPosX-int(PC.StagePosX/2)+(1*TS.Tile_Width), CPosY, TileNumber+1);
       TILE_Draw(CPosX-int(PC.StagePosX/2)+(2*TS.Tile_Width), CPosY, TileNumber+2);
@@ -90,9 +125,6 @@ void BACKGROUND_ELEMENTS_Outdoors_Draw()
       TILE_Draw(CPosX-int(PC.StagePosX/2)+(2*TS.Tile_Width), CPosY+TS.Tile_Height, TileNumber+2+TS.Width);
       TILE_Draw(CPosX-int(PC.StagePosX/2)+(3*TS.Tile_Width), CPosY+TS.Tile_Height, TileNumber+3+TS.Width);
       TILE_Draw(CPosX-int(PC.StagePosX/2)+(4*TS.Tile_Width), CPosY+TS.Tile_Height, TileNumber+4+TS.Width);
-     // PrintInt(CPosX-int(PC.StagePosX/2), CPosY, 1,0, x);
-     // PrintInt(400, 10*x, 0,0, CPosX-int(PC.StagePosX/2));
-     // PrintInt(480, 10*x, 0,0, BackGroundElements.CloudPosX[x]);
     }
 
   SDL_SetTextureAlphaMod(TilesTexture,100);
@@ -112,7 +144,7 @@ void Background_DrawATube(int x, int y, bool Fire)
 
   for(z=0; z<2; z++)
   {
-    TubePosY = y-(z*48);
+    TubePosY = y-(z*48) - PC.StagePosY;
     TILE_Draw(x-int(PC.StagePosX/2)+(0*TS.Tile_Width), TubePosY, TileNumber+0);
     TILE_Draw(x-int(PC.StagePosX/2)+(1*TS.Tile_Width), TubePosY, TileNumber+1);
     TILE_Draw(x-int(PC.StagePosX/2)+(2*TS.Tile_Width), TubePosY, TileNumber+2);
@@ -158,25 +190,22 @@ void BACKGROUND_ELEMENTS_Indoors_Draw()
     int x, y;
     int CPosX = 0;
     int DrawPos;
+    int virtualWidth = (GV.Resolution == RESOLUTION_320x170 && GV.ViewMode == VIEW_MODE_C64_SCALED) ? 640 : GV.Screen_Width;
     SDL_SetTextureAlphaMod(TilesTexture,100);
 
     for(x=0; x<84; x++)
     {
       DrawPos = CPosX-int(PC.StagePosX/2)+(0*TS.Tile_Width)+(x*2*TS.Tile_Width);
-      if(DrawPos > -(2*TS.Tile_Width) && DrawPos < GV.Screen_Width) //ONLY DRAW WHAT'S VISIBLE
+      if(DrawPos > -(2*TS.Tile_Width) && DrawPos < virtualWidth) //ONLY DRAW WHAT'S VISIBLE
       {
         for(y=4; y<15; y++)
         {
-          TILE_Draw(CPosX-int(PC.StagePosX/2)+(0*TS.Tile_Width)+(x*2*TS.Tile_Width), y*2*TS.Tile_Height, TileNumber+0);
-          TILE_Draw(CPosX-int(PC.StagePosX/2)+(1*TS.Tile_Width)+(x*2*TS.Tile_Width), y*2*TS.Tile_Height, TileNumber+1);
-          TILE_Draw(CPosX-int(PC.StagePosX/2)+(0*TS.Tile_Width)+(x*2*TS.Tile_Width), (y*2*TS.Tile_Height)+TS.Tile_Height, TileNumber+0+TS.Width);
-          TILE_Draw(CPosX-int(PC.StagePosX/2)+(1*TS.Tile_Width)+(x*2*TS.Tile_Width), (y*2*TS.Tile_Height)+TS.Tile_Height, TileNumber+1+TS.Width);
-/*
-          TILE_Draw(CPosX-int(PC.StagePosX/2)+(0*TS.Tile_Width)+(x*2*TS.Tile_Width), CPosY, TileNumber+0);
-          TILE_Draw(CPosX-int(PC.StagePosX/2)+(1*TS.Tile_Width)+(x*2*TS.Tile_Width), CPosY, TileNumber+1);
-          TILE_Draw(CPosX-int(PC.StagePosX/2)+(0*TS.Tile_Width)+(x*2*TS.Tile_Width), CPosY+TS.Tile_Height, TileNumber+0+TS.Width);
-          TILE_Draw(CPosX-int(PC.StagePosX/2)+(1*TS.Tile_Width)+(x*2*TS.Tile_Width), CPosY+TS.Tile_Height, TileNumber+1+TS.Width);
-*/
+          int drawY1 = y*2*TS.Tile_Height - PC.StagePosY;
+          int drawY2 = (y*2*TS.Tile_Height)+TS.Tile_Height - PC.StagePosY;
+          TILE_Draw(CPosX-int(PC.StagePosX/2)+(0*TS.Tile_Width)+(x*2*TS.Tile_Width), drawY1, TileNumber+0);
+          TILE_Draw(CPosX-int(PC.StagePosX/2)+(1*TS.Tile_Width)+(x*2*TS.Tile_Width), drawY1, TileNumber+1);
+          TILE_Draw(CPosX-int(PC.StagePosX/2)+(0*TS.Tile_Width)+(x*2*TS.Tile_Width), drawY2, TileNumber+0+TS.Width);
+          TILE_Draw(CPosX-int(PC.StagePosX/2)+(1*TS.Tile_Width)+(x*2*TS.Tile_Width), drawY2, TileNumber+1+TS.Width);
         }
       }
     }
