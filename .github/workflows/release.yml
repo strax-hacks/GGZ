@@ -1,0 +1,172 @@
+name: Release Cardputer ZERO OpenGGS
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name to release (e.g. v1.0.0)'
+        required: false
+        type: string
+      is_draft:
+        description: 'Create draft release'
+        required: false
+        type: boolean
+        default: false
+      is_prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    name: Run Automated Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev
+
+      - name: Configure and Build Tests
+        run: cmake -B build/desktop -DCMAKE_BUILD_TYPE=Release -DTARGET_DEVICE=DESKTOP -DBUILD_TESTS=ON && cmake --build build/desktop --parallel 2
+
+      - name: Run Smoke Test & CTest Suite
+        run: |
+          chmod +x tests/smoke_test.sh
+          ./tests/smoke_test.sh
+          ctest --test-dir build/desktop --output-on-failure
+
+  build-cardputer-zero-deb:
+    name: Build Cardputer ZERO ARM64 Debian Package
+    needs: [ test ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract Release Version
+        run: |
+          if [ -n "${{ github.event.inputs.tag_name }}" ]; then
+            TAG="${{ github.event.inputs.tag_name }}"
+          elif [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            TAG="${GITHUB_REF#refs/tags/}"
+          else
+            TAG="v1.0.0"
+          fi
+          VERSION="${TAG#v}"
+          echo "RELEASE_VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "RELEASE_TAG=${TAG}" >> $GITHUB_ENV
+
+      - name: Set up QEMU for ARM64
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      - name: Build in Debian Bookworm ARM64 container
+        run: |
+          docker run --rm --platform linux/arm64 \
+            -v "${{ github.workspace }}:/workspace" \
+            -w /workspace \
+            debian:bookworm-slim bash -c "
+              set -euo pipefail
+              export DEBIAN_FRONTEND=noninteractive
+              apt-get update
+              apt-get install -y --no-install-recommends \
+                build-essential \
+                cmake \
+                pkg-config \
+                libsdl2-dev \
+                libsdl2-image-dev \
+                libsdl2-mixer-dev \
+                dpkg-dev \
+                ca-certificates
+
+              cmake -B build/cp0-arm64 -DCMAKE_BUILD_TYPE=Release -DTARGET_DEVICE=CARDPUTER_ZERO -DBUILD_TESTS=OFF
+              cmake --build build/cp0-arm64 --parallel 2
+              ./packaging/pack-deb.sh \"${{ env.RELEASE_VERSION }}-1\" arm64 build/cp0-arm64
+            "
+          sudo chown -R $USER:$USER dist build || true
+
+      - name: Generate SHA256 Checksums
+        run: |
+          cd dist
+          sha256sum *.deb > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+          cd ..
+
+      - name: Generate Release Body
+        run: |
+          cat << EOF > release_body.md
+# Giana Sisters Zero (\`cardputerzero-openggs\`) ${RELEASE_TAG}
+
+Pre-built Debian installation package for **M5Stack Cardputer ZERO** (Raspberry Pi CM0 / ARM64).
+
+---
+
+## 🎮 Cardputer ZERO Download
+
+| File | Type | Architecture | Description |
+| :--- | :--- | :--- | :--- |
+| **\`cardputerzero-openggs_${RELEASE_VERSION}-1_arm64.deb\`** | Debian Package | \`arm64\` (Raspberry Pi CM0) | Full standalone app package, game assets, and APPLaunch menu entry. |
+| **\`SHA256SUMS.txt\`** | Checksums | — | SHA-256 integrity verification hash. |
+
+---
+
+## 🚀 How to Install on Cardputer ZERO
+
+### Method 1: Direct Download on Device
+\`\`\`bash
+# 1. Download the .deb package
+wget https://github.com/${{ github.repository }}/releases/download/${RELEASE_TAG}/cardputerzero-openggs_${RELEASE_VERSION}-1_arm64.deb
+
+# 2. Install using dpkg
+sudo dpkg -i cardputerzero-openggs_${RELEASE_VERSION}-1_arm64.deb || sudo apt-get install -f -y
+
+# 3. Launch from APPLaunch menu or terminal
+openggs-cz
+\`\`\`
+
+### Method 2: Copy from PC / Mac via SCP
+\`\`\`bash
+# Copy from your computer to Cardputer ZERO
+scp cardputerzero-openggs_${RELEASE_VERSION}-1_arm64.deb root@cardputer.local:/tmp/
+
+# SSH in and install
+ssh root@cardputer.local "dpkg -i /tmp/cardputerzero-openggs_${RELEASE_VERSION}-1_arm64.deb"
+\`\`\`
+
+---
+
+## 🕹️ Controls
+
+| Action | Cardputer ZERO 46-Key Keyboard | External Gamepad |
+| :--- | :--- | :--- |
+| **Move Left / Right** | \`Left\` / \`Right\` or \`A\` / \`D\` | \`D-Pad Left\` / \`Right\` |
+| **Look Down / Crouch** | \`Down\` or \`S\` | \`D-Pad Down\` |
+| **Jump** | \`Space\`, \`Up\`, \`W\`, or \`K\` | \`A\` Button (South) |
+| **Shoot / Fire** | \`Enter\`, \`J\`, or \`Right Shift\` | \`B\` Button (East) / \`X\` |
+| **Toggle View Mode** | \`V\` (C64 Scaled / 1:1 Zoom) | \`Y\` Button (North) |
+| **Pause Game** | \`P\` | \`Start\` Button |
+| **Menu / Back** | \`Esc\` | \`Back\` / \`Select\` |
+| **Quick Save / Load** | \`F5\` / \`F6\` | — |
+EOF
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: "Giana Sisters Zero ${{ env.RELEASE_TAG }}"
+          body_path: release_body.md
+          draft: ${{ inputs.is_draft || false }}
+          prerelease: ${{ inputs.is_prerelease || false }}
+          files: |
+            dist/*_arm64.deb
+            dist/SHA256SUMS.txt

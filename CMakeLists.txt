@@ -107,26 +107,36 @@ set(OPENGGS_SOURCES
     src/SYSTEM_SaveState.cpp
 )
 
-# Main executable
-add_executable(openggs-cz
+# Core game library
+add_library(openggs_core STATIC
     ${OPENGGS_SOURCES}
-    src/main.cpp
 )
 
-target_link_libraries(openggs-cz PRIVATE
-    ${SDL2_LIBRARIES}
-    ${SDL2_IMAGE_LIBRARIES}
-    ${SDL2_MIXER_LIBRARIES}
-)
-
-target_include_directories(openggs-cz PRIVATE
+target_include_directories(openggs_core PUBLIC
+    src
     ${SDL2_INCLUDE_DIRS}
     ${SDL2_IMAGE_INCLUDE_DIRS}
     ${SDL2_MIXER_INCLUDE_DIRS}
 )
 
+target_link_libraries(openggs_core PUBLIC
+    ${SDL2_LIBRARIES}
+    ${SDL2_IMAGE_LIBRARIES}
+    ${SDL2_MIXER_LIBRARIES}
+)
+
+# Main executable
+add_executable(openggs-cz
+    src/main.cpp
+)
+
+target_link_libraries(openggs-cz PRIVATE
+    openggs_core
+)
+
 # Test targets
 if(BUILD_TESTS)
+    add_compile_definitions(OPENGGS_RENDER_STATS=1)
     enable_testing()
     add_subdirectory(tests)
 endif()

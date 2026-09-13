@@ -120,7 +120,7 @@ void Load_Stagefile(int StagefileNumber)
 {
   if(strncmp("---", FileName.Stage[StagefileNumber], 2) != 0)
   {
-    snprintf(FileName.Stage[0], sizeof(char) * 128, FileName.Stage[StagefileNumber]);
+    snprintf(FileName.Stage[0], sizeof(FileName.Stage[0]), "%s", FileName.Stage[StagefileNumber]);
     AUDIO_Sound_Play(AUDIO_DISK);
     STAGES_Import();
     QuitToMenu = true;

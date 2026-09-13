@@ -1,12 +1,46 @@
 # Cardputer ZERO OpenGGS (`cardputerzero-openggs`)
 
-[![Build & Test](https://github.com/strax-hacks/GGZ/actions/workflows/build-and-package.yml/badge.svg)](https://github.com/strax-hacks/GGZ/actions)
+[![Build & Test](https://github.com/strax-hacks/GGZ/actions/workflows/build-and-package.yml/badge.svg)](https://github.com/strax-hacks/GGZ/actions/workflows/build-and-package.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/strax-hacks/GGZ?include_prereleases&label=Latest%20Release)](https://github.com/strax-hacks/GGZ/releases)
 
 A native port and enhanced fork of **OpenGGS** (the open-source C64 *The Great Giana Sisters* remake) engineered specifically for the **M5Stack Cardputer ZERO** (Raspberry Pi Compute Module 0 / BCM2837 ARM64, 320×170 IPS LCD, 46-key mechanical tactile keyboard) and modern desktop systems.
 
 > **Note on Hardware Testing:** This port has been engineered and validated using the desktop simulator harness and headless automated test suites, but is **yet to be tested on a real physical Cardputer ZERO device**. Reports, testing feedback, and pull requests from real hardware testing are warmly welcomed!
 
 Full technical details and architecture specifications are documented in [docs/SPECIFICATION.md](docs/SPECIFICATION.md).
+
+---
+
+## ⬇️ Download Pre-Built Cardputer ZERO App (No Compilation Required)
+
+You don't need to build from source! The ready-to-install Cardputer ZERO package is automatically built and published under GitHub Releases:
+
+👉 **[Download the Latest Cardputer ZERO `.deb` on GitHub Releases](https://github.com/strax-hacks/GGZ/releases)**
+
+### 🎮 How to Copy & Install on M5Stack Cardputer ZERO
+
+The exact file you need is: **`cardputerzero-openggs_1.0.0-1_arm64.deb`**
+
+#### Method A: Direct Download on Device
+```bash
+# 1. Download the .deb package
+wget https://github.com/strax-hacks/GGZ/releases/latest/download/cardputerzero-openggs_1.0.0-1_arm64.deb
+
+# 2. Install the package
+sudo dpkg -i cardputerzero-openggs_1.0.0-1_arm64.deb || sudo apt-get install -f -y
+
+# 3. Launch from APPLaunch Games menu or terminal
+openggs-cz
+```
+
+#### Method B: Copy from PC / Mac via SCP or SD Card
+```bash
+# Copy over Wi-Fi
+scp cardputerzero-openggs_1.0.0-1_arm64.deb root@cardputer.local:/tmp/
+
+# SSH and install
+ssh root@cardputer.local "dpkg -i /tmp/cardputerzero-openggs_1.0.0-1_arm64.deb"
+```
 
 ---
 

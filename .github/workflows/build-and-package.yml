@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   desktop-test:
@@ -22,31 +23,87 @@ jobs:
         run: cmake -B build/desktop -DCMAKE_BUILD_TYPE=Release -DTARGET_DEVICE=DESKTOP -DBUILD_TESTS=ON
 
       - name: Build
-        run: cmake --build build/desktop --parallel
+        run: cmake --build build/desktop --parallel 2
 
       - name: Run Smoke Test
         run: |
           chmod +x tests/smoke_test.sh
           ./tests/smoke_test.sh
 
-  package-deb:
-    name: Build ARM64 Debian Package
+      - name: Run CTest Suite
+        run: ctest --test-dir build/desktop --output-on-failure
+
+  build-cardputer-zero:
+    name: Build Cardputer ZERO (ARM64) Packages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install cross-compilation toolchain
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu dpkg-dev
+      - name: Set up QEMU for ARM64
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
 
-      - name: Package .deb
+      - name: Build and Package in Debian Bookworm ARM64 container
         run: |
-          chmod +x packaging/pack-deb.sh
-          ./packaging/pack-deb.sh
+          docker run --rm --platform linux/arm64 \
+            -v "${{ github.workspace }}:/workspace" \
+            -w /workspace \
+            debian:bookworm-slim bash -c "
+              set -euo pipefail
+              export DEBIAN_FRONTEND=noninteractive
+              apt-get update
+              apt-get install -y --no-install-recommends \
+                build-essential \
+                cmake \
+                pkg-config \
+                libsdl2-dev \
+                libsdl2-image-dev \
+                libsdl2-mixer-dev \
+                dpkg-dev \
+                ca-certificates
 
-      - name: Upload Artifact
+              cmake -B build/cp0-arm64 -DCMAKE_BUILD_TYPE=Release -DTARGET_DEVICE=CARDPUTER_ZERO -DBUILD_TESTS=OFF
+              cmake --build build/cp0-arm64 --parallel 2
+              ./packaging/pack-deb.sh 1.0.0-1 arm64 build/cp0-arm64
+              ./packaging/pack-standalone.sh 1.0.0 cardputerzero-arm64 build/cp0-arm64
+            "
+          sudo chown -R $USER:$USER dist build || true
+
+      - name: Upload Cardputer ZERO Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: cardputerzero-openggs-deb
-          path: dist/*.deb
+          name: cardputerzero-arm64-packages
+          path: |
+            dist/*.deb
+            dist/*-cardputerzero-arm64.tar.gz
+
+  build-desktop-linux:
+    name: Build Desktop Linux (x86_64) Packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev dpkg-dev
+
+      - name: Configure CMake
+        run: cmake -B build/desktop-release -DCMAKE_BUILD_TYPE=Release -DTARGET_DEVICE=DESKTOP -DBUILD_TESTS=OFF
+
+      - name: Build
+        run: cmake --build build/desktop-release --parallel 2
+
+      - name: Package Desktop Linux Artifacts
+        run: |
+          ./packaging/pack-deb.sh 1.0.0-1 amd64 build/desktop-release
+          ./packaging/pack-standalone.sh 1.0.0 desktop-linux-x86_64 build/desktop-release
+
+      - name: Upload Desktop Linux Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-linux-packages
+          path: |
+            dist/*_amd64.deb
+            dist/*-desktop-linux-x86_64.tar.gz
