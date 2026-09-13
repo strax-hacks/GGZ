@@ -8,20 +8,39 @@ Full technical details and architecture specifications are documented in [docs/S
 
 ---
 
-## Features
+## Key Changes & Enhancements vs Upstream OpenGGS
 
-- **Dual Viewport Modes (320×170):**
-  - **C64 Scaled (Default / Authentic):** Full 640×340 stage viewport scaled to 320×170, matching the original Commodore 64 visible stage height and layout on CRT displays.
-  - **1:1 Zoomed Mode:** Crisp unscaled pixel-for-pixel rendering with dynamic smooth camera tracking centered on Giana.
-  - Switch view modes on-the-fly anytime by pressing `V` or toggling in the Options menu.
-- **Authentic C64 Intro Sequence & Stage 0:**
-  - Classic autoscrolling intro panorama with retro GIANA SISTERS diamond-brick layout, color cycling, and title chiptune.
-  - Direct quick-launch shortcuts from the intro screen (`1` to Start Game, `2`/`M` for Main Menu, `E` for Editor, `H` for Highscores, `V` to toggle Viewport mode).
-- **MOS 6581 SID Audio Pipeline:**
-  - Complete sound effects and chiptune module soundtracks (`Title`, `Outdoors / Stage 1`, `Indoors / Caves`, `Highscore`, `Ready`).
-  - Low-latency `SDL2_mixer` audio engine configured for the Cardputer ZERO ES8389 DAC and desktop audio devices.
+Compared to the upstream OpenGGS implementation, this version includes several major gameplay, visual, and architectural changes:
+
+1. **Scrolling Intro Screen with Original Music:**
+   - Implemented the iconic, previously missing Commodore 64 scrolling intro sequence (Stage 0).
+   - Features retro "GIANA SISTERS" block typography crafted from diamond and brick tiles, green raster banner text, smooth horizontal autoscrolling, and authentic title music playback.
+   - Quick navigation shortcuts: press `SPACE` / `ENTER` / `1` to start the game or `M` / `2` / `ESC` to open the Main Menu.
+
+2. **Authentic C64 SID Music & Chip Sounds:**
+   - Replaced generic audio samples with synthesized Commodore 64 MOS 6581 SID waveforms and chiptune sound effects (`Jump`, `Ding`, `Crack`, `Disk`, `Stomp`, `Shoot`, `Morphing`, `Died`, `Click`, `Portal`).
+   - Integrated full chiptune module soundtracks (`Title`, `Outdoors / Stage 1`, `Indoors / Caves`, `Highscore`, `Ready`).
+   - Low-latency `SDL2_mixer` audio pipeline tuned specifically for the ES8389 DAC / headphone amplifier and desktop audio devices.
+
+3. **Scaled Graphics & Viewport for Cardputer ZERO (320×170):**
+   - Custom rendering pipeline tailored for the 320×170 IPS display with two selectable viewport modes:
+     - **C64 Scaled (Default / Authentic):** Full 640×340 stage viewport scaled to 320×170, preserving the exact visible height and layout of the original C64 release on CRT monitors.
+     - **1:1 Zoomed Mode:** Unscaled pixel-for-pixel rendering with smooth dynamic camera tracking centered on Giana.
+   - Toggle view modes instantly at any time during gameplay by pressing `V` or via the Options menu.
+
+4. **Dedicated Menu Background & UI Redesign:**
+   - Added custom retro-styled menu background artwork (`base/menu_background.png`).
+   - Redesigned main menu, options menu, story screen, and in-game HUD coordinates to fit the 320×170 handheld geometry with clean alignment and zero clipping.
+
+5. **Level Editor Removed:**
+   - Removed the mouse-driven desktop level editor and its UI components to streamline the handheld experience, reduce binary size, conserve RAM/ROM, and focus the engine purely on authentic arcade platforming.
+
+---
+
+## Additional Features
+
 - **Cardputer ZERO 46-Key Controls & Gamepad Support:**
-  - Tuned keyboard matrix handling (`Arrows`/`WASD` for navigation, `SPACE`/`UP`/`W`/`K` for jump, `ENTER`/`J`/`RSHIFT` for fire/action).
+  - Tuned keyboard matrix handling (`Arrows` / `WASD` for navigation, `SPACE` / `UP` / `W` / `K` for jump, `ENTER` / `J` / `RSHIFT` for fire/action).
   - Full USB and Bluetooth `SDL_GameController` hot-plugging.
 - **XDG-Compliant Save States & Storage:**
   - Multi-slot quick-save/load engine (Slots 1–5) and auto-save on stage transitions stored in `$XDG_DATA_HOME/openggs/` (`~/.local/share/openggs/`).
