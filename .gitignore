@@ -24,6 +24,7 @@ my_std*.txt
 
 # Plotlines local cache / history
 .plotlines/
+.plotlines.config.json
 
 # Beads / Dolt files (added by bd init)
 .dolt/
