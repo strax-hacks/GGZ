@@ -19,7 +19,7 @@
 8. [OpenGGS Maker / Level Editor Adaptation](#8-openggs-maker--level-editor-adaptation)
 9. [Cardputer ZERO OS & AppStore Packaging](#9-cardputer-zero-os--appstore-packaging)
 10. [Development, Emulation & CI/CD Pipeline](#10-development-emulation--cicd-pipeline)
-11. [Beads Task Matrix & Milestones](#11-beads-task-matrix--milestones)
+11. [Project Milestones](#11-project-milestones)
 
 ---
 
@@ -265,24 +265,23 @@ cardputerzero-openggs_1.0.0-1_arm64.deb
 
 ---
 
-## 11. Beads Task Matrix & Milestones
+## 11. Project Milestones
 
-| Bead Task ID | Milestone | Title | Priority | Est. | Status |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **`cz-ggz-bf4`** | **Epic** | **Port and package OpenGGS for M5Stack Cardputer ZERO** | `P1` | — | Open |
-| `cz-ggz-bf4.1` | Harness | Setup Cardputer Zero App Template Runner and build harness | `P1` | 30m | **Ready** |
-| `cz-ggz-bf4.2` | Engine | Ingest upstream bugix/OpenGGS C64 game codebase and assets | `P1` | 30m | Open |
-| `cz-ggz-bf4.3` | Graphics | Implement native 320x170 display resolution and viewport scaling | `P1` | 45m | Open |
-| `cz-ggz-bf4.4` | UI/HUD | Redesign HUD layout and menus for 320x170 screen geometry | `P2` | 30m | Open |
-| `cz-ggz-bf4.5` | Controls | Adapt input system for Cardputer ZERO 46-key matrix keyboard | `P1` | 30m | Open |
-| `cz-ggz-bf4.6` | Audio | Optimize audio pipeline for BCM2837 / ES8389 on Cardputer ZERO | `P1` | 25m | Open |
-| `cz-ggz-bf4.7` | Packaging | Create APPLaunch .desktop integration, icon, and Debian packaging (.deb) | `P1` | 35m | Open |
-| `cz-ggz-bf4.8` | CI / QA | Build validation suite: headless smoke tests and CI build matrix | `P2` | 30m | Open |
-| `cz-ggz-bf4.9` | Tooling | Setup CardputerZero official czdev emulator runtime integration | `P2` | 25m | Open |
-| `cz-ggz-bf4.10` | Tooling | Setup QEMU ARM64 cardputer-zero-os system image runner | `P3` | 40m | Open |
-| `cz-ggz-bf4.11` | Storage | Implement XDG-compliant persistent storage and portable save-states | `P1` | 35m | Open |
-| `cz-ggz-bf4.12` | Power/OS | Implement battery monitoring, power management, and suspend/resume | `P2` | 30m | Open |
-| `cz-ggz-bf4.13` | Input | Implement SDL2 GameController hot-plugging & external gamepads | `P2` | 25m | Open |
-| `cz-ggz-bf4.14` | UI/Settings | Implement on-device settings menu, visual filters, and help overlay | `P2` | 30m | Open |
-| `cz-ggz-bf4.15` | Level Editor| Adapt OpenGGS Maker / Level Editor for 320x170 keyboard navigation | `P3` | 35m | **Deferred** |
-| `cz-ggz-bf4.16` | Store/Pub | Generate CardputerZero Store registry entry and distribution assets | `P2` | 20m | Open |
+| Milestone ID | Area | Title | Target Device | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **`M1`** | Harness | Setup Cardputer Zero App Template Runner and build harness | Desktop / CP0 | Complete |
+| **`M2`** | Engine | Ingest upstream bugix/OpenGGS C64 game codebase and assets | Core Engine | Complete |
+| **`M3`** | Graphics | Implement native 320x170 display resolution and viewport scaling | ST7789v3 | Complete |
+| **`M4`** | UI/HUD | Redesign HUD layout and menus for 320x170 screen geometry | ST7789v3 | Complete |
+| **`M5`** | Controls | Adapt input system for Cardputer ZERO 46-key matrix keyboard | Matrix Keyboard | Complete |
+| **`M6`** | Audio | Optimize audio pipeline for BCM2837 / ES8389 on Cardputer ZERO | ES8389 DAC | Complete |
+| **`M7`** | Packaging | Create APPLaunch .desktop integration, icon, and Debian packaging (.deb) | Debian ARM64 | Complete |
+| **`M8`** | CI / QA | Build validation suite: headless smoke tests and CI build matrix | GitHub Actions | Complete |
+| **`M9`** | Tooling | Setup CardputerZero official czdev emulator runtime integration | Emulator | Complete |
+| **`M10`** | Tooling | Setup QEMU ARM64 cardputer-zero-os system image runner | QEMU | Complete |
+| **`M11`** | Storage | Implement XDG-compliant persistent storage and portable save-states | Linux Filesystem | Complete |
+| **`M12`** | Power/OS | Implement battery monitoring, power management, and suspend/resume | PMIC / Sysfs | Complete |
+| **`M13`** | Input | Implement SDL2 GameController hot-plugging & external gamepads | GameController | Complete |
+| **`M14`** | UI/Settings | Implement on-device settings menu, visual filters, and help overlay | ST7789v3 | Complete |
+| **`M15`** | Level Editor| Adapt OpenGGS Maker / Level Editor for 320x170 keyboard navigation | Handheld Editor | Deferred |
+| **`M16`** | Store/Pub | Generate CardputerZero Store registry entry and distribution assets | App Store | Complete |

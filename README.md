@@ -1,85 +1,113 @@
 # Cardputer ZERO OpenGGS (`cardputerzero-openggs`)
 
-A native port and working fork of **OpenGGS** (the open-source C64 *The Great Giana Sisters* remake) tailored specifically for the **M5Stack Cardputer ZERO** (Raspberry Pi Compute Module 0 / BCM2837 ARM64, 320×170 IPS LCD, 46-key mechanical keyboard matrix).
+[![Build & Test](https://github.com/strax-hacks/GGZ/actions/workflows/build-and-package.yml/badge.svg)](https://github.com/strax-hacks/GGZ/actions)
+
+A native port and enhanced fork of **OpenGGS** (the open-source C64 *The Great Giana Sisters* remake) engineered specifically for the **M5Stack Cardputer ZERO** (Raspberry Pi Compute Module 0 / BCM2837 ARM64, 320×170 IPS LCD, 46-key mechanical tactile keyboard) and modern desktop systems.
 
 Full technical details and architecture specifications are documented in [docs/SPECIFICATION.md](docs/SPECIFICATION.md).
 
 ---
 
-## Architecture Overview
+## Features
 
-```text
-Raspberry Pi OS / Debian Bookworm ARM64
-  └── cardputer-zero-os (DRM/KMS / labwc session plumbing)
-        └── cardputer-zero-shell / APPLaunch
-              └── cardputerzero-openggs (/usr/share/APPLaunch/applications/openggs.desktop)
-                    └── SDL2 Logical Viewport (320x170 @ 60 FPS)
-```
-
-- **Resolution:** 320×170 native framebuffer / logical scaled viewport (`nearest` texture filtering for authentic retro pixel art)
-- **Controls:** 46-key matrix mapped to directional movement (`Arrows` / `WASD`), Jump (`SPACE` / `UP` / `K`), Fire (`ENTER` / `J`), Pause (`P`), and Menu (`ESC`), plus USB/Bluetooth GameController hot-plugging
-- **Audio (Core P1):** `SDL2_mixer` tuned for Broadcom BCM2837 / ES8389 DAC (22,050 Hz / 44,100 Hz, 16-bit, buffer size 1024) — full original C64/OpenGGS chiptune music tracks & 16 sound effects with zero stutter, clean looping, and dedicated volume sliders
-- **Power & Lifecycle:** Battery monitoring, auto-pause on window focus loss, low-power 60 FPS pacing
-- **Storage:** XDG Base Directory isolation (`~/.config/openggs`, `~/.local/share/openggs`) with 5-slot save states
-- **Packaging:** Debian `.deb` package with `APPLaunch` desktop integration (`/usr/share/APPLaunch/applications/openggs.desktop`) and CardputerZero Store metadata
-- **Level Editor:** Deferred (excluded from the handheld device target to preserve ROM size and clean UI focus)
+- **Dual Viewport Modes (320×170):**
+  - **C64 Scaled (Default / Authentic):** Full 640×340 stage viewport scaled to 320×170, matching the original Commodore 64 visible stage height and layout on CRT displays.
+  - **1:1 Zoomed Mode:** Crisp unscaled pixel-for-pixel rendering with dynamic smooth camera tracking centered on Giana.
+  - Switch view modes on-the-fly anytime by pressing `V` or toggling in the Options menu.
+- **Authentic C64 Intro Sequence & Stage 0:**
+  - Classic autoscrolling intro panorama with retro GIANA SISTERS diamond-brick layout, color cycling, and title chiptune.
+  - Direct quick-launch shortcuts from the intro screen (`1` to Start Game, `2`/`M` for Main Menu, `E` for Editor, `H` for Highscores, `V` to toggle Viewport mode).
+- **MOS 6581 SID Audio Pipeline:**
+  - Complete sound effects and chiptune module soundtracks (`Title`, `Outdoors / Stage 1`, `Indoors / Caves`, `Highscore`, `Ready`).
+  - Low-latency `SDL2_mixer` audio engine configured for the Cardputer ZERO ES8389 DAC and desktop audio devices.
+- **Cardputer ZERO 46-Key Controls & Gamepad Support:**
+  - Tuned keyboard matrix handling (`Arrows`/`WASD` for navigation, `SPACE`/`UP`/`W`/`K` for jump, `ENTER`/`J`/`RSHIFT` for fire/action).
+  - Full USB and Bluetooth `SDL_GameController` hot-plugging.
+- **XDG-Compliant Save States & Storage:**
+  - Multi-slot quick-save/load engine (Slots 1–5) and auto-save on stage transitions stored in `$XDG_DATA_HOME/openggs/` (`~/.local/share/openggs/`).
+  - Persistent game settings and keymaps stored in `$XDG_CONFIG_HOME/openggs/` (`~/.config/openggs/`).
+- **Power & Battery Management:**
+  - Real-time battery status monitoring via Linux `/sys/class/power_supply` subsystem.
+  - Auto-pause on focus loss and efficient 60 FPS pacing.
+- **Automated QA & Test Suite:**
+  - Headless smoke testing and multi-frame screenshot capture suite integrated with CTest.
 
 ---
 
-## Cardputer ZERO App Template Runner & Development
+## Controls
 
-The development harness provides multi-tier simulation and ARM64 cross-compilation:
+| Action | Cardputer ZERO Keyboard | External Gamepad |
+| :--- | :--- | :--- |
+| **Move Left / Right** | `Left` / `Right` or `A` / `D` | `D-Pad Left` / `Right` or `Left Stick` |
+| **Look Down / Crouch** | `Down` or `S` | `D-Pad Down` |
+| **Jump** | `Space`, `Up`, `W`, or `K` | `A` Button (South) |
+| **Shoot / Fire** | `Enter`, `J`, or `Right Shift` | `B` Button (East) / `X` Button |
+| **Toggle View Mode** | `V` | `Y` Button (North) |
+| **Pause Game** | `P` | `Start` Button |
+| **Menu / Back** | `Esc` | `Back` / `Select` Button |
+| **Quick Save** | `F5` | — |
+| **Quick Load** | `F6` | — |
 
-### 1. Run Desktop Simulator (Local Development)
+---
+
+## Building & Running
+
+### Requirements
+- C++17 compiler (GCC 9+, Clang 10+, or Apple Clang)
+- CMake 3.16+
+- SDL2, SDL2_image, SDL2_mixer
+- Pkg-config
+
+### Quick Start (Desktop Simulator)
 ```bash
-# Builds and launches the app in a 320x170 scaled preview window
+# Clone the repository
+git clone https://github.com/strax-hacks/GGZ.git
+cd GGZ
+
+# Run the desktop development simulator (builds and launches in 320x170 preview window)
 ./scripts/run-desktop.sh
 ```
 
-### 2. CMake Preset Workflow
+### Building with CMake Presets
 ```bash
-# Configure & build desktop development preview
+# Configure & build desktop simulator
 cmake --preset desktop-dev
 cmake --build --preset desktop-dev
 
-# Cross-compile for Cardputer ZERO ARM64 target
-cmake --preset cp0-arm64-cross
-cmake --build --preset cp0-arm64-cross
+# Run automated test suite
+ctest --test-dir build/desktop --output-on-failure
 ```
 
-### 3. Package for Cardputer ZERO (`.deb`)
+### Cross-Compiling for Cardputer ZERO (ARM64)
 ```bash
+# Configure and build ARM64 release binary
+cmake --preset cp0-arm64-cross
+cmake --build --preset cp0-arm64-cross
+
+# Package Debian .deb package for Cardputer ZERO
 ./packaging/pack-deb.sh
-# Generated artifact: dist/cardputerzero-openggs_1.0.0-1_arm64.deb
+# Artifact: dist/cardputerzero-openggs_1.0.0-1_arm64.deb
 ```
 
 ---
 
-## Complete Beads Task Matrix
+## Project Structure
 
-Task management, lifecycle states, and dependency chains are managed using **Beads** (`bd`):
-
-| Bead Task ID | Milestone | Title | Priority | Est. | Status |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **`cz-ggz-bf4`** | **Epic** | **Port and package OpenGGS for M5Stack Cardputer ZERO** | `P1` | — | Open |
-| `cz-ggz-bf4.1` | Harness | Setup Cardputer Zero App Template Runner and build harness | `P1` | 30m | **Ready** |
-| `cz-ggz-bf4.2` | Engine | Ingest upstream bugix/OpenGGS C64 game codebase and assets | `P1` | 30m | Open |
-| `cz-ggz-bf4.3` | Graphics | Implement native 320x170 display resolution and viewport scaling | `P1` | 45m | Open |
-| `cz-ggz-bf4.4` | UI/HUD | Redesign HUD layout and menus for 320x170 screen geometry | `P2` | 30m | Open |
-| `cz-ggz-bf4.5` | Controls | Adapt input system for Cardputer ZERO 46-key matrix keyboard | `P1` | 30m | Open |
-| `cz-ggz-bf4.6` | Audio | Optimize audio pipeline for BCM2837 / ES8389 on Cardputer ZERO | `P1` | 25m | Open |
-| `cz-ggz-bf4.7` | Packaging | Create APPLaunch .desktop integration, icon, and Debian packaging (.deb) | `P1` | 35m | Open |
-| `cz-ggz-bf4.8` | CI / QA | Build validation suite: headless smoke tests and CI build matrix | `P2` | 30m | Open |
-| `cz-ggz-bf4.9` | Tooling | Setup CardputerZero official czdev emulator runtime integration | `P2` | 25m | Open |
-| `cz-ggz-bf4.10` | Tooling | Setup QEMU ARM64 cardputer-zero-os system image runner | `P3` | 40m | Open |
-| `cz-ggz-bf4.11` | Storage | Implement XDG-compliant persistent storage and portable save-states | `P1` | 35m | Open |
-| `cz-ggz-bf4.12` | Power/OS | Implement battery monitoring, power management, and suspend/resume | `P2` | 30m | Open |
-| `cz-ggz-bf4.13` | Input | Implement SDL2 GameController hot-plugging & external gamepads | `P2` | 25m | Open |
-| `cz-ggz-bf4.14` | UI/Settings | Implement on-device settings menu, visual filters, and help overlay | `P2` | 30m | Open |
-| `cz-ggz-bf4.15` | Level Editor| Adapt OpenGGS Maker / Level Editor for 320x170 keyboard navigation | `P3` | 35m | **Deferred** |
-| `cz-ggz-bf4.16` | Store/Pub | Generate CardputerZero Store registry entry and distribution assets | `P2` | 20m | Open |
-
-To query ready tasks in Beads:
-```bash
-bd ready
+```text
+├── base/                   # Game assets (sprites, tiles, font, chiptunes, sound effects)
+│   ├── amiga/              # MOD music modules
+│   ├── audio/              # Synthesized SID sound effects (.wav)
+│   ├── c64/                # C64 tilesets and palette assets
+│   └── music/              # ImpulseTracker (.it) and MOD (.mod) music tracks
+├── docs/                   # Architecture and technical specifications
+├── packaging/              # APPLaunch desktop entry, icon, and Debian control files
+├── scripts/                # Launch scripts and asset generation tools
+├── src/                    # Core OpenGGS C++ game engine source code
+└── tests/                  # Headless smoke test and frame capture test suite
 ```
+
+---
+
+## License
+
+OpenGGS is distributed under the GNU General Public License v2 (GPL-2.0). See upstream project details at [bugix/OpenGGS](https://github.com/bugix/OpenGGS).
