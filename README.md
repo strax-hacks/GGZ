@@ -4,6 +4,8 @@
 
 A native port and enhanced fork of **OpenGGS** (the open-source C64 *The Great Giana Sisters* remake) engineered specifically for the **M5Stack Cardputer ZERO** (Raspberry Pi Compute Module 0 / BCM2837 ARM64, 320×170 IPS LCD, 46-key mechanical tactile keyboard) and modern desktop systems.
 
+> **Note on Hardware Testing:** This port has been engineered and validated using the desktop simulator harness and headless automated test suites, but is **yet to be tested on a real physical Cardputer ZERO device**. Reports, testing feedback, and pull requests from real hardware testing are warmly welcomed!
+
 Full technical details and architecture specifications are documented in [docs/SPECIFICATION.md](docs/SPECIFICATION.md).
 
 ---

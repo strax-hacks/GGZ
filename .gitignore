@@ -34,3 +34,9 @@ my_std*.txt
 .beads-credential-key
 .beads/proxieddb/
 .agents/
+
+# Agent & AI tool configurations
+CLAUDE.md
+AGENTS.md
+.claude/
+.codex/
