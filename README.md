@@ -1,4 +1,4 @@
-# Cardputer ZERO OpenGGS (`cardputerzero-openggs`)
+# The Great Giana Sisters native on Cardputer ZERO, a fork/port of OpenGGS
 
 [![Build & Test](https://github.com/strax-hacks/GGZ/actions/workflows/build-and-package.yml/badge.svg)](https://github.com/strax-hacks/GGZ/actions/workflows/build-and-package.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/strax-hacks/GGZ?include_prereleases&label=Latest%20Release)](https://github.com/strax-hacks/GGZ/releases)
