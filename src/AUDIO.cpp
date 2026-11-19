@@ -52,6 +52,9 @@ void AUDIO_Define()
 
   Mix_FreeChunk(AUDIO_CHUNK_Killed); AUDIO_CHUNK_Killed = NULL;
   AUDIO_CHUNK_Killed  = Mix_LoadWAV(GetAssetPath(FileName.WavChunk[AUDIO_KILLED]).c_str());
+  if (AUDIO_CHUNK_Killed != NULL) {
+    Mix_VolumeChunk(AUDIO_CHUNK_Killed, MIX_MAX_VOLUME / 4);
+  }
 
   Mix_FreeChunk(AUDIO_CHUNK_Ding); AUDIO_CHUNK_Ding = NULL;
   AUDIO_CHUNK_Ding  = Mix_LoadWAV(GetAssetPath(FileName.WavChunk[AUDIO_DING]).c_str());

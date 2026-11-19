@@ -5,42 +5,57 @@
 
 A native port and enhanced fork of **OpenGGS** (the open-source C64 *The Great Giana Sisters* remake) engineered specifically for the **M5Stack Cardputer ZERO** (Raspberry Pi Compute Module 0 / BCM2837 ARM64, 320×170 IPS LCD, 46-key mechanical tactile keyboard) and modern desktop systems.
 
-> **Note on Hardware Testing:** This port has been engineered and validated using the desktop simulator harness and headless automated test suites, but is **yet to be tested on a real physical Cardputer ZERO device**. Reports, testing feedback, and pull requests from real hardware testing are warmly welcomed!
-
 Full technical details and architecture specifications are documented in [docs/SPECIFICATION.md](docs/SPECIFICATION.md).
 
 ---
 
-## ⬇️ Download Pre-Built Cardputer ZERO App (No Compilation Required)
+## Install on Cardputer Zero
 
-You don't need to build from source! The ready-to-install Cardputer ZERO package is automatically built and published under GitHub Releases:
+Open Terminal on your Zero. To install over Wi-Fi, enable SSH on the Zero, find its address in **IP Panel**, and connect from your computer using the account you created during setup. [M5Stack SSH setup](https://docs.m5stack.com/en/compute/cardputerzero/usage)
 
-👉 **[Download the Latest Cardputer ZERO `.deb` on GitHub Releases](https://github.com/strax-hacks/GGZ/releases)**
-
-### 🎮 How to Copy & Install on M5Stack Cardputer ZERO
-
-The exact file you need is: **`cardputerzero-openggs_1.0.0-1_arm64.deb`**
-
-#### Method A: Direct Download on Device
 ```bash
-# 1. Download the .deb package
-wget https://github.com/strax-hacks/GGZ/releases/latest/download/cardputerzero-openggs_1.0.0-1_arm64.deb
-
-# 2. Install the package
-sudo dpkg -i cardputerzero-openggs_1.0.0-1_arm64.deb || sudo apt-get install -f -y
-
-# 3. Launch from APPLaunch Games menu or terminal
-openggs-cz
+ssh YOUR_USER@ZERO_IP
 ```
 
-#### Method B: Copy from PC / Mac via SCP or SD Card
-```bash
-# Copy over Wi-Fi
-scp cardputerzero-openggs_1.0.0-1_arm64.deb root@cardputer.local:/tmp/
+Run this **on the Zero**, either in its Terminal or in that SSH session. It downloads the ARM64 package from the latest published GitHub release and installs it with APT.
 
-# SSH and install
-ssh root@cardputer.local "dpkg -i /tmp/cardputerzero-openggs_1.0.0-1_arm64.deb"
+```bash
+(
+  set -eu
+  release=$(curl -fsSL -o /dev/null -w '%{url_effective}' https://github.com/strax-hacks/GGZ/releases/latest)
+  tag=${release##*/}
+  case "$release" in
+    https://github.com/strax-hacks/GGZ/releases/tag/v*) ;;
+    *) echo "Could not find the latest GGZ release tag" >&2; exit 1 ;;
+  esac
+  deb="cardputerzero-openggs_${tag#v}-1_arm64.deb"
+  download_dir=$(mktemp -d)
+  chmod 755 "$download_dir"
+  trap 'rm -f "$download_dir/$deb"; rmdir "$download_dir"' EXIT
+  curl -fsSL "https://github.com/strax-hacks/GGZ/releases/download/$tag/$deb" -o "$download_dir/$deb"
+  chmod 644 "$download_dir/$deb"
+  sudo apt install "$download_dir/$deb"
+)
 ```
+
+Open **Giana Sisters Zero** from the Zero's home screen.
+
+### Install an ARM64 package you already have
+
+From your computer, copy the package to the Zero and connect. Substitute your actual filename, username, and IP address.
+
+```bash
+scp ./cardputerzero-openggs_1.0.2~store-1_arm64.deb YOUR_USER@ZERO_IP:/tmp/
+ssh YOUR_USER@ZERO_IP
+```
+
+On the Zero, run:
+
+```bash
+sudo apt install /tmp/cardputerzero-openggs_1.0.2~store-1_arm64.deb
+```
+
+The updated package also provides `cardputerzero-openggs` as a command. Run it on the Zero as your regular user. It opens on the Zero's built-in display.
 
 ---
 
@@ -51,7 +66,7 @@ Compared to the upstream OpenGGS implementation, this version includes several m
 1. **Scrolling Intro Screen with Original Music:**
    - Implemented the iconic, previously missing Commodore 64 scrolling intro sequence (Stage 0).
    - Features retro "GIANA SISTERS" block typography crafted from diamond and brick tiles, green raster banner text, smooth horizontal autoscrolling, and authentic title music playback.
-   - Quick navigation shortcuts: press `SPACE` / `ENTER` / `1` to start the game or `M` / `2` / `ESC` to open the Main Menu.
+   - Quick navigation shortcuts: press any key to start the game or `Esc` to open the main menu.
 
 2. **Authentic C64 SID Music & Chip Sounds:**
    - Replaced generic audio samples with synthesized Commodore 64 MOS 6581 SID waveforms and chiptune sound effects (`Jump`, `Ding`, `Crack`, `Disk`, `Stomp`, `Shoot`, `Morphing`, `Died`, `Click`, `Portal`).
@@ -76,7 +91,7 @@ Compared to the upstream OpenGGS implementation, this version includes several m
 ## Additional Features
 
 - **Cardputer ZERO 46-Key Controls & Gamepad Support:**
-  - Tuned keyboard matrix handling (`Arrows` / `WASD` for navigation, `SPACE` / `UP` / `W` / `K` for jump, `ENTER` / `J` / `RSHIFT` for fire/action).
+  - Use the printed direction cluster (`F`, `X`, `Z`, `C`) directly, with `V` or `Space` for fire.
   - Full USB and Bluetooth `SDL_GameController` hot-plugging.
 - **XDG-Compliant Save States & Storage:**
   - Multi-slot quick-save/load engine (Slots 1–5) and auto-save on stage transitions stored in `$XDG_DATA_HOME/openggs/` (`~/.local/share/openggs/`).
@@ -93,15 +108,20 @@ Compared to the upstream OpenGGS implementation, this version includes several m
 
 | Action | Cardputer ZERO Keyboard | External Gamepad |
 | :--- | :--- | :--- |
-| **Move Left / Right** | `Left` / `Right` or `A` / `D` | `D-Pad Left` / `Right` or `Left Stick` |
-| **Look Down / Crouch** | `Down` or `S` | `D-Pad Down` |
-| **Jump** | `Space`, `Up`, `W`, or `K` | `A` Button (South) |
-| **Shoot / Fire** | `Enter`, `J`, or `Right Shift` | `B` Button (East) / `X` Button |
-| **Toggle View Mode** | `V` | `Y` Button (North) |
-| **Pause Game** | `P` | `Start` Button |
+| **Move Left / Right** | `Z` / `C` | `D-Pad Left` / `Right` |
+| **Down** | `X` | `D-Pad Down` |
+| **Jump** | `F` | `A` Button (South) |
+| **Shoot / Fire** | `V` or `Space` after the fireball power-up | `B` Button (East) |
+| **Toggle View Mode** | `Fn+0` (`F10`) | — |
+| **Pause Game** | `P` | — |
 | **Menu / Back** | `Esc` | `Back` / `Select` Button |
-| **Quick Save** | `F5` | — |
-| **Quick Load** | `F6` | — |
+| **Quick Save / Load** | `1` / `2` | — |
+| **Music Down / Up** | `Fn+M` / `Fn+L` (`Page Down` / `Page Up`) | — |
+| **Effects Down / Up** | `U` / `I` | — |
+
+Press any key at the title to start. Tap `Esc` during gameplay to go back, or hold it to return to the Zero home screen. `Fn+S` and `Fn+D` are the Zero's system volume shortcuts. [M5Stack keyboard guide](https://docs.m5stack.com/en/compute/cardputerzero/usage)
+
+On desktop, use the arrow keys or `WASD`, `Up` / `W` / `K` to jump, `Ctrl` or `J` to fire, and `V` to toggle the view.
 
 ---
 
@@ -133,16 +153,23 @@ cmake --build --preset desktop-dev
 ctest --test-dir build/desktop --output-on-failure
 ```
 
-### Cross-Compiling for Cardputer ZERO (ARM64)
-```bash
-# Configure and build ARM64 release binary
-cmake --preset cp0-arm64-cross
-cmake --build --preset cp0-arm64-cross
+### Build a Cardputer Zero package
 
-# Package Debian .deb package for Cardputer ZERO
-./packaging/pack-deb.sh
-# Artifact: dist/cardputerzero-openggs_1.0.0-1_arm64.deb
+From the repository root, use Docker to build in an ARM64 Debian environment. Docker needs ARM64 support, either native or through emulation.
+
+```bash
+docker run --rm --platform linux/arm64 -v "$PWD:/work" -w /work debian:bookworm-slim sh -ec '
+  apt-get update
+  apt-get install -y --no-install-recommends build-essential cmake pkg-config \
+    libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev
+  cmake -S . -B build/cp0-arm64-linux -DCMAKE_BUILD_TYPE=Release \
+    -DTARGET_DEVICE=CARDPUTER_ZERO -DBUILD_TESTS=OFF
+  cmake --build build/cp0-arm64-linux --parallel 2
+  bash packaging/pack-deb.sh 1.0.2~store-1 arm64 build/cp0-arm64-linux
+'
 ```
+
+The package is written to `dist/`. Follow the [local package install steps](#install-an-arm64-package-you-already-have).
 
 ---
 

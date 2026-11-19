@@ -19,7 +19,7 @@ endif()
 
 # Asset install and runtime directory
 if(NOT DEFINED DATADIR)
-    set(DATADIR "/usr/share/openggs/data")
+    set(DATADIR "/usr/share/cardputerzero-openggs/data")
 endif()
 add_compile_definitions(OPENGGS_DATADIR="${DATADIR}")
 
@@ -142,7 +142,8 @@ if(BUILD_TESTS)
 endif()
 
 # Installation rules for packaging
-install(TARGETS openggs-cz DESTINATION /usr/share/openggs/bin)
-install(DIRECTORY base/ DESTINATION /usr/share/openggs/data)
-install(FILES packaging/openggs.desktop DESTINATION /usr/share/APPLaunch/applications)
-install(FILES packaging/openggs.png DESTINATION /usr/share/APPLaunch/share/images)
+install(TARGETS openggs-cz DESTINATION /usr/share/cardputerzero-openggs/bin)
+install(PROGRAMS packaging/openggs-cz-launch DESTINATION /usr/bin RENAME cardputerzero-openggs)
+install(DIRECTORY base/ DESTINATION /usr/share/cardputerzero-openggs/data)
+install(FILES packaging/openggs.desktop DESTINATION /usr/share/APPLaunch/applications RENAME cardputerzero-openggs.desktop)
+install(FILES packaging/openggs.png DESTINATION /usr/share/APPLaunch/share/images RENAME cardputerzero-openggs.png)

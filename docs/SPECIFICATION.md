@@ -125,16 +125,17 @@ The in-game HUD is compacted into a single 10–14px top bar across 320px width:
 
 | Action | Primary Key | Secondary / Ergonomic Key | External Gamepad |
 | :--- | :--- | :--- | :--- |
-| **Move Left** | `Left Arrow` | `A` | D-Pad Left / Left Stick Left |
-| **Move Right** | `Right Arrow` | `D` | D-Pad Right / Left Stick Right |
-| **Duck / Down** | `Down Arrow` | `S` | D-Pad Down / Left Stick Down |
-| **Jump** | `SPACE` / `Up Arrow` | `W` or `K` | `Button A` (South) |
-| **Shoot / Fireball** | `ENTER` | `J` or `Right Shift` | `Button B` (East) / `Button X` |
-| **Pause Game** | `P` | `Fn + P` | `Start` Button |
-| **Quick Save** | `1` / `Fn + 1` | Slot 1 Save | `L1 / LB` |
-| **Quick Load** | `2` / `Fn + 2` | Slot 1 Load | `R1 / RB` |
-| **Help Overlay** | `H` / `Fn + H` | Displays Keymap | `Select` Button |
-| **Exit / Menu** | `ESC` (Home Key) | — | Guide / Home Button |
+| **Move Left** | `Z` | `Left Arrow` or `A` | D-Pad Left |
+| **Move Right** | `C` | `Right Arrow` or `D` | D-Pad Right |
+| **Down** | `X` | `Down Arrow` or `S` | D-Pad Down |
+| **Jump** | `F` | `Up Arrow`, `W`, or `K` | `Button A` (South) |
+| **Shoot / Fireball** | `V` or `Space` after the fireball power-up | `Ctrl` or `J` | `Button B` (East) |
+| **Toggle View** | `Fn+0` (`F10`) | — | — |
+| **Pause Game** | `P` | — | — |
+| **Quick Save / Load** | `1` / `2` | Slot 1 | — |
+| **Music Down / Up** | `Fn+M` / `Fn+L` | `Page Down` / `Page Up` | — |
+| **Effects Down / Up** | `U` / `I` | Keypad `-` / `+` | — |
+| **Back / Exit** | Tap `Esc` to go back. Hold `Esc` to return home. | Select `Exit` from the game menu | — |
 
 ---
 
@@ -145,7 +146,7 @@ To ensure security, multi-user support, and compatibility with read-only root fi
 
 | Component | Path | Permissions | Purpose |
 | :--- | :--- | :--- | :--- |
-| **Read-Only Data** | `/usr/share/openggs/data/` | `0755 root:root` | Sprites, tilesets, BGM, SFX, 33 original stages |
+| **Read-Only Data** | `/usr/share/cardputerzero-openggs/data/` | `0755 root:root` | Sprites, tilesets, BGM, SFX, 33 original stages |
 | **User Configuration** | `$XDG_CONFIG_HOME/openggs/` (`~/.config/openggs/`) | `0700 user:user` | `options.cfg`, `keybindings.cfg` |
 | **User Progress & Saves** | `$XDG_DATA_HOME/openggs/` (`~/.local/share/openggs/`) | `0700 user:user` | `hiscores.dat`, `saves/slot_{1..5}.sav`, `custom_stages/` |
 
@@ -198,34 +199,22 @@ Binary serialization containing:
 
 ## 9. Cardputer ZERO OS & AppStore Packaging
 
-### Debian Package Layout (`cardputerzero-openggs_1.0.0-1_arm64.deb`)
+### ARM64 Debian Package Layout
 
 ```text
-cardputerzero-openggs_1.0.0-1_arm64.deb
-├── DEBIAN/
-│   ├── control
-│   ├── postinst
-│   └── prerm
+├── DEBIAN/control
 └── usr/
+    ├── bin/cardputerzero-openggs
     └── share/
         ├── APPLaunch/
-        │   ├── applications/
-        │   │   └── openggs.desktop
-        │   └── share/
-        │       └── images/
-        │           └── openggs.png
-        └── openggs/
-            ├── bin/
-            │   └── openggs-cz
+        │   ├── applications/cardputerzero-openggs.desktop
+        │   └── share/images/cardputerzero-openggs.png
+        └── cardputerzero-openggs/
+            ├── bin/openggs-cz
             └── data/
-                ├── base/
-                │   ├── audio/
-                │   ├── gfx/
-                │   ├── stages/
-                │   └── fonts/
-                └── licenses/
-                    └── GPL-2.0.txt
 ```
+
+The launcher entry and the terminal command use the same wrapper to select the built-in LCD. The package keeps saves and settings in the existing per-user XDG directories.
 
 ### CardputerZero AppStore Registry Entry (`registry.json`)
 ```json

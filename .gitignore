@@ -32,6 +32,7 @@ my_std*.txt
 .dolt/
 *.db
 .beads-credential-key
+.beads.gate.lock
 .beads/proxieddb/
 .agents/
 

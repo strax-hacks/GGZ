@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+
+if [ -z "${SDL_VIDEODRIVER:-}" ] && [ -e /dev/dri/cardputer-zero-internal ]; then
+    card=$(readlink -f /dev/dri/cardputer-zero-internal)
+    export SDL_VIDEODRIVER=kmsdrm
+    export SDL_KMSDRM_DEVICE_INDEX="${card##*/card}"
+fi
+
+exec /usr/share/cardputerzero-openggs/bin/openggs-cz "$@"

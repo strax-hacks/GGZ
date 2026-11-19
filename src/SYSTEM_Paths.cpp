@@ -9,7 +9,7 @@
 #include <iostream>
 
 #ifndef OPENGGS_DATADIR
-#define OPENGGS_DATADIR "/usr/share/openggs/data"
+#define OPENGGS_DATADIR "/usr/share/cardputerzero-openggs/data"
 #endif
 
 static bool FileExists(const std::string& path) {

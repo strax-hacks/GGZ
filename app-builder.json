@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "runtime": "legacy-deb-only",
   "bin_name": "openggs-cz",
-  "install_prefix": "/usr/share/openggs",
+  "install_prefix": "/usr/share/cardputerzero-openggs",
   "description": "The Great Giana Sisters C64 remake ported for M5Stack Cardputer ZERO",
   "author": "OpenGGS Team / CardputerZero Community",
   "category": "Game",

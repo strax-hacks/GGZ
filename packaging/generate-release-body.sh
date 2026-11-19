@@ -6,12 +6,26 @@ RELEASE_VERSION="${2:-1.0.0}"
 REPO="${3:-strax-hacks/GGZ}"
 OUTPUT_FILE="${4:-release_body.md}"
 
+RELEASE_HIGHLIGHTS=""
+if [[ "$RELEASE_TAG" == v1.0.2 ]]; then
+  RELEASE_HIGHLIGHTS=$(cat <<'NOTES'
+## What’s new in v1.0.2
+
+- Launches on the Cardputer Zero’s built-in LCD from its home screen.
+- Adds the stone G icon, handheld controls, and any-key start from the title.
+- Lowers the death sound and adds live effects-volume controls.
+NOTES
+)
+fi
+
 cat << EOF > "${OUTPUT_FILE}"
 # Giana Sisters Zero (\`cardputerzero-openggs\`) ${RELEASE_TAG}
 
 Pre-built Debian installation package for **M5Stack Cardputer ZERO** (Raspberry Pi CM0 / ARM64).
 
 ---
+
+${RELEASE_HIGHLIGHTS:+$RELEASE_HIGHLIGHTS}
 
 ## 🎮 Cardputer ZERO Download
 
@@ -24,26 +38,15 @@ Pre-built Debian installation package for **M5Stack Cardputer ZERO** (Raspberry 
 
 ## 🚀 How to Install on Cardputer ZERO
 
-### Method 1: Direct Download on Device
+Run these commands in the Zero's Terminal or in an SSH session as your regular user.
+
 \`\`\`bash
-# 1. Download the .deb package
-wget https://github.com/${REPO}/releases/download/${RELEASE_TAG}/cardputerzero-openggs_${RELEASE_VERSION}-1_arm64.deb
-
-# 2. Install using dpkg
-sudo dpkg -i cardputerzero-openggs_${RELEASE_VERSION}-1_arm64.deb || sudo apt-get install -f -y
-
-# 3. Launch from APPLaunch menu or terminal
-openggs-cz
+cd "\$(mktemp -d)" && chmod 755 . &&
+wget -O cardputerzero-openggs_${RELEASE_VERSION}-1_arm64.deb https://github.com/${REPO}/releases/download/${RELEASE_TAG}/cardputerzero-openggs_${RELEASE_VERSION}-1_arm64.deb &&
+  sudo apt install ./cardputerzero-openggs_${RELEASE_VERSION}-1_arm64.deb
 \`\`\`
 
-### Method 2: Copy from PC / Mac via SCP
-\`\`\`bash
-# Copy from your computer to Cardputer ZERO
-scp cardputerzero-openggs_${RELEASE_VERSION}-1_arm64.deb root@cardputer.local:/tmp/
-
-# SSH in and install
-ssh root@cardputer.local "dpkg -i /tmp/cardputerzero-openggs_${RELEASE_VERSION}-1_arm64.deb"
-\`\`\`
+Open **Giana Sisters Zero** from the Zero's home screen. For SSH setup or installation from a local package, see the [README](https://github.com/${REPO}#install-on-cardputer-zero).
 
 ---
 
@@ -51,14 +54,18 @@ ssh root@cardputer.local "dpkg -i /tmp/cardputerzero-openggs_${RELEASE_VERSION}-
 
 | Action | Cardputer ZERO 46-Key Keyboard | External Gamepad |
 | :--- | :--- | :--- |
-| **Move Left / Right** | \`Left\` / \`Right\` or \`A\` / \`D\` | \`D-Pad Left\` / \`Right\` |
-| **Look Down / Crouch** | \`Down\` or \`S\` | \`D-Pad Down\` |
-| **Jump** | \`Space\`, \`Up\`, \`W\`, or \`K\` | \`A\` Button (South) |
-| **Shoot / Fire** | \`Enter\`, \`J\`, or \`Right Shift\` | \`B\` Button (East) / \`X\` |
-| **Toggle View Mode** | \`V\` (C64 Scaled / 1:1 Zoom) | \`Y\` Button (North) |
-| **Pause Game** | \`P\` | \`Start\` Button |
+| **Move Left / Right** | \`Z\` / \`C\` | \`D-Pad Left\` / \`Right\` |
+| **Down** | \`X\` | \`D-Pad Down\` |
+| **Jump** | \`F\` | \`A\` Button (South) |
+| **Shoot / Fire** | \`V\` or \`Space\` after the fireball power-up | \`B\` Button (East) |
+| **Toggle View Mode** | \`Fn+0\` (\`F10\`) | — |
+| **Pause Game** | \`P\` | — |
 | **Menu / Back** | \`Esc\` | \`Back\` / \`Select\` |
-| **Quick Save / Load** | \`F5\` / \`F6\` | — |
+| **Quick Save / Load** | \`1\` / \`2\` | — |
+| **Music Down / Up** | \`Fn+M\` / \`Fn+L\` | — |
+| **Effects Down / Up** | \`U\` / \`I\` | — |
+
+Press any key at the title to start. Hold \`Esc\` to return to the Zero home screen. Use \`Fn+S\` and \`Fn+D\` for system volume.
 EOF
 
 echo "✓ Generated ${OUTPUT_FILE} for ${RELEASE_TAG} (version ${RELEASE_VERSION})"

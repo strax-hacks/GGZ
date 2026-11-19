@@ -20,14 +20,24 @@ void LOOP_Controls_Help()
       inHelp = false;
     }
     drawGround(0);
-    Print((320 - 23 * 8) / 2, 10, 3, 0, "CARDPUTER ZERO CONTROLS");
+    Print((320 - 8 * 8) / 2, 10, 3, 0, "CONTROLS");
+#ifdef TARGET_CARDPUTER_ZERO
+    Print(16, 28, 0, 0, "Left/Right: Z/C   Down: X");
+    Print(16, 42, 0, 0, "Jump: F   Fire: V or SPACE");
+    Print(16, 56, 0, 0, "Music -/+: Fn+M / Fn+L");
+    Print(16, 70, 0, 0, "Effects -/+: U/I");
+    Print(16, 84, 0, 0, "View: Fn+0   Pause: P");
+    Print(16, 98, 0, 0, "Save/Load: 1/2   Back: ESC");
+    Print(16, 112, 0, 0, "Hold ESC to return to HOME");
+#else
     Print(16, 28, 0, 0, "Move:    Arrows or WASD");
-    Print(16, 42, 0, 0, "Jump:    SPACE, W, UP, or K");
-    Print(16, 56, 0, 0, "Fire:    ENTER, J, or R-SHIFT");
+    Print(16, 42, 0, 0, "Jump:    W, UP, or K");
+    Print(16, 56, 0, 0, "Fire:    CTRL or J");
     Print(16, 70, 0, 0, "View:    V (C64 0.5X / 1:1 Zoom)");
     Print(16, 84, 0, 0, "Pause:   P    Back/Menu: ESC");
     Print(16, 98, 0, 0, "Save:    1 (Slot 1)  Load: 2");
     Print(16, 112, 0, 0, "Gamepad: D-Pad / [A]Jump [B]Fire");
+#endif
     Print((320 - 28 * 8) / 2, 146, 2, 0, "Press ESC or ENTER to return");
     SDL_RenderPresent(gRenderer);
     SDL_Delay(30);

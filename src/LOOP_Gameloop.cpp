@@ -93,12 +93,19 @@ void LOOP_Gameloop_Standard()
       SaveState_QuickLoad();
     }
 
-    if(Key_V_pressed) {
+#ifdef TARGET_CARDPUTER_ZERO
+    const bool changeView = Key_F10_pressed;
+    const bool shoot = Key_V_pressed || Key_SPACE_pressed;
+#else
+    const bool changeView = Key_V_pressed;
+    const bool shoot = false;
+#endif
+    if(changeView) {
       GV.ViewMode = (GV.ViewMode == VIEW_MODE_C64_SCALED) ? VIEW_MODE_1X_ZOOMED : VIEW_MODE_C64_SCALED;
       AUDIO_Sound_Play(AUDIO_CLICK);
     }
 
-    if(Key_CTRL_pressed || Joy_SHOOT) {SPRITE_Bullet_Activate();}
+    if(shoot || Key_CTRL_pressed || Joy_SHOOT) {SPRITE_Bullet_Activate();}
 
     if(PC.Exit_Reached)
     {

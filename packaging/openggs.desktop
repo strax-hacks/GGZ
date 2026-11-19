@@ -2,8 +2,8 @@
 Type=Application
 Name=Giana Sisters Zero
 Comment=The Great Giana Sisters C64 Remake for Cardputer ZERO
-Exec=/usr/share/openggs/bin/openggs-cz
-Icon=/usr/share/APPLaunch/share/images/openggs.png
+Exec=/usr/bin/cardputerzero-openggs
+Icon=/usr/share/APPLaunch/share/images/cardputerzero-openggs.png
 Terminal=false
 Categories=Game;Arcade;
 Keywords=giana;c64;arcade;platformer;

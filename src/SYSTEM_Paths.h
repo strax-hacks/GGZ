@@ -5,7 +5,7 @@
 
 // Resolves a relative asset path by searching:
 // 1. Local ./base/<subpath> or ./<relativePath>
-// 2. Install DATADIR (/usr/share/openggs/data/<subpath>)
+// 2. Install DATADIR (/usr/share/cardputerzero-openggs/data/<subpath>)
 // 3. Executable-relative data paths
 std::string GetAssetPath(const std::string& relativePath);
 

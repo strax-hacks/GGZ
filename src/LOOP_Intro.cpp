@@ -39,7 +39,7 @@ void LOOP_Intro_Draw()
 
   if (GV.Resolution == RESOLUTION_320x170) {
     Print((320 - 33 * 8) / 2, 1, 3, 0, "**** THE GREAT GIANA SISTERS ****");
-    Print((320 - 26 * 8) / 2, 10, 3, 0, "SPACE TO PLAY - M FOR MENU");
+    Print((320 - 26 * 8) / 2, 10, 3, 0, "ANY KEY TO PLAY - ESC MENU");
     if (creditCycle == 0) {
       Print((320 - 29 * 8) / 2, 19, 3, 0, "(C) 1987 TIME WARP / SOFTGOLD");
     } else if (creditCycle == 1) {
@@ -49,7 +49,7 @@ void LOOP_Intro_Draw()
     }
   } else {
     Print(GV.Screen_Width / 2 - 160, 2, 3, 0, "**** THE GREAT GIANA SISTERS ****");
-    Print((GV.Screen_Width - 26 * 8) / 2, 11, 3, 0, "SPACE TO PLAY - M FOR MENU");
+    Print((GV.Screen_Width - 26 * 8) / 2, 11, 3, 0, "ANY KEY TO PLAY - ESC MENU");
     if (creditCycle == 0) {
       Print(GV.Screen_Width / 2 - 145, 20, 3, 0, "(C) 1987 TIME WARP / SOFTGOLD");
     } else if (creditCycle == 1) {
@@ -60,7 +60,7 @@ void LOOP_Intro_Draw()
   }
 
   // Render bottom retro scroller ticker
-  const char scrollerText[] = "+++ THE GREAT GIANA SISTERS +++ CARDPUTER ZERO PORT BY STRAX-HACKS +++ BASED ON OPENGGS 2.0 BY ROMANH +++ ORIGINAL GAME (C) 1987 TIME WARP / SOFTGOLD +++ GREETINGS TO ALL RETRO GAMING FANS! +++ SPACE TO PLAY - M FOR MENU +++ ";
+  const char scrollerText[] = "+++ THE GREAT GIANA SISTERS +++ CARDPUTER ZERO PORT BY STRAX-HACKS +++ BASED ON OPENGGS 2.0 BY ROMANH +++ ORIGINAL GAME (C) 1987 TIME WARP / SOFTGOLD +++ GREETINGS TO ALL RETRO GAMING FANS! +++ ANY KEY TO PLAY - ESC MENU +++ ";
   const int textLen = (int)(sizeof(scrollerText) - 1);
   const int textPixelWidth = textLen * 8;
   int scrollOffset = ((int)(PC.StagePosX * 1.5f)) % textPixelWidth;
@@ -103,29 +103,19 @@ void LOOP_Intro()
     getInput();
     INPUT_General();
 
-    // Key handlers
-    // SPACE, ENTER, 1, Gamepad OK -> Start Game
-    if (Key_SPACE_pressed || Key_ENTER_pressed || Key_1_pressed || Joy_OK_pressed) {
+    const bool openMenu = Key_ESCAPE_pressed || Joy_ESCAPE_pressed;
+    if (!QuitProgram && (openMenu || Key_NonEscape_pressed || Joy_OK_pressed)) {
       AUDIO_Sound_Play(AUDIO_CLICK);
-      PC_Define();
-      int startStage = (GV.Cheat_StartAtLastFinishedLevel && GV.LastFinishedLevel >= 1 && GV.LastFinishedLevel <= 33)
-                         ? GV.LastFinishedLevel
-                         : 1;
-      STAGE_Load(startStage, 0, false, false);
-      LOOP_Gameloop_Standard();
-      if (!QuitProgram) {
-        // Return to Intro after finishing or quitting standard gameloop
-        QuitToMenu = false;
-        GV.Mode = MODE_INTRO;
-        STAGE_Load(0, 0, false, false);
-        AUDIO_Music_Play(MUSIC_MENU);
+      if (openMenu) {
+        LOOP_Menu();
+      } else {
+        PC_Define();
+        int startStage = (GV.Cheat_StartAtLastFinishedLevel && GV.LastFinishedLevel >= 1 && GV.LastFinishedLevel <= 33)
+                           ? GV.LastFinishedLevel
+                           : 1;
+        STAGE_Load(startStage, 0, false, false);
+        LOOP_Gameloop_Standard();
       }
-    }
-
-    // M, 2, ESC, Gamepad ESC/Select -> Enter Options / Main Menu
-    if (currentKeyStates[SDL_SCANCODE_M] || Key_2_pressed || Key_ESCAPE_pressed || Joy_ESCAPE_pressed) {
-      AUDIO_Sound_Play(AUDIO_CLICK);
-      LOOP_Menu();
       if (!QuitProgram) {
         QuitToMenu = false;
         GV.Mode = MODE_INTRO;

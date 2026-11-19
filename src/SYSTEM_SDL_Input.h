@@ -15,6 +15,7 @@ void INPUT_General();
 //Event handler
 extern SDL_Event e;
 extern const Uint8* currentKeyStates;
+extern bool Key_NonEscape_pressed;
 
 extern bool Key_ESCAPE;    extern bool Key_ESCAPE_pressed;
 extern bool Key_ENTER;     extern bool Key_ENTER_pressed;

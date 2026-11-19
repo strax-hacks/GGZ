@@ -6,6 +6,7 @@
 //Event handler
 SDL_Event e;
 const Uint8* currentKeyStates;
+bool Key_NonEscape_pressed;
 
 bool Key_UP;        int Key_UP_pressed_value;        bool Key_UP_pressed;
 bool Key_RIGHT;     int Key_RIGHT_pressed_value;     bool Key_RIGHT_pressed;
@@ -83,6 +84,7 @@ void getInput()
 
 
 
+  Key_NonEscape_pressed = false;
   currentKeyStates = SDL_GetKeyboardState( NULL );
 
   SDL_GetMouseState(&MouseX, &MouseY);  // writes Mouse-Position to MouseX and MouseY
@@ -131,6 +133,7 @@ void getInput()
         break;
 
       case SDL_KEYDOWN:
+      if (!e.key.repeat && e.key.keysym.sym != SDLK_ESCAPE) {Key_NonEscape_pressed = true;}
       switch( e.key.keysym.sym )
       {
         case SDLK_ESCAPE: Key_ESCAPE = true; break;
@@ -273,6 +276,18 @@ void getInput()
 
 
   }
+
+#ifdef TARGET_CARDPUTER_ZERO
+  // Read aliases independently so releasing one does not cancel another held key.
+  Key_UP = currentKeyStates[SDL_SCANCODE_F] || currentKeyStates[SDL_SCANCODE_UP] ||
+           currentKeyStates[SDL_SCANCODE_W] || currentKeyStates[SDL_SCANCODE_K];
+  Key_DOWN = currentKeyStates[SDL_SCANCODE_X] || currentKeyStates[SDL_SCANCODE_DOWN] || currentKeyStates[SDL_SCANCODE_S];
+  Key_LEFT = currentKeyStates[SDL_SCANCODE_Z] || currentKeyStates[SDL_SCANCODE_LEFT] || currentKeyStates[SDL_SCANCODE_A];
+  Key_RIGHT = currentKeyStates[SDL_SCANCODE_C] || currentKeyStates[SDL_SCANCODE_RIGHT] || currentKeyStates[SDL_SCANCODE_D];
+  Key_SPACE = currentKeyStates[SDL_SCANCODE_SPACE];
+  Key_MINUS = currentKeyStates[SDL_SCANCODE_U] || currentKeyStates[SDL_SCANCODE_KP_MINUS];
+  Key_PLUS = currentKeyStates[SDL_SCANCODE_I] || currentKeyStates[SDL_SCANCODE_KP_PLUS];
+#endif
 
   if (!Key_ESCAPE){Key_ESCAPE_pressed_value = 0; Key_ESCAPE_pressed = false;} else
                   {if (Key_ESCAPE_pressed_value == 2){Key_ESCAPE_pressed_value = 1; Key_ESCAPE_pressed = false;}
