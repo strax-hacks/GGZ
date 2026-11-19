@@ -22,8 +22,8 @@ void LOOP_Controls_Help()
     drawGround(0);
     Print((320 - 8 * 8) / 2, 10, 3, 0, "CONTROLS");
 #ifdef TARGET_CARDPUTER_ZERO
-    Print(16, 28, 0, 0, "Left/Right: Z/C   Down: X");
-    Print(16, 42, 0, 0, "Jump: F   Fire: V or SPACE");
+    Print(16, 28, 0, 0, "Left/Right: D/G or Z/C   Down: X");
+    Print(16, 42, 0, 0, "Jump: F   Fire: T, V, or SPACE");
     Print(16, 56, 0, 0, "Music -/+: Fn+M / Fn+L");
     Print(16, 70, 0, 0, "Effects -/+: U/I");
     Print(16, 84, 0, 0, "View: Fn+0   Pause: P");

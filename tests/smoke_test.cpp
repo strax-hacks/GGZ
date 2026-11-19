@@ -26,6 +26,20 @@ int main(int argc, char* argv[]) {
     std::cout << "[SMOKE TEST] Loaded GameType=" << GV.GameType
               << ", Resolution=" << GV.Screen_Width << "x" << GV.Screen_Height << std::endl;
 
+    AUDIO_Volume_Change_Music(50, false);
+    AUDIO_Volume_Change_Sound(50, false);
+    assert(Mix_Volume(-1, -1) == MIX_MAX_VOLUME / 8);
+    AUDIO_Sound_Play(AUDIO_GOTPOWERUP);
+    AUDIO_Sound_Play(AUDIO_GOTPOWERUP);
+    assert(GV.VolumeMusic == MIX_MAX_VOLUME / 2);
+    assert(Mix_VolumeMusic(-1) == MIX_MAX_VOLUME / 2);
+    AUDIO_Volume_Change_Music(0, false);
+    AUDIO_Music_Play(MUSIC_OUTDOORS);
+    assert(Mix_PlayingMusic());
+    AUDIO_Volume_Change_Music(50, false);
+    assert(Mix_PlayingMusic() && Mix_VolumeMusic(-1) == MIX_MAX_VOLUME / 2);
+    AUDIO_Music_Halt();
+
     // Verify stage 1 loaded
     assert(PC.Stage == 1);
     std::cout << "[SMOKE TEST] Stage 1 loaded at (" << PC.PosX << ", " << PC.PosY << ")" << std::endl;

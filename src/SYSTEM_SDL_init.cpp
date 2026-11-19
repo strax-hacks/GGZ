@@ -1,5 +1,10 @@
 #include "globals.h"
 
+#if defined(TARGET_CARDPUTER_ZERO) && defined(__linux__)
+#include <SDL_syswm.h>
+#include <xf86drm.h>
+#endif
+
 int CurrentScreenMode;
 SDL_Window* gWindow = NULL;     //The window we'll be rendering to
 SDL_Renderer* gRenderer = NULL; //The window renderer
@@ -9,88 +14,73 @@ SDL_Joystick* GameController = NULL;
 // ##############################################
 // ##############################################
 
-void init()
+bool init()
 {
-  CurrentScreenMode=0;
-
-  //Initialize SDL
-  if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-  {
-    printf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
-  }
-  else
-  {
-    //Enable VSync
-    //if( !SDL_SetHint( SDL_HINT_RENDER_VSYNC, "1" ) ){printf( "Warning: VSync not enabled!\n" );}
-    //Set texture filtering to linear
-    if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) ){printf( "Warning: Linear texture filtering not enabled!\n" );}
-
-    //IMPORTANT
-    //Start program in windowed mode! If renderers are created after program is in fullscreen mode
-    //there are a lot of weird problems.
-    //IMPORTANT
-
-    if (GV.Resolution == RESOLUTION_320x170)
-    {
-      gWindow = SDL_CreateWindow("Giana Sisters Zero", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 320, 170, SDL_WINDOW_SHOWN);
-    }
-    else
-    {
-      gWindow = SDL_CreateWindow( "OpenGGS 2.0 (aka OpenGGS Maker) - BETA 3", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, GV.Screen_Width, GV.Screen_Height, SDL_WINDOW_SHOWN);
-    }
-    if( gWindow == NULL )
-    {
-      printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
-    }
-    else
-    {
-      // Create renderer for window: try accelerated first, fall back to software
-      gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED );
-      if( gRenderer == NULL )
-      {
-        gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_SOFTWARE );
-      }
-      if( gRenderer == NULL )
-      {
-        gRenderer = SDL_CreateRenderer( gWindow, -1, 0 );
-      }
-
-      if( gRenderer == NULL )
-      {
-        printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
-      }
-      else
-      {
-        //Initialize renderer color
-        SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
-      }
-
-      //Initialize PNG loading
-      int imgFlags = IMG_INIT_PNG;
-      if( !( IMG_Init( imgFlags ) & imgFlags ) )
-      {
-        printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
-      }
-    }
+  CurrentScreenMode = 0;
+  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    fprintf(stderr, "SDL video initialization failed: %s\n", SDL_GetError());
+    return false;
   }
 
-   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
-   if (gRenderer != NULL) {
-     SDL_RenderSetLogicalSize(gRenderer, GV.Screen_Width, GV.Screen_Height);
-   }
+  const bool handheldSize = GV.Resolution == RESOLUTION_320x170;
+  const char* title = handheldSize ? "Giana Sisters Zero" : "OpenGGS 2.0 (aka OpenGGS Maker) - BETA 3";
+  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+  gWindow = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                             handheldSize ? 320 : GV.Screen_Width,
+                             handheldSize ? 170 : GV.Screen_Height, SDL_WINDOW_SHOWN);
+  if (!gWindow) {
+    fprintf(stderr, "SDL window creation failed: %s\n", SDL_GetError());
+    return false;
+  }
 
-   if (gameplayTargetTexture != NULL) {
-     SDL_DestroyTexture(gameplayTargetTexture);
-     gameplayTargetTexture = NULL;
-   }
-   if (gRenderer != NULL) {
-     gameplayTargetTexture = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 640, 340);
-     if (gameplayTargetTexture == NULL) {
-       printf("Warning: gameplayTargetTexture could not be created: %s\n", SDL_GetError());
-     } else {
-       SDL_SetTextureBlendMode(gameplayTargetTexture, SDL_BLENDMODE_NONE);
-     }
-   }
+#if defined(TARGET_CARDPUTER_ZERO) && defined(__linux__) && defined(SDL_VIDEO_DRIVER_KMSDRM)
+  if (SDL_strcasecmp(SDL_GetCurrentVideoDriver(), "kmsdrm") == 0) {
+    SDL_SysWMinfo info{};
+    SDL_VERSION(&info.version);
+    if (!SDL_GetWindowWMInfo(gWindow, &info) || info.subsystem != SDL_SYSWM_KMSDRM) {
+      fprintf(stderr, "Could not get the LCD device from SDL: %s\n", SDL_GetError());
+      return false;
+    }
+    // SDL can create a KMS window even when the DRM master ioctl fails.
+    const int fd = info.info.kmsdrm.drm_fd;
+    if (!drmIsMaster(fd) && drmSetMaster(fd) != 0) {
+      fprintf(stderr, "Could not take control of the Cardputer LCD.\n");
+      return false;
+    }
+  }
+#endif
+
+  gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+  if (!gRenderer) {
+    gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_SOFTWARE);
+  }
+  if (!gRenderer) {
+    gRenderer = SDL_CreateRenderer(gWindow, -1, 0);
+  }
+  if (!gRenderer) {
+    fprintf(stderr, "SDL renderer creation failed: %s\n", SDL_GetError());
+    return false;
+  }
+  SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
+  if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
+    fprintf(stderr, "SDL PNG initialization failed: %s\n", IMG_GetError());
+    return false;
+  }
+
+  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
+  SDL_RenderSetLogicalSize(gRenderer, GV.Screen_Width, GV.Screen_Height);
+
+  if (gameplayTargetTexture) {
+    SDL_DestroyTexture(gameplayTargetTexture);
+  }
+  gameplayTargetTexture = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888,
+                                            SDL_TEXTUREACCESS_TARGET, 640, 340);
+  if (gameplayTargetTexture) {
+    SDL_SetTextureBlendMode(gameplayTargetTexture, SDL_BLENDMODE_NONE);
+  } else {
+    fprintf(stderr, "Could not create the gameplay texture: %s\n", SDL_GetError());
+  }
 
   int i;
   SDL_Init( SDL_INIT_GAMECONTROLLER );
@@ -103,6 +93,7 @@ void init()
   }
 
   SYSTEM_SetResolution(GV.Resolution);
+  return true;
 }
 
 // ##############################################

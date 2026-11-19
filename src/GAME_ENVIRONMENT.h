@@ -84,8 +84,6 @@ typedef struct {
   int GameType;
   int VolumeSounds;
   int VolumeMusic;
-  int TempMusicVolume;
-  int TempMusicOffCounter;
   bool MusicEnabled;
   bool DirDefaultExists;
   bool DirC64Exists;

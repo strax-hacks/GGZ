@@ -282,8 +282,11 @@ void getInput()
   Key_UP = currentKeyStates[SDL_SCANCODE_F] || currentKeyStates[SDL_SCANCODE_UP] ||
            currentKeyStates[SDL_SCANCODE_W] || currentKeyStates[SDL_SCANCODE_K];
   Key_DOWN = currentKeyStates[SDL_SCANCODE_X] || currentKeyStates[SDL_SCANCODE_DOWN] || currentKeyStates[SDL_SCANCODE_S];
-  Key_LEFT = currentKeyStates[SDL_SCANCODE_Z] || currentKeyStates[SDL_SCANCODE_LEFT] || currentKeyStates[SDL_SCANCODE_A];
-  Key_RIGHT = currentKeyStates[SDL_SCANCODE_C] || currentKeyStates[SDL_SCANCODE_RIGHT] || currentKeyStates[SDL_SCANCODE_D];
+  Key_LEFT = currentKeyStates[SDL_SCANCODE_Z] || currentKeyStates[SDL_SCANCODE_LEFT] ||
+             currentKeyStates[SDL_SCANCODE_A] || currentKeyStates[SDL_SCANCODE_D];
+  Key_RIGHT = currentKeyStates[SDL_SCANCODE_C] || currentKeyStates[SDL_SCANCODE_RIGHT] || currentKeyStates[SDL_SCANCODE_G];
+  Key_CTRL = currentKeyStates[SDL_SCANCODE_LCTRL] || currentKeyStates[SDL_SCANCODE_RCTRL] ||
+            currentKeyStates[SDL_SCANCODE_J] || currentKeyStates[SDL_SCANCODE_T];
   Key_SPACE = currentKeyStates[SDL_SCANCODE_SPACE];
   Key_MINUS = currentKeyStates[SDL_SCANCODE_U] || currentKeyStates[SDL_SCANCODE_KP_MINUS];
   Key_PLUS = currentKeyStates[SDL_SCANCODE_I] || currentKeyStates[SDL_SCANCODE_KP_PLUS];

@@ -6,7 +6,7 @@
 // ##############################################
 
 // SYSTEM_SDL_init.cpp
-void init();
+bool init();
 void Game_Close();
 void loadTextures();
 

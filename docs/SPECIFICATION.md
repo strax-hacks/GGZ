@@ -125,11 +125,11 @@ The in-game HUD is compacted into a single 10–14px top bar across 320px width:
 
 | Action | Primary Key | Secondary / Ergonomic Key | External Gamepad |
 | :--- | :--- | :--- | :--- |
-| **Move Left** | `Z` | `Left Arrow` or `A` | D-Pad Left |
-| **Move Right** | `C` | `Right Arrow` or `D` | D-Pad Right |
+| **Move Left** | `D` or `Z` | `Left Arrow` or `A` | D-Pad Left |
+| **Move Right** | `G` or `C` | `Right Arrow` | D-Pad Right |
 | **Down** | `X` | `Down Arrow` or `S` | D-Pad Down |
 | **Jump** | `F` | `Up Arrow`, `W`, or `K` | `Button A` (South) |
-| **Shoot / Fireball** | `V` or `Space` after the fireball power-up | `Ctrl` or `J` | `Button B` (East) |
+| **Shoot / Fireball** | `T`, `V`, or `Space` after the fireball power-up | `Ctrl` or `J` | `Button B` (East) |
 | **Toggle View** | `Fn+0` (`F10`) | — | — |
 | **Pause Game** | `P` | — | — |
 | **Quick Save / Load** | `1` / `2` | Slot 1 | — |

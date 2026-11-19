@@ -58,13 +58,7 @@ void STAGE_Save(int StageNumber)
   ExportStage.Substage_PlatformDirection = StageCache_C64.Substage_PlatformDirection[StageNumber];
   ExportStage.Substage_PlatformPathlength = StageCache_C64.Substage_PlatformPathlength[StageNumber];
   ExportStage.Substage_PlatformMovePos = StageCache_C64.Substage_PlatformMovePos[StageNumber];
-  for(y = 0; y < 40; y++)
-  {
-    for (x = 0; x < 30; x++)
-    {
-      ExportStage.Substage_Array[x][y] = StageCache_C64.Substage_Array[StageNumber][x][y];
-    }
-  }
+  SDL_memcpy(ExportStage.Substage_Array, StageCache_C64.Substage_Array[StageNumber], sizeof(ExportStage.Substage_Array));
 
   for (x = 0; x < MAX_NUM_ENEMIES; x++)
   {
@@ -148,13 +142,7 @@ void STAGES_Import()
       StageCache_C64.Substage_PlatformPathlength[StageNumber] = ImportStage.Substage_PlatformPathlength;
       StageCache_C64.Substage_PlatformMovePos[StageNumber] = ImportStage.Substage_PlatformMovePos;
 
-      for(y = 0; y < 40; y++)
-      {
-        for (x = 0; x < 30; x++)
-        {
-          StageCache_C64.Substage_Array[StageNumber][x][y] = ImportStage.Substage_Array[x][y];
-        }
-      }
+      SDL_memcpy(StageCache_C64.Substage_Array[StageNumber], ImportStage.Substage_Array, sizeof(StageCache_C64.Substage_Array[StageNumber]));
 
       for (x = 0; x < MAX_NUM_ENEMIES; x++)
       {

@@ -3,7 +3,7 @@ Version: 1.0.0-1
 Section: games
 Priority: optional
 Architecture: arm64
-Depends: libsdl2-2.0-0 (>= 2.0.10), libsdl2-image-2.0-0, libsdl2-mixer-2.0-0, libc6 (>= 2.31)
+Depends: libsdl2-2.0-0 (>= 2.0.16), libsdl2-image-2.0-0, libsdl2-mixer-2.0-0, libdrm2, libc6 (>= 2.31)
 Maintainer: CardputerZero Community <dev@cardputerzero.local>
 Homepage: https://github.com/CardputerZero
 Description: Giana Sisters Zero (The Great Giana Sisters C64 clone) for M5Stack Cardputer ZERO

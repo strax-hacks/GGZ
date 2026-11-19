@@ -128,14 +128,6 @@ void LOOP_Gameloop_Standard()
 
     if(PC.WarpCounter == 1) {LOOP_Gameloop_Warpscreen();}
 
-    // TURN MUSIC BACK ON AFTER POWERUP-FADEOUT
-    if(GV.TempMusicOffCounter == 1 && GV.TempMusicVolume !=0)
-    {
-      GV.VolumeMusic = GV.TempMusicVolume;
-      Mix_VolumeMusic(GV.VolumeMusic);
-      GV.TempMusicVolume = 0;
-    }
-
     if(!PC.Dead && PC.WarpCounter == 0)
     {
       if(Key_UP_pressed || Joy_JUMP_pressed)    {PC.JumpOnGoing = true;}

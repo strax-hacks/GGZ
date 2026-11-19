@@ -3,7 +3,6 @@
 bool QuitProgram;
 Config_Type Config;
 
-void init();                    //Starts up SDL and creates window
 void iniSetup();
 
 // ##############################################
@@ -15,7 +14,16 @@ int main( int argc, char* args[] )
   GAME_ENVIRONMENT_Define();
   Options_Load();
 
-  init();               // Start up SDL and create window
+  const char* driver = SDL_getenv("SDL_VIDEODRIVER");
+  const int attempts = driver && SDL_strcasecmp(driver, "kmsdrm") == 0 ? 5 : 1;
+  for (int attempt = 1; !init(); ++attempt)
+  {
+    Game_Close();
+    if (attempt == attempts) {
+      return 1;
+    }
+    SDL_Delay(300);
+  }
   srand (time(NULL));   // initialize random seed
   defineAngles();
 

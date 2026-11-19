@@ -91,7 +91,7 @@ Compared to the upstream OpenGGS implementation, this version includes several m
 ## Additional Features
 
 - **Cardputer ZERO 46-Key Controls & Gamepad Support:**
-  - Use the printed direction cluster (`F`, `X`, `Z`, `C`) directly, with `V` or `Space` for fire.
+  - Use the printed direction cluster (`F`, `X`, `Z`, `C`) directly, with `D` / `G` as movement alternatives and `T`, `V`, or `Space` for fire.
   - Full USB and Bluetooth `SDL_GameController` hot-plugging.
 - **XDG-Compliant Save States & Storage:**
   - Multi-slot quick-save/load engine (Slots 1–5) and auto-save on stage transitions stored in `$XDG_DATA_HOME/openggs/` (`~/.local/share/openggs/`).
@@ -108,10 +108,10 @@ Compared to the upstream OpenGGS implementation, this version includes several m
 
 | Action | Cardputer ZERO Keyboard | External Gamepad |
 | :--- | :--- | :--- |
-| **Move Left / Right** | `Z` / `C` | `D-Pad Left` / `Right` |
+| **Move Left / Right** | `D` / `G` or `Z` / `C` | `D-Pad Left` / `Right` |
 | **Down** | `X` | `D-Pad Down` |
 | **Jump** | `F` | `A` Button (South) |
-| **Shoot / Fire** | `V` or `Space` after the fireball power-up | `B` Button (East) |
+| **Shoot / Fire** | `T`, `V`, or `Space` after the fireball power-up | `B` Button (East) |
 | **Toggle View Mode** | `Fn+0` (`F10`) | — |
 | **Pause Game** | `P` | — |
 | **Menu / Back** | `Esc` | `Back` / `Select` Button |
@@ -119,7 +119,9 @@ Compared to the upstream OpenGGS implementation, this version includes several m
 | **Music Down / Up** | `Fn+M` / `Fn+L` (`Page Down` / `Page Up`) | — |
 | **Effects Down / Up** | `U` / `I` | — |
 
-Press any key at the title to start. Tap `Esc` during gameplay to go back, or hold it to return to the Zero home screen. `Fn+S` and `Fn+D` are the Zero's system volume shortcuts. [M5Stack keyboard guide](https://docs.m5stack.com/en/compute/cardputerzero/usage)
+Press any key at the title to start or at the Get Ready screen to continue. Tap `Esc` during gameplay to go back, or hold it to return to the Zero home screen. `Fn+S` and `Fn+D` are the Zero's system volume shortcuts. [M5Stack keyboard guide](https://docs.m5stack.com/en/compute/cardputerzero/usage)
+
+The Cardputer Zero build combines both audio channels for the built-in speaker. Headphones on the Zero get the same mono mix.
 
 On desktop, use the arrow keys or `WASD`, `Up` / `W` / `K` to jump, `Ctrl` or `J` to fire, and `V` to toggle the view.
 
@@ -161,7 +163,7 @@ From the repository root, use Docker to build in an ARM64 Debian environment. Do
 docker run --rm --platform linux/arm64 -v "$PWD:/work" -w /work debian:bookworm-slim sh -ec '
   apt-get update
   apt-get install -y --no-install-recommends build-essential cmake pkg-config \
-    libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev
+    libdrm-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev
   cmake -S . -B build/cp0-arm64-linux -DCMAKE_BUILD_TYPE=Release \
     -DTARGET_DEVICE=CARDPUTER_ZERO -DBUILD_TESTS=OFF
   cmake --build build/cp0-arm64-linux --parallel 2

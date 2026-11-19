@@ -26,7 +26,7 @@ void LOOP_Gameloop_Splashscreen()
     if(Key_ESCAPE_pressed || Joy_ESCAPE_pressed){ExitSplashscreen = true;}
     if(Key_LALT && Key_ENTER_pressed)          {toggleScreenmode();}
 
-    if(Key_ENTER_pressed || Key_CTRL_pressed || Joy_OK_pressed) {ExitSplashscreen = true;}
+    if(Key_NonEscape_pressed || Joy_OK_pressed) {ExitSplashscreen = true;}
 
     Update_Screen();  // draw the scene
   }
@@ -90,7 +90,7 @@ void LOOP_Gameloop_Warpscreen()
     if(Key_ESCAPE_pressed || Joy_ESCAPE_pressed){ExitSplashscreen = true;}
     if(Key_LALT && Key_ENTER_pressed)          {toggleScreenmode();}
 
-    if(Key_ENTER_pressed || Key_CTRL_pressed || Joy_OK_pressed) {ExitSplashscreen = true;}
+    if(Key_NonEscape_pressed || Joy_OK_pressed) {ExitSplashscreen = true;}
 
     Update_Screen();  // draw the scene
   }

@@ -39,8 +39,6 @@ void GAME_ENVIRONMENT_Define()
 
   GV.VolumeSounds = 64;  // 0-128
   GV.VolumeMusic = 64;   // 0-128
-  GV.TempMusicVolume = 0; // 0-128
-  GV.TempMusicOffCounter = 0; // USED TO FADE OUT MUSIC DURING POWER UP
   GV.MusicEnabled = true;
 
   Stage_AnimationCounters_Reset();

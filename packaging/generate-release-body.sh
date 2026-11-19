@@ -7,7 +7,17 @@ REPO="${3:-strax-hacks/GGZ}"
 OUTPUT_FILE="${4:-release_body.md}"
 
 RELEASE_HIGHLIGHTS=""
-if [[ "$RELEASE_TAG" == v1.0.2 ]]; then
+if [[ "$RELEASE_TAG" == v1.0.3 ]]; then
+  RELEASE_HIGHLIGHTS=$(cat <<'NOTES'
+## What’s new in v1.0.3
+
+- Press any key to continue from Get Ready and warp screens. Use D/G to move and T to fire on the Zero.
+- Mixes both soundtrack channels for the built-in speaker and lowers the effects mix.
+- Keeps music playing through power-ups and retries the LCD handoff when the display is busy.
+- Fixes an out-of-bounds substage copy without changing the level file format.
+NOTES
+)
+elif [[ "$RELEASE_TAG" == v1.0.2 ]]; then
   RELEASE_HIGHLIGHTS=$(cat <<'NOTES'
 ## What’s new in v1.0.2
 
@@ -54,10 +64,10 @@ Open **Giana Sisters Zero** from the Zero's home screen. For SSH setup or instal
 
 | Action | Cardputer ZERO 46-Key Keyboard | External Gamepad |
 | :--- | :--- | :--- |
-| **Move Left / Right** | \`Z\` / \`C\` | \`D-Pad Left\` / \`Right\` |
+| **Move Left / Right** | \`D\` / \`G\` or \`Z\` / \`C\` | \`D-Pad Left\` / \`Right\` |
 | **Down** | \`X\` | \`D-Pad Down\` |
 | **Jump** | \`F\` | \`A\` Button (South) |
-| **Shoot / Fire** | \`V\` or \`Space\` after the fireball power-up | \`B\` Button (East) |
+| **Shoot / Fire** | \`T\`, \`V\`, or \`Space\` after the fireball power-up | \`B\` Button (East) |
 | **Toggle View Mode** | \`Fn+0\` (\`F10\`) | — |
 | **Pause Game** | \`P\` | — |
 | **Menu / Back** | \`Esc\` | \`Back\` / \`Select\` |
@@ -65,7 +75,7 @@ Open **Giana Sisters Zero** from the Zero's home screen. For SSH setup or instal
 | **Music Down / Up** | \`Fn+M\` / \`Fn+L\` | — |
 | **Effects Down / Up** | \`U\` / \`I\` | — |
 
-Press any key at the title to start. Hold \`Esc\` to return to the Zero home screen. Use \`Fn+S\` and \`Fn+D\` for system volume.
+Press any key at the title to start or at the Get Ready screen to continue. Hold \`Esc\` to return to the Zero home screen. Use \`Fn+S\` and \`Fn+D\` for system volume.
 EOF
 
 echo "✓ Generated ${OUTPUT_FILE} for ${RELEASE_TAG} (version ${RELEASE_VERSION})"

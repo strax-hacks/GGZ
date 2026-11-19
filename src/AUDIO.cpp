@@ -17,8 +17,8 @@ Mix_Music* BGM_Indoors;
 Mix_Music* BGM_Highscore;
 Mix_Music* BGM_MultiSong;
 
-int VolumePercentage_Music;
-int VolumePercentage_Sound;
+int VolumePercentage_Music = 50;
+int VolumePercentage_Sound = 50;
 int ShowVolume_Music;
 int ShowVolume_Sound;
 
@@ -26,18 +26,39 @@ int ShowVolume_Sound;
 // ##############################################
 // ##############################################
 
+#ifdef TARGET_CARDPUTER_ZERO
+static void SDLCALL MixForMonoSpeaker(void*, Uint8* stream, int length)
+{
+  auto* samples = reinterpret_cast<Sint16*>(stream);
+  for (int i = 0; i + 1 < length / static_cast<int>(sizeof(*samples)); i += 2)
+  {
+    const auto mono = static_cast<Sint16>((static_cast<int>(samples[i]) + samples[i + 1]) / 2);
+    samples[i] = mono;
+    samples[i + 1] = mono;
+  }
+}
+#endif
+
 void AUDIO_Define()
 {
   //*********************************
   // initialize sound for Cardputer ZERO / ES8389 audio codec
   // 44100Hz 16-bit stereo with 1024 chunk size for low-latency glitch-free playback
+#ifdef TARGET_CARDPUTER_ZERO
+  // Keep a stereo device stream but send the combined mix to both sides.
+  if (Mix_OpenAudioDevice(44100, AUDIO_S16SYS, 2, 1024, nullptr, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) == 0 ||
+      Mix_OpenAudioDevice(22050, AUDIO_S16SYS, 2, 1024, nullptr, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) == 0) {
+    Mix_SetPostMix(MixForMonoSpeaker, nullptr);
+  }
+#else
   if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) < 0) {
     // Fallback to 22050Hz if 44.1kHz is unavailable
     Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024);
   }
-  AUDIO_Volume_Change_Music(50, false);  // Default music volume 50%
-  AUDIO_Volume_Change_Sound(50, false);  // Default SFX volume 50%
-  Mix_AllocateChannels(16);  // Allocate 16 channels for concurrent sounds
+#endif
+  Mix_AllocateChannels(16);
+  AUDIO_Volume_Change_Music(VolumePercentage_Music, false);
+  AUDIO_Volume_Change_Sound(VolumePercentage_Sound, false);
 
   //*********************************
 
@@ -52,9 +73,6 @@ void AUDIO_Define()
 
   Mix_FreeChunk(AUDIO_CHUNK_Killed); AUDIO_CHUNK_Killed = NULL;
   AUDIO_CHUNK_Killed  = Mix_LoadWAV(GetAssetPath(FileName.WavChunk[AUDIO_KILLED]).c_str());
-  if (AUDIO_CHUNK_Killed != NULL) {
-    Mix_VolumeChunk(AUDIO_CHUNK_Killed, MIX_MAX_VOLUME / 4);
-  }
 
   Mix_FreeChunk(AUDIO_CHUNK_Ding); AUDIO_CHUNK_Ding = NULL;
   AUDIO_CHUNK_Ding  = Mix_LoadWAV(GetAssetPath(FileName.WavChunk[AUDIO_DING]).c_str());
@@ -131,7 +149,7 @@ void AUDIO_Volume_Change_Sound(int Percentage, bool ShowVolumeOverlay)
 
   VolumePercentage_Sound = Percentage;
   GV.VolumeSounds = Value128;
-  Mix_Volume(-1, GV.VolumeSounds);
+  Mix_Volume(-1, GV.VolumeSounds / 4);
 
   if(ShowVolumeOverlay){ShowVolume_Sound = 3;}
 }
@@ -155,14 +173,6 @@ void AUDIO_Sound_Play(int SoundNumber)
     if(SoundNumber == AUDIO_SHOOT)      {Mix_PlayChannel(-1,AUDIO_CHUNK_Shoot,0);}
     if(SoundNumber == AUDIO_CRACK)      {Mix_PlayChannel(-1,AUDIO_CHUNK_Crack,0);}
   }
-
-  if(SoundNumber == AUDIO_GOTPOWERUP)
-  {
-    GV.TempMusicVolume = GV.VolumeMusic;
-    GV.VolumeMusic = 0;
-    GV.TempMusicOffCounter = 1000;
-    Mix_VolumeMusic(GV.VolumeMusic);
-  }
 }
 
 // ##############################################
@@ -179,7 +189,7 @@ void AUDIO_Music_Halt()
 
 void AUDIO_Music_Play(int MusicNumber)
 {
-  if(GV.VolumeMusic > 0 && GV.MusicEnabled)
+  if(GV.MusicEnabled)
   {
     if (CurrentMusicNumber == MusicNumber && Mix_PlayingMusic())
     {

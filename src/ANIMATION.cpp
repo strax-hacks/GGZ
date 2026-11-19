@@ -38,7 +38,6 @@ void Animation()
       if(PC.MorphingCounter > 0)            {PC.MorphingCounter--;}
       if(PC.WarpCounter > 0)                {PC.WarpCounter--;}
       if(PC.OnGroundDelay > 0)              {PC.OnGroundDelay--;}
-      if(GV.TempMusicOffCounter > 0)        {GV.TempMusicOffCounter--;}
     }
 }
 

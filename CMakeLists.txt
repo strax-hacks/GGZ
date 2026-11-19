@@ -125,6 +125,11 @@ target_link_libraries(openggs_core PUBLIC
     ${SDL2_MIXER_LIBRARIES}
 )
 
+if(TARGET_DEVICE STREQUAL "CARDPUTER_ZERO" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    pkg_check_modules(DRM REQUIRED IMPORTED_TARGET libdrm)
+    target_link_libraries(openggs_core PRIVATE PkgConfig::DRM)
+endif()
+
 # Main executable
 add_executable(openggs-cz
     src/main.cpp
