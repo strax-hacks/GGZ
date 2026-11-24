@@ -7,7 +7,15 @@ REPO="${3:-strax-hacks/GGZ}"
 OUTPUT_FILE="${4:-release_body.md}"
 
 RELEASE_HIGHLIGHTS=""
-if [[ "$RELEASE_TAG" == v1.0.3 ]]; then
+if [[ "$RELEASE_TAG" == v1.0.4 ]]; then
+  RELEASE_HIGHLIGHTS=$(cat <<'NOTES'
+## What’s new in v1.0.4
+
+- Waits for the Cardputer Zero’s built-in LCD to become available when launched during boot.
+- Uses software rendering on the built-in LCD to avoid blank screens when the GPU runs out of DMA memory during startup.
+NOTES
+)
+elif [[ "$RELEASE_TAG" == v1.0.3 ]]; then
   RELEASE_HIGHLIGHTS=$(cat <<'NOTES'
 ## What’s new in v1.0.3
 

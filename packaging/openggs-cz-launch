@@ -5,6 +5,44 @@ if [ -z "${SDL_VIDEODRIVER:-}" ] && [ -e /dev/dri/cardputer-zero-internal ]; the
     card=$(readlink -f /dev/dri/cardputer-zero-internal)
     export SDL_VIDEODRIVER=kmsdrm
     export SDL_KMSDRM_DEVICE_INDEX="${card##*/card}"
+    # The LCD can have DRM master while VC4 is out of DMA memory during boot.
+    export MESA_LOADER_DRIVER_OVERRIDE="${MESA_LOADER_DRIVER_OVERRIDE:-kms_swrast}"
+    export LIBGL_ALWAYS_SOFTWARE="${LIBGL_ALWAYS_SOFTWARE:-true}"
+
+    # APPLaunch can show Home while the boot greeter still controls the LCD.
+    python3 - "$card" <<'PYTHON'
+import ctypes
+import os
+import sys
+import time
+
+drm = ctypes.CDLL("libdrm.so.2")
+card = sys.argv[1]
+start = time.monotonic()
+deadline = start + 20
+waiting = False
+
+while time.monotonic() < deadline:
+    try:
+        fd = os.open(card, os.O_RDWR | os.O_CLOEXEC)
+    except OSError:
+        available = False
+    else:
+        try:
+            available = drm.drmIsMaster(fd) or drm.drmSetMaster(fd) == 0
+        finally:
+            os.close(fd)
+    if available:
+        if waiting:
+            print(f"Cardputer LCD available after {time.monotonic() - start:.1f}s.", file=sys.stderr)
+        break
+    if not waiting:
+        print("Waiting for the Cardputer LCD display handoff.", file=sys.stderr)
+        waiting = True
+    time.sleep(0.1)
+else:
+    sys.exit(f"Timed out waiting for the Cardputer LCD ({card}).")
+PYTHON
 fi
 
 exec /usr/share/cardputerzero-openggs/bin/openggs-cz "$@"
